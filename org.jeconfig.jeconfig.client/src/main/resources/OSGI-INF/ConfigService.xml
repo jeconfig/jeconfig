@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.jeconfig.ConfigService">
+   <implementation class="org.jeconfig.client.internal.ConfigServiceImpl"/>
+   <service>
+      <provide interface="org.jeconfig.api.IConfigService"/>
+      <provide interface="org.jeconfig.api.IConfigSetupService"/>
+      <provide interface="org.jeconfig.client.IInternalConfigService"/>
+   </service>
+   <reference bind="bindConfigPersister" cardinality="1..1" interface="org.jeconfig.api.persister.IConfigPersister" name="IConfigPersister" policy="static" unbind="unbindConfigPersister"/>
+</scr:component>

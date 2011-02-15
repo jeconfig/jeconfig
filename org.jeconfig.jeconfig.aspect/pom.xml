@@ -1,0 +1,102 @@
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.jeconfig</groupId>
+		<artifactId>jeconfig.main</artifactId>
+		<version>1.0.0-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.jeconfig</groupId>
+	<artifactId>jeconfig.aspect</artifactId>
+	<version>${project.parent.version}</version>
+	<name>${project.artifactId}</name>
+	<packaging>bundle</packaging>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.7.2</version>
+				<configuration>
+					<forkMode>once</forkMode>
+					<argLine>-javaagent:${settings.localRepository}/org/aspectj/com.springsource.org.aspectj.weaver/1.6.8.RELEASE/com.springsource.org.aspectj.weaver-1.6.8.RELEASE.jar</argLine>
+					<useSystemClassloader>true</useSystemClassloader>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>com.springsource.org.aspectj.weaver</artifactId>
+			<version>1.6.8.RELEASE</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jeconfig</groupId>
+			<artifactId>jeconfig.api</artifactId>
+			<version>${project.parent.version}</version>
+			<type>bundle</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jeconfig</groupId>
+			<artifactId>jeconfig.common</artifactId>
+			<version>${project.parent.version}</version>
+			<type>bundle</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jeconfig</groupId>
+			<artifactId>jeconfig.client</artifactId>
+			<version>${project.parent.version}</version>
+			<type>bundle</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jeconfig</groupId>
+			<artifactId>jeconfig.server</artifactId>
+			<version>${project.parent.version}</version>
+			<type>bundle</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>com.springsource.ch.qos.logback.classic</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>com.springsource.org.hibernate.validator</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>com.springsource.org.aspectj.runtime</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>com.springsource.org.aspectj.weaver</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.compendium</artifactId>
+		</dependency>
+	</dependencies>
+</project>

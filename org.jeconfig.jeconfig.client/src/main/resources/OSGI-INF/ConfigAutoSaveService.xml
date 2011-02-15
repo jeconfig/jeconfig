@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.jeconfig.ConfigAutoSaveService">
+   <implementation class="org.jeconfig.client.internal.autosave.ConfigAutoSaveServiceImpl"/>
+   <service>
+      <provide interface="org.jeconfig.api.autosave.IConfigAutoSaveService"/>
+   </service>
+   <reference bind="bindConfigService" cardinality="1..1" interface="org.jeconfig.api.IConfigService" name="IConfigService" policy="dynamic" unbind="unbindConfigService"/>
+</scr:component>
