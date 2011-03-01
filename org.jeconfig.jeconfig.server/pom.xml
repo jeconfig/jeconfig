@@ -61,4 +61,11 @@
 			<artifactId>com.springsource.com.thoughtworks.xstream</artifactId>
 		</dependency>
 	</dependencies>
+
+	<distributionManagement>
+		<repository>
+			<id>jeconfig-m2.local</id>
+			<url>file://${basedir}/../../jeconfig-m2/</url>
+		</repository>
+	</distributionManagement>
 </project>

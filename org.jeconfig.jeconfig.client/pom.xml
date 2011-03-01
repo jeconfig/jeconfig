@@ -36,7 +36,7 @@
 			<type>bundle</type>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>com.springsource.ch.qos.logback.classic</artifactId>
@@ -68,7 +68,6 @@
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.compendium</artifactId>
 		</dependency>
-
 	</dependencies>
 
 	<build>
@@ -89,4 +88,10 @@
 		</plugins>
 	</build>
 
+	<distributionManagement>
+		<repository>
+			<id>jeconfig-m2.local</id>
+			<url>file://${basedir}/../../jeconfig-m2/</url>
+		</repository>
+	</distributionManagement>
 </project>

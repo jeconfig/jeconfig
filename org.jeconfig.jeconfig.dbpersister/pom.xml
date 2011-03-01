@@ -34,13 +34,13 @@
 			<artifactId>com.springsource.ch.qos.logback.classic</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>com.springsource.org.hibernate.validator</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jeconfig</groupId>
 			<artifactId>jeconfig.client</artifactId>
@@ -77,4 +77,11 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>jeconfig-m2.local</id>
+			<url>file://${basedir}/../../jeconfig-m2/</url>
+		</repository>
+	</distributionManagement>
 </project>

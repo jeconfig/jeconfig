@@ -13,7 +13,7 @@
 	<version>${project.parent.version}</version>
 	<name>${project.artifactId}</name>
 	<packaging>bundle</packaging>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.jeconfig</groupId>
@@ -28,12 +28,12 @@
 			<version>${project.parent.version}</version>
 			<type>bundle</type>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.osgi</groupId>
 			<artifactId>org.osgi.core</artifactId>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.jeconfig</groupId>
 			<artifactId>jeconfig.client</artifactId>
@@ -41,7 +41,7 @@
 			<type>bundle</type>
 			<scope>test</scope>
 		</dependency>
-				
+
 		<dependency>
 			<groupId>org.jeconfig</groupId>
 			<artifactId>jeconfig.server</artifactId>
@@ -49,20 +49,20 @@
 			<type>bundle</type>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>com.springsource.ch.qos.logback.classic</artifactId>
 			<scope>test</scope>
 		</dependency>
-		
+
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>com.springsource.org.hibernate.validator</artifactId>
 			<scope>test</scope>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>
@@ -78,4 +78,11 @@
 			</plugin>
 		</plugins>
 	</build>
+
+	<distributionManagement>
+		<repository>
+			<id>jeconfig-m2.local</id>
+			<url>file://${basedir}/../../jeconfig-m2/</url>
+		</repository>
+	</distributionManagement>
 </project>

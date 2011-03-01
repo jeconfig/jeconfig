@@ -13,7 +13,7 @@
 	<version>${project.parent.version}</version>
 	<name>${project.artifactId}</name>
 	<packaging>bundle</packaging>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.jeconfig</groupId>
@@ -22,5 +22,11 @@
 			<type>bundle</type>
 		</dependency>
 	</dependencies>
-	
+
+	<distributionManagement>
+		<repository>
+			<id>jeconfig-m2.local</id>
+			<url>file://${basedir}/../../jeconfig-m2/</url>
+		</repository>
+	</distributionManagement>
 </project>
