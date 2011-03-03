@@ -9,8 +9,8 @@
 	<name>${project.artifactId}</name>
 
 	<scm>
-		<connection>scm:git:git://github.com/jeconfig/jeconfig.git</connection>
-		<developerConnection>scm:git:git://github.com/jeconfig/jeconfig.git</developerConnection>
+		<connection>scm:git:git@github.com:jeconfig/jeconfig.git</connection>
+		<developerConnection>scm:git:git@github.com:jeconfig/jeconfig.git</developerConnection>
 	</scm>
 
 	<distributionManagement>
