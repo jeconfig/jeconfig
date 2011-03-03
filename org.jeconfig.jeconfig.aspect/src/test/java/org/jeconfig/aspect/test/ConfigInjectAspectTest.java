@@ -40,6 +40,18 @@ import org.junit.Test;
 public class ConfigInjectAspectTest extends AbstractConfigInjectTest {
 
 	@Test
+	public void testSaveDirtyConfigBeforeInjection() {
+		final InjectConfigUser user1 = new InjectConfigUser();
+		Assert.assertEquals(0, user1.getAutoSavedConfig().getI());
+
+		user1.getAutoSavedConfig().setI(1337);
+
+		final InjectConfigUser user2 = new InjectConfigUser();
+		Assert.assertEquals(1337, user2.getConfig().getI());
+		Assert.assertEquals(1337, user2.getAutoSavedConfig().getI());
+	}
+
+	@Test
 	public void testSimpleInjection() {
 		final InjectConfigUser injectConfigUser = new InjectConfigUser();
 		Assert.assertNotNull(injectConfigUser.getConfig());

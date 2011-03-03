@@ -33,6 +33,10 @@ import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.jeconfig.aspect.InjectConfig;
 
 public class InjectConfigUser {
+
+	@InjectConfig(autoSave = true)
+	private InjectTestConfig autoSavedConfig;
+
 	@InjectConfig
 	private InjectTestConfig config;
 
@@ -49,6 +53,10 @@ public class InjectConfigUser {
 
 	public InjectTestConfig getConfig() {
 		return config;
+	}
+
+	public InjectTestConfig getAutoSavedConfig() {
+		return autoSavedConfig;
 	}
 
 	public void setConfig(final InjectTestConfig config) {

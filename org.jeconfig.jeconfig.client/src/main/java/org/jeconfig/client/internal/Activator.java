@@ -27,17 +27,11 @@
 
 package org.jeconfig.client.internal;
 
-import org.jeconfig.api.autosave.IConfigAutoSaveService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceReference;
-import org.osgi.util.tracker.ServiceTracker;
-import org.osgi.util.tracker.ServiceTrackerCustomizer;
 
 public final class Activator implements BundleActivator {
 	private static BundleContext bundleContext;
-	private ServiceTracker tracker;
-	private IConfigAutoSaveService service;
 
 	private static void setBundleContext(final BundleContext ctx) {
 		bundleContext = ctx;
@@ -46,20 +40,6 @@ public final class Activator implements BundleActivator {
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		setBundleContext(context);
-		tracker = new ServiceTracker(context, IConfigAutoSaveService.class.getName(), new ServiceTrackerCustomizer() {
-			@Override
-			public void removedService(final ServiceReference reference, final Object service) {}
-
-			@Override
-			public void modifiedService(final ServiceReference reference, final Object service) {}
-
-			@Override
-			public Object addingService(final ServiceReference reference) {
-				service = (IConfigAutoSaveService) context.getService(reference);
-				return service;
-			}
-		});
-		tracker.open();
 	}
 
 	public static BundleContext getContext() {
@@ -69,11 +49,6 @@ public final class Activator implements BundleActivator {
 	@Override
 	public void stop(final BundleContext context) throws Exception {
 		setBundleContext(null);
-		tracker.close();
-		if (service != null) {
-			service.close();
-			service = null;
-		}
 	}
 
 }
