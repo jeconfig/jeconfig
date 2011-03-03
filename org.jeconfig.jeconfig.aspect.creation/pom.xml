@@ -21,6 +21,7 @@
 				<configuration>
 					<instructions>
 						<Bundle-Activator>org.jeconfig.aspect.creation.Activator</Bundle-Activator>
+						<Import-Package>org.jeconfig.api.annotation,*</Import-Package>
 					</instructions>
 				</configuration>
 			</plugin>

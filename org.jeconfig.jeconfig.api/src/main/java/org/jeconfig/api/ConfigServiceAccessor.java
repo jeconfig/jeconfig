@@ -74,6 +74,9 @@ public class ConfigServiceAccessor implements IConfigService {
 	 * @param exceptionHandler
 	 */
 	public ConfigServiceAccessor(final IConfigService configService, final IConfigExceptionHandler exceptionHandler) {
+		if (configService == null) {
+			throw new IllegalArgumentException("configService must not be null"); //$NON-NLS-1$
+		}
 		this.configService = configService;
 		this.exceptionHandler = exceptionHandler;
 	}
