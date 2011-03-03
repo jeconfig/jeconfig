@@ -59,6 +59,7 @@ public class Activator implements BundleActivator {
 			if (cfgService == null) {
 				throw new RuntimeException("Didn't find " + IConfigService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
 			}
+			configService = cfgService;
 			return cfgService;
 		} else {
 			if (configService != null) {

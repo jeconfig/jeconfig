@@ -67,7 +67,8 @@ public class Activator implements BundleActivator {
 			if (cfgService == null) {
 				throw new RuntimeException("Didn't find " + IConfigService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
 			}
-			return cfgService;
+			configService = cfgService;
+			return configService;
 		} else {
 			if (configService != null) {
 				return configService;
@@ -82,6 +83,8 @@ public class Activator implements BundleActivator {
 			if (cfgAutoSaveService == null) {
 				throw new RuntimeException("Didn't find " + IConfigAutoSaveService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
 			}
+			configAutoSaveService = cfgAutoSaveService;
+			return configAutoSaveService;
 		} else {
 			if (configAutoSaveService != null) {
 				return configAutoSaveService;
@@ -89,8 +92,6 @@ public class Activator implements BundleActivator {
 				throw new RuntimeException("Didn't find " + IConfigAutoSaveService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
 			}
 		}
-
-		return configAutoSaveService;
 	}
 
 	@Override
