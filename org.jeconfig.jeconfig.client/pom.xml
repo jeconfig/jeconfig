@@ -77,9 +77,8 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Service-Component>OSGI-INF/ConfigAutoRefreshService.xml,
-							OSGI-INF/ConfigAutoSaveService.xml, OSGI-INF/ConfigService.xml</Service-Component>
-						<Bundle-Activator>org.jeconfig.client.internal.Activator</Bundle-Activator>
+						<Service-Component>OSGI-INF/ConfigAutoRefreshService.xml, OSGI-INF/ConfigAutoSaveService.xml, OSGI-INF/ConfigService.xml</Service-Component>
+						<DynamicImport-Package>*</DynamicImport-Package>
 					</instructions>
 				</configuration>
 			</plugin>

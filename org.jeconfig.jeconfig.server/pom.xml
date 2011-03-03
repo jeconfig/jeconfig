@@ -22,7 +22,6 @@
 				<configuration>
 					<instructions>
 						<Service-Component>OSGI-INF/persistenceService.xml</Service-Component>
-						<Bundle-Activator>org.jeconfig.server.Activator</Bundle-Activator>
 					</instructions>
 				</configuration>
 			</plugin>
