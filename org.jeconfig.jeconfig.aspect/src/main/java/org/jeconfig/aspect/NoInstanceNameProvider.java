@@ -27,7 +27,7 @@
 
 package org.jeconfig.aspect;
 
-public final class NullInstanceNameProvider implements IInstanceNameProvider {
+public final class NoInstanceNameProvider implements IInstanceNameProvider {
 	@Override
 	public String getInstanceName(final Object configUser) {
 		return null;

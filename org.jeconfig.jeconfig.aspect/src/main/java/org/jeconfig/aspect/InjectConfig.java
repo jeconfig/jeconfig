@@ -61,7 +61,7 @@ public @interface InjectConfig {
 	 * by the provider is automatically added to the 'instance' scope. When {@link InjectConfig#instanceName()} is set, this
 	 * property is ignored.
 	 */
-	Class<? extends IInstanceNameProvider> instanceNameProvider() default NullInstanceNameProvider.class;
+	Class<? extends IInstanceNameProvider> instanceNameProvider() default NoInstanceNameProvider.class;
 
 	/**
 	 * <b>use with caution!!! no transactions are supported.</b><br>
