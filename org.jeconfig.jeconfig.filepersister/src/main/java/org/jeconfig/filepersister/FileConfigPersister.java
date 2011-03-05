@@ -51,6 +51,9 @@ import org.jeconfig.api.util.Assert;
 import org.jeconfig.server.marshalling.IConfigMarshaller;
 import org.jeconfig.server.persister.DefaultScopePathGenerator;
 
+/**
+ * A Persister implementation that stores configs in files
+ */
 public final class FileConfigPersister implements IConfigPersister {
 
 	public static final String ID = FileConfigPersister.class.getName();
@@ -60,6 +63,13 @@ public final class FileConfigPersister implements IConfigPersister {
 	private final String rootDirectory;
 	private final String fileExtension;
 
+	/**
+	 * Creates a new FileConfigPersister
+	 * 
+	 * @param marshaller the marshaller to be used for serialization
+	 * @param rootDirectory the root directory for config storage
+	 * @param fileExtension the file extension to be used for the saved files including the "." e.g. ".xml"
+	 */
 	public FileConfigPersister(final IConfigMarshaller marshaller, final String rootDirectory, final String fileExtension) {
 		Assert.paramNotNull(rootDirectory, "rootDirectory"); //$NON-NLS-1$
 		Assert.paramNotNull(marshaller, "marshaller"); //$NON-NLS-1$
