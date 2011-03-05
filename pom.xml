@@ -1,4 +1,5 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.jeconfig</groupId>
@@ -6,6 +7,60 @@
 	<version>0.9.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
+	<url>https://github.com/jeconfig</url>
+
+	<developers>
+		<developer>
+			<id>edmund-wagner</id>
+			<name>Edmund Wagner</name>
+			<roles>
+				<role>project owner</role>
+			</roles>
+			<url>https://github.com/edmund-wagner</url>
+		</developer>
+		<developer>
+			<id>wolfram-weidel</id>
+			<name>Wolfram Weidel</name>
+			<roles>
+				<role>project owner</role>
+			</roles>
+			<url>https://github.com/wolfram-weidel</url>
+		</developer>
+	</developers>
+
+	<contributors>
+		<contributor>
+			<name>Lukas Gross</name>
+			<url>https://github.com/LukasGross</url>
+			<roles>
+				<role>persisters</role>
+				<role>exporter</role>
+				<role>tests</role>
+			</roles>
+		</contributor>
+		<contributor>
+			<name>Manuel Woelker</name>
+			<url>https://github.com/manuel-woelker</url>
+			<roles>
+				<role>review</role>
+			</roles>
+		</contributor>
+	</contributors>
+
+	<issueManagement>
+		<system>github</system>
+		<url>https://github.com/jeconfig/jeconfig/issues</url>
+	</issueManagement>
+
+	<licenses>
+		<license>
+			<name>BSD</name>
+			<distribution>repo</distribution>
+			<url>http://www.opensource.org/licenses/bsd-license</url>
+		</license>
+	</licenses>
+
+	<inceptionYear>2010</inceptionYear>
 
 	<scm>
 		<connection>scm:git:git@github.com:jeconfig/jeconfig.git</connection>
