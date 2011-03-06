@@ -94,7 +94,7 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 	}
 
 	@Test(expected = StaleConfigException.class)
-	public void testSaveConfigurationAlreadyExcists() {
+	public void testSaveConfigurationAlreadyExists() {
 		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
 		final ComplexConfigDTO configuration = createTestConfigDTO(factory.annotatedPath().create());
 		persister.saveConfiguration(configuration);
