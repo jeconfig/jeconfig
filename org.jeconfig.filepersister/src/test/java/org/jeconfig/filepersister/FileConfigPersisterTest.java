@@ -303,6 +303,7 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 		configuration.setPolymorph(false);
 		configuration.setDefiningScopePath(path);
 		configuration.setVersion(1);
+		configuration.setClassVersion(1);
 		configuration.setNulled(false);
 		return configuration;
 	}
