@@ -42,7 +42,7 @@ import org.jeconfig.api.util.Assert;
 public class ComplexConfigDTO extends AbstractConfigDTO {
 	private static final long serialVersionUID = 1L;
 
-	private long classVersion = Long.MIN_VALUE;
+	private long classVersion = -1;
 
 	private final Map<String, ConfigListDTO> listProperties;
 	private final Map<String, ConfigSimpleValueDTO> simpleProperties;
