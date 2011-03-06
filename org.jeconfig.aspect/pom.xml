@@ -2,34 +2,74 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.jeconfig</groupId>
-		<artifactId>jeconfig.main</artifactId>
+		<artifactId>org.jeconfig.main</artifactId>
 		<version>0.9.5-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.jeconfig</groupId>
-	<artifactId>jeconfig.client</artifactId>
+	<artifactId>org.jeconfig.aspect</artifactId>
 	<version>0.9.5-SNAPSHOT</version>
 	<name>${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.2.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Bundle-Activator>org.jeconfig.aspect.internal.Activator</Bundle-Activator>
+					</instructions>
+				</configuration>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-surefire-plugin</artifactId>
+				<version>2.7.2</version>
+				<configuration>
+					<forkMode>once</forkMode>
+					<argLine>-javaagent:${settings.localRepository}/org/aspectj/com.springsource.org.aspectj.weaver/1.6.8.RELEASE/com.springsource.org.aspectj.weaver-1.6.8.RELEASE.jar</argLine>
+					<useSystemClassloader>true</useSystemClassloader>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
+
 	<dependencies>
 		<dependency>
+			<groupId>org.aspectj</groupId>
+			<artifactId>com.springsource.org.aspectj.weaver</artifactId>
+			<version>1.6.8.RELEASE</version>
+		</dependency>
+
+		<dependency>
 			<groupId>org.jeconfig</groupId>
-			<artifactId>jeconfig.api</artifactId>
+			<artifactId>org.jeconfig.api</artifactId>
 			<version>${project.parent.version}</version>
 			<type>bundle</type>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jeconfig</groupId>
-			<artifactId>jeconfig.common</artifactId>
+			<artifactId>org.jeconfig.common</artifactId>
 			<version>${project.parent.version}</version>
 			<type>bundle</type>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jeconfig</groupId>
-			<artifactId>jeconfig.server</artifactId>
+			<artifactId>org.jeconfig.client</artifactId>
+			<version>${project.parent.version}</version>
+			<type>bundle</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jeconfig</groupId>
+			<artifactId>org.jeconfig.server</artifactId>
 			<version>${project.parent.version}</version>
 			<type>bundle</type>
 			<scope>test</scope>
@@ -48,13 +88,14 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.google.collect</groupId>
-			<artifactId>com.springsource.com.google.common.collect</artifactId>
+			<groupId>org.aspectj</groupId>
+			<artifactId>com.springsource.org.aspectj.runtime</artifactId>
 		</dependency>
 
 		<dependency>
-			<groupId>org.jboss.javassist</groupId>
-			<artifactId>com.springsource.javassist</artifactId>
+			<groupId>org.aspectj</groupId>
+			<artifactId>com.springsource.org.aspectj.weaver</artifactId>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -67,23 +108,6 @@
 			<artifactId>org.osgi.compendium</artifactId>
 		</dependency>
 	</dependencies>
-
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.apache.felix</groupId>
-				<artifactId>maven-bundle-plugin</artifactId>
-				<version>2.2.0</version>
-				<extensions>true</extensions>
-				<configuration>
-					<instructions>
-						<Service-Component>OSGI-INF/ConfigAutoRefreshService.xml, OSGI-INF/ConfigAutoSaveService.xml, OSGI-INF/ConfigService.xml</Service-Component>
-						<DynamicImport-Package>*</DynamicImport-Package>
-					</instructions>
-				</configuration>
-			</plugin>
-		</plugins>
-	</build>
 
 	<distributionManagement>
 		<repository>

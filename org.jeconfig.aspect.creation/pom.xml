@@ -2,11 +2,11 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.jeconfig</groupId>
-		<artifactId>jeconfig.main</artifactId>
+		<artifactId>org.jeconfig.main</artifactId>
 		<version>0.9.5-SNAPSHOT</version>
 	</parent>
 
-	<artifactId>jeconfig.aspect.creation</artifactId>
+	<artifactId>org.jeconfig.aspect.creation</artifactId>
 	<version>0.9.5-SNAPSHOT</version>
 	<name>${project.artifactId}</name>
 	<packaging>bundle</packaging>
@@ -47,28 +47,28 @@
 
 		<dependency>
 			<groupId>org.jeconfig</groupId>
-			<artifactId>jeconfig.api</artifactId>
+			<artifactId>org.jeconfig.api</artifactId>
 			<version>${project.parent.version}</version>
 			<type>bundle</type>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jeconfig</groupId>
-			<artifactId>jeconfig.common</artifactId>
+			<artifactId>org.jeconfig.common</artifactId>
 			<version>${project.parent.version}</version>
 			<type>bundle</type>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jeconfig</groupId>
-			<artifactId>jeconfig.client</artifactId>
+			<artifactId>org.jeconfig.client</artifactId>
 			<version>${project.parent.version}</version>
 			<type>bundle</type>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jeconfig</groupId>
-			<artifactId>jeconfig.server</artifactId>
+			<artifactId>org.jeconfig.server</artifactId>
 			<version>${project.parent.version}</version>
 			<type>bundle</type>
 			<scope>test</scope>

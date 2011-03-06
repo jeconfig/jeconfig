@@ -1,0 +1,69 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>org.jeconfig</groupId>
+		<artifactId>org.jeconfig.main</artifactId>
+		<version>0.9.5-SNAPSHOT</version>
+	</parent>
+
+	<groupId>org.jeconfig</groupId>
+	<artifactId>org.jeconfig.dbpersister</artifactId>
+	<version>0.9.5-SNAPSHOT</version>
+	<name>${project.artifactId}</name>
+	<packaging>bundle</packaging>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.jeconfig</groupId>
+			<artifactId>org.jeconfig.api</artifactId>
+			<version>${project.parent.version}</version>
+			<type>bundle</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jeconfig</groupId>
+			<artifactId>org.jeconfig.server</artifactId>
+			<version>${project.parent.version}</version>
+			<type>bundle</type>
+		</dependency>
+
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>com.springsource.ch.qos.logback.classic</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>com.springsource.org.hibernate.validator</artifactId>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jeconfig</groupId>
+			<artifactId>org.jeconfig.client</artifactId>
+			<version>${project.parent.version}</version>
+			<type>bundle</type>
+			<scope>test</scope>
+		</dependency>
+
+		<dependency>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.core</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>com.h2database</groupId>
+			<artifactId>h2</artifactId>
+			<version>1.2.147</version>
+			<scope>test</scope>
+		</dependency>
+	</dependencies>
+
+	<distributionManagement>
+		<repository>
+			<id>jeconfig-m2.local</id>
+			<url>file://${basedir}/../../../../jeconfig-m2/</url>
+		</repository>
+	</distributionManagement>
+</project>

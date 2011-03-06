@@ -1,23 +1,26 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
+
 	<parent>
 		<groupId>org.jeconfig</groupId>
-		<artifactId>jeconfig.main</artifactId>
+		<artifactId>org.jeconfig.main</artifactId>
 		<version>0.9.5-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.jeconfig</groupId>
-	<artifactId>jeconfig.common</artifactId>
+	<artifactId>org.jeconfig.api</artifactId>
 	<version>0.9.5-SNAPSHOT</version>
 	<name>${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.jeconfig</groupId>
-			<artifactId>jeconfig.api</artifactId>
-			<version>${project.parent.version}</version>
-			<type>bundle</type>
+			<groupId>javax.validation</groupId>
+			<artifactId>com.springsource.javax.validation</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.slf4j</groupId>
+			<artifactId>com.springsource.slf4j.org.apache.commons.logging</artifactId>
 		</dependency>
 	</dependencies>
 

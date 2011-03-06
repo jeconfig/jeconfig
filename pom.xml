@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>org.jeconfig</groupId>
-	<artifactId>jeconfig.main</artifactId>
+	<artifactId>org.jeconfig.main</artifactId>
 	<version>0.9.5-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<name>${project.artifactId}</name>
@@ -75,15 +75,15 @@
 	</distributionManagement>
 
 	<modules>
-		<module>org.jeconfig.jeconfig.api</module>
-		<module>org.jeconfig.jeconfig.common</module>
-		<module>org.jeconfig.jeconfig.client</module>
-		<module>org.jeconfig.jeconfig.server</module>
-		<module>org.jeconfig.jeconfig.filepersister</module>
-		<module>org.jeconfig.jeconfig.dbpersister</module>
-		<module>org.jeconfig.jeconfig.exporter</module>
-		<module>org.jeconfig.jeconfig.aspect</module>
-		<module>org.jeconfig.jeconfig.aspect.creation</module>
+		<module>org.jeconfig.api</module>
+		<module>org.jeconfig.common</module>
+		<module>org.jeconfig.client</module>
+		<module>org.jeconfig.server</module>
+		<module>org.jeconfig.filepersister</module>
+		<module>org.jeconfig.dbpersister</module>
+		<module>org.jeconfig.exporter</module>
+		<module>org.jeconfig.aspect</module>
+		<module>org.jeconfig.aspect.creation</module>
 	</modules>
 
 	<properties>
@@ -201,6 +201,20 @@
 		<plugins>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-source-plugin</artifactId>
+				<version>2.1.2</version>
+				<executions>
+					<execution>
+						<id>attach-sources</id>
+						<goals>
+							<goal>jar</goal>
+						</goals>
+					</execution>
+				</executions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-deploy-plugin</artifactId>
 				<version>2.5</version>
 			</plugin>
@@ -223,7 +237,7 @@
 				<extensions>true</extensions>
 				<configuration>
 					<instructions>
-						<Bundle-SymbolicName>${project.groupId}.${project.artifactId}</Bundle-SymbolicName>
+						<Bundle-SymbolicName>${project.artifactId}</Bundle-SymbolicName>
 						<Bundle-Name>${project.artifactId}</Bundle-Name>
 						<Bundle-ActivationPolicy>lazy</Bundle-ActivationPolicy>
 					</instructions>

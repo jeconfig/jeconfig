@@ -2,12 +2,12 @@
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.jeconfig</groupId>
-		<artifactId>jeconfig.main</artifactId>
+		<artifactId>org.jeconfig.main</artifactId>
 		<version>0.9.5-SNAPSHOT</version>
 	</parent>
 
 	<groupId>org.jeconfig</groupId>
-	<artifactId>jeconfig.dbpersister</artifactId>
+	<artifactId>org.jeconfig.client</artifactId>
 	<version>0.9.5-SNAPSHOT</version>
 	<name>${project.artifactId}</name>
 	<packaging>bundle</packaging>
@@ -15,16 +15,24 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.jeconfig</groupId>
-			<artifactId>jeconfig.api</artifactId>
+			<artifactId>org.jeconfig.api</artifactId>
 			<version>${project.parent.version}</version>
 			<type>bundle</type>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jeconfig</groupId>
-			<artifactId>jeconfig.server</artifactId>
+			<artifactId>org.jeconfig.common</artifactId>
 			<version>${project.parent.version}</version>
 			<type>bundle</type>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jeconfig</groupId>
+			<artifactId>org.jeconfig.server</artifactId>
+			<version>${project.parent.version}</version>
+			<type>bundle</type>
+			<scope>test</scope>
 		</dependency>
 
 		<dependency>
@@ -40,11 +48,13 @@
 		</dependency>
 
 		<dependency>
-			<groupId>org.jeconfig</groupId>
-			<artifactId>jeconfig.client</artifactId>
-			<version>${project.parent.version}</version>
-			<type>bundle</type>
-			<scope>test</scope>
+			<groupId>com.google.collect</groupId>
+			<artifactId>com.springsource.com.google.common.collect</artifactId>
+		</dependency>
+
+		<dependency>
+			<groupId>org.jboss.javassist</groupId>
+			<artifactId>com.springsource.javassist</artifactId>
 		</dependency>
 
 		<dependency>
@@ -53,12 +63,27 @@
 		</dependency>
 
 		<dependency>
-			<groupId>com.h2database</groupId>
-			<artifactId>h2</artifactId>
-			<version>1.2.147</version>
-			<scope>test</scope>
+			<groupId>org.osgi</groupId>
+			<artifactId>org.osgi.compendium</artifactId>
 		</dependency>
 	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.apache.felix</groupId>
+				<artifactId>maven-bundle-plugin</artifactId>
+				<version>2.2.0</version>
+				<extensions>true</extensions>
+				<configuration>
+					<instructions>
+						<Service-Component>OSGI-INF/ConfigAutoRefreshService.xml, OSGI-INF/ConfigAutoSaveService.xml, OSGI-INF/ConfigService.xml</Service-Component>
+						<DynamicImport-Package>*</DynamicImport-Package>
+					</instructions>
+				</configuration>
+			</plugin>
+		</plugins>
+	</build>
 
 	<distributionManagement>
 		<repository>

@@ -7,7 +7,7 @@
 	</parent>
 
 	<groupId>org.jeconfig</groupId>
-	<artifactId>jeconfig.filepersister</artifactId>
+	<artifactId>org.jeconfig.filepersister</artifactId>
 	<version>0.9.5-SNAPSHOT</version>
 	<name>${project.artifactId}</name>
 	<packaging>bundle</packaging>
@@ -15,14 +15,14 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.jeconfig</groupId>
-			<artifactId>jeconfig.api</artifactId>
+			<artifactId>org.jeconfig.api</artifactId>
 			<version>${project.parent.version}</version>
 			<type>bundle</type>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jeconfig</groupId>
-			<artifactId>jeconfig.server</artifactId>
+			<artifactId>org.jeconfig.server</artifactId>
 			<version>${project.parent.version}</version>
 			<type>bundle</type>
 		</dependency>
@@ -39,7 +39,7 @@
 
 		<dependency>
 			<groupId>org.jeconfig</groupId>
-			<artifactId>jeconfig.client</artifactId>
+			<artifactId>org.jeconfig.client</artifactId>
 			<version>${project.parent.version}</version>
 			<type>bundle</type>
 			<scope>test</scope>
