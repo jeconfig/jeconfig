@@ -91,11 +91,13 @@ public class SetDTODeserializer extends AbstractDTODeserializer {
 
 	private List<ConfigSetDTO> getSetPropertyDtos(final List<ComplexConfigDTO> dtos, final String propName) {
 		final List<ConfigSetDTO> ret = new ArrayList<ConfigSetDTO>();
-		for (final ComplexConfigDTO config : dtos) {
-			if (config != null) {
-				final ConfigSetDTO setProperty = config.getSetProperty(propName);
-				if (setProperty != null) {
-					ret.add(setProperty);
+		if (dtos != null) {
+			for (final ComplexConfigDTO config : dtos) {
+				if (config != null) {
+					final ConfigSetDTO setProperty = config.getSetProperty(propName);
+					if (setProperty != null) {
+						ret.add(setProperty);
+					}
 				}
 			}
 		}
