@@ -57,7 +57,8 @@ public final class ComplexPropertyValidator implements IPropertyValidator<Config
 		final Set<Annotation> otherAnnotations,
 		final ISimpleTypeConverterRegistry converterRegistry,
 		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
-		final ComplexTypeValidator complexTypeValidator) {
+		final ComplexTypeValidator complexTypeValidator,
+		final Set<Class<?>> validatedComplexTypes) {
 
 		if (!annotation.polymorph()) {
 			final ConfigComplexType complexTypeAnno = AnnotationUtil.getAnnotation(
@@ -72,7 +73,12 @@ public final class ComplexPropertyValidator implements IPropertyValidator<Config
 					+ ConfigComplexType.class.getSimpleName()
 					+ "!");
 			}
-			complexTypeValidator.validate(propertyDescriptor.getPropertyType(), null, validators, converterRegistry);
+			complexTypeValidator.validate(
+					propertyDescriptor.getPropertyType(),
+					null,
+					validators,
+					converterRegistry,
+					validatedComplexTypes);
 		}
 
 		if (config == null) {

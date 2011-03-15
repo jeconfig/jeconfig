@@ -60,7 +60,8 @@ public final class SimplePropertyValidator implements IPropertyValidator<ConfigS
 		final Set<Annotation> otherAnnotations,
 		final ISimpleTypeConverterRegistry converterRegistry,
 		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
-		final ComplexTypeValidator complexTypeValidator) {
+		final ComplexTypeValidator complexTypeValidator,
+		final Set<Class<?>> validatedComplexTypes) {
 
 		if (annotation.customConverter() == NoCustomSimpleTypeConverter.class
 			&& !converterRegistry.isTypeSupported(propertyDescriptor.getPropertyType())) {

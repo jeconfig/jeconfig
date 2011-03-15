@@ -58,7 +58,8 @@ public final class MapPropertyValidator implements IPropertyValidator<ConfigMapP
 		final Set<Annotation> otherAnnotations,
 		final ISimpleTypeConverterRegistry converterRegistry,
 		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
-		final ComplexTypeValidator complexTypeValidator) {
+		final ComplexTypeValidator complexTypeValidator,
+		final Set<Class<?>> validatedComplexTypes) {
 
 		if (annotation.valueType().isPrimitive() && annotation.polymorph()) {
 			throw new IllegalArgumentException("'polymorph'='true' is not supported for primitive types!"); //$NON-NLS-1$
@@ -94,7 +95,7 @@ public final class MapPropertyValidator implements IPropertyValidator<ConfigMapP
 					+ ConfigComplexType.class.getSimpleName()
 					+ " or make the map polymorph!");
 			} else if (complexTypeAnnotation != null) {
-				complexTypeValidator.validate(annotation.valueType(), null, validators, converterRegistry);
+				complexTypeValidator.validate(annotation.valueType(), null, validators, converterRegistry, validatedComplexTypes);
 			}
 		}
 
@@ -112,7 +113,8 @@ public final class MapPropertyValidator implements IPropertyValidator<ConfigMapP
 						"map",
 						converterRegistry,
 						validators,
-						complexTypeValidator);
+						complexTypeValidator,
+						validatedComplexTypes);
 			}
 
 			for (final Object obj : map.values()) {
@@ -123,7 +125,8 @@ public final class MapPropertyValidator implements IPropertyValidator<ConfigMapP
 						"map",
 						converterRegistry,
 						validators,
-						complexTypeValidator);
+						complexTypeValidator,
+						validatedComplexTypes);
 			}
 		}
 	}

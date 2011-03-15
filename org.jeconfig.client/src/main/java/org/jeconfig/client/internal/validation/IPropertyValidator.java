@@ -53,5 +53,6 @@ public interface IPropertyValidator<ANNOTATION_TYPE extends Annotation> {
 		Set<Annotation> otherAnnotations,
 		final ISimpleTypeConverterRegistry converterRegistry,
 		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
-		ComplexTypeValidator complexTypeValidator);
+		ComplexTypeValidator complexTypeValidator,
+		Set<Class<?>> validatedComplexTypes);
 }

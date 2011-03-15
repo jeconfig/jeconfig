@@ -55,7 +55,8 @@ public final class CrossReferencePropertyValidator implements IPropertyValidator
 		final Set<Annotation> otherAnnotations,
 		final ISimpleTypeConverterRegistry converterRegistry,
 		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
-		final ComplexTypeValidator complexTypeValidator) {
+		final ComplexTypeValidator complexTypeValidator,
+		final Set<Class<?>> validatedComplexTypes) {
 
 		final Class<?> crossReferenceConfigClass = ProxyUtil.getConfigClass(propertyDescriptor.getPropertyType());
 

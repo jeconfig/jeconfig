@@ -95,7 +95,6 @@ public final class ConfigValidator {
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
 	private void validate(final Class<?> configClass, final Object config, final IScopePath scopePath) {
-
 		final ConfigClass configClassAnnotation = AnnotationUtil.getAnnotation(configClass, ConfigClass.class);
 		if (configClassAnnotation == null) {
 			throw new IllegalArgumentException("A configuration class must be annotated with the @"
@@ -111,7 +110,8 @@ public final class ConfigValidator {
 
 		validateScopePath(configClass, configClassAnnotation);
 
-		complexTypeValidator.validate(configClass, config, (Map) validators, converterRegistry);
+		final Set<Class<?>> validatedComplexTypes = new HashSet<Class<?>>();
+		complexTypeValidator.validate(configClass, config, (Map) validators, converterRegistry, validatedComplexTypes);
 
 		migrationValidator.validate(configClass);
 

@@ -29,6 +29,7 @@ package org.jeconfig.client.internal.validation;
 
 import java.lang.annotation.Annotation;
 import java.util.Map;
+import java.util.Set;
 
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
@@ -45,7 +46,8 @@ public final class CollectionElementValidator {
 		final String collectionName,
 		final ISimpleTypeConverterRegistry converterRegistry,
 		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
-		final ComplexTypeValidator complexTypeValidator) {
+		final ComplexTypeValidator complexTypeValidator,
+		final Set<Class<?>> validatedComplexTypes) {
 		if (object != null) {
 			if (annotatedItemType.isPrimitive()) {
 				if (!getWrapper(annotatedItemType).isAssignableFrom(object.getClass())) {
@@ -91,7 +93,7 @@ public final class CollectionElementValidator {
 							+ "' must have a default constructor!");
 					}
 
-					complexTypeValidator.validate(object.getClass(), null, validators, converterRegistry);
+					complexTypeValidator.validate(object.getClass(), null, validators, converterRegistry, validatedComplexTypes);
 				} else {
 					checkNonPolymorphClassCompatibility(annotatedItemType, object, collectionName);
 				}

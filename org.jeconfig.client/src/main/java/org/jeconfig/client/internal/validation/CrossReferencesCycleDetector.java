@@ -30,7 +30,9 @@ package org.jeconfig.client.internal.validation;
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import org.jeconfig.api.IConfigService;
 import org.jeconfig.api.annotation.ConfigArrayProperty;
@@ -65,27 +67,36 @@ public final class CrossReferencesCycleDetector {
 	public void detectCycles(final Class<?> configClass, final IScopePath scope) {
 		final List<IScopePath> usedScopes = new ArrayList<IScopePath>();
 		usedScopes.add(scope);
-		detectCycles(configClass, usedScopes);
+		final Set<Class<?>> checkedTypes = new HashSet<Class<?>>();
+		detectCycles(configClass, usedScopes, checkedTypes);
 	}
 
-	private void detectCycles(final Class<?> type, final List<IScopePath> usedScopes) {
+	private void detectCycles(final Class<?> type, final List<IScopePath> usedScopes, final Set<Class<?>> checkedTypes) {
 		final Class<?> configClass = ProxyUtil.getConfigClass(type);
+		if (checkedTypes.contains(configClass)) {
+			return;
+		}
+		checkedTypes.add(configClass);
 
 		for (final PropertyDescriptor propertyDescriptor : propertyAccessor.getPropertyDescriptors(configClass)) {
 			if (propertyDescriptor.getReadMethod() != null) {
 				for (final Annotation annotation : propertyDescriptor.getReadMethod().getAnnotations()) {
 					if (ConfigCrossReference.class.equals(annotation.annotationType())) {
-						handleCrossReference(propertyDescriptor.getPropertyType(), (ConfigCrossReference) annotation, usedScopes);
+						handleCrossReference(
+								propertyDescriptor.getPropertyType(),
+								(ConfigCrossReference) annotation,
+								usedScopes,
+								checkedTypes);
 					} else if (ConfigComplexProperty.class.equals(annotation.annotationType())) {
-						handleComplexType(propertyDescriptor, (ConfigComplexProperty) annotation, usedScopes);
+						handleComplexType(propertyDescriptor, (ConfigComplexProperty) annotation, usedScopes, checkedTypes);
 					} else if (ConfigArrayProperty.class.equals(annotation.annotationType())) {
-						handleArrayProperty(propertyDescriptor, (ConfigArrayProperty) annotation, usedScopes);
+						handleArrayProperty(propertyDescriptor, (ConfigArrayProperty) annotation, usedScopes, checkedTypes);
 					} else if (ConfigListProperty.class.equals(annotation.annotationType())) {
-						handleListProperty(propertyDescriptor, (ConfigListProperty) annotation, usedScopes);
+						handleListProperty(propertyDescriptor, (ConfigListProperty) annotation, usedScopes, checkedTypes);
 					} else if (ConfigSetProperty.class.equals(annotation.annotationType())) {
-						handleSetProperty(propertyDescriptor, (ConfigSetProperty) annotation, usedScopes);
+						handleSetProperty(propertyDescriptor, (ConfigSetProperty) annotation, usedScopes, checkedTypes);
 					} else if (ConfigMapProperty.class.equals(annotation.annotationType())) {
-						handleMapProperty(propertyDescriptor, (ConfigMapProperty) annotation, usedScopes);
+						handleMapProperty(propertyDescriptor, (ConfigMapProperty) annotation, usedScopes, checkedTypes);
 					}
 				}
 			}
@@ -95,58 +106,64 @@ public final class CrossReferencesCycleDetector {
 	private void handleMapProperty(
 		final PropertyDescriptor propertyDescriptor,
 		final ConfigMapProperty annotation,
-		final List<IScopePath> usedScopes) {
+		final List<IScopePath> usedScopes,
+		final Set<Class<?>> checkedTypes) {
 
 		if (isComplexType(annotation.valueType())) {
-			detectCycles(annotation.valueType(), usedScopes);
+			detectCycles(annotation.valueType(), usedScopes, checkedTypes);
 		}
 	}
 
 	private void handleSetProperty(
 		final PropertyDescriptor propertyDescriptor,
 		final ConfigSetProperty annotation,
-		final List<IScopePath> usedScopes) {
+		final List<IScopePath> usedScopes,
+		final Set<Class<?>> checkedTypes) {
 
 		if (isComplexType(annotation.itemType())) {
-			detectCycles(annotation.itemType(), usedScopes);
+			detectCycles(annotation.itemType(), usedScopes, checkedTypes);
 		}
 	}
 
 	private void handleListProperty(
 		final PropertyDescriptor propertyDescriptor,
 		final ConfigListProperty annotation,
-		final List<IScopePath> usedScopes) {
+		final List<IScopePath> usedScopes,
+		final Set<Class<?>> checkedTypes) {
 
 		if (isComplexType(annotation.itemType())) {
-			detectCycles(annotation.itemType(), usedScopes);
+			detectCycles(annotation.itemType(), usedScopes, checkedTypes);
 		}
 	}
 
 	private void handleArrayProperty(
 		final PropertyDescriptor propertyDescriptor,
 		final ConfigArrayProperty annotation,
-		final List<IScopePath> usedScopes) {
+		final List<IScopePath> usedScopes,
+		final Set<Class<?>> checkedTypes) {
 
 		final Class<?> itemType = propertyDescriptor.getPropertyType().getComponentType();
 		if (isComplexType(itemType)) {
-			detectCycles(itemType, usedScopes);
+			detectCycles(itemType, usedScopes, checkedTypes);
 		}
 	}
 
 	private void handleComplexType(
 		final PropertyDescriptor propertyDescriptor,
 		final ConfigComplexProperty annotation,
-		final List<IScopePath> usedScopes) {
+		final List<IScopePath> usedScopes,
+		final Set<Class<?>> checkedTypes) {
 
 		if (isComplexType(propertyDescriptor.getPropertyType())) {
-			detectCycles(propertyDescriptor.getPropertyType(), usedScopes);
+			detectCycles(propertyDescriptor.getPropertyType(), usedScopes, checkedTypes);
 		}
 	}
 
 	private void handleCrossReference(
 		final Class<?> crossReferenceType,
 		final ConfigCrossReference annotation,
-		final List<IScopePath> usedScopes) {
+		final List<IScopePath> usedScopes,
+		final Set<Class<?>> checkedTypes) {
 		final IScopePath scopeOfReference = getScope(crossReferenceType, annotation);
 		if (usedScopes.contains(scopeOfReference)) {
 			throw new IllegalArgumentException("Detected cross references cycle:\n" //$NON-NLS-1$
@@ -156,7 +173,7 @@ public final class CrossReferencesCycleDetector {
 		final List<IScopePath> usedScopesForReference = new ArrayList<IScopePath>(usedScopes);
 		usedScopesForReference.add(scopeOfReference);
 
-		detectCycles(crossReferenceType, usedScopesForReference);
+		detectCycles(crossReferenceType, usedScopesForReference, checkedTypes);
 	}
 
 	private String getCycleString(final List<IScopePath> usedScopes, final IScopePath nextScope) {

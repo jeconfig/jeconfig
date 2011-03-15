@@ -59,7 +59,8 @@ public final class ArrayPropertyValidator implements IPropertyValidator<ConfigAr
 		final Set<Annotation> otherAnnotations,
 		final ISimpleTypeConverterRegistry converterRegistry,
 		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
-		final ComplexTypeValidator complexTypeValidator) {
+		final ComplexTypeValidator complexTypeValidator,
+		final Set<Class<?>> validatedComplexTypes) {
 
 		if (!propertyDescriptor.getPropertyType().isArray()) {
 			throw new IllegalArgumentException("The property '"
@@ -92,7 +93,7 @@ public final class ArrayPropertyValidator implements IPropertyValidator<ConfigAr
 						+ " or make it polymorph!");
 				}
 			} else {
-				complexTypeValidator.validate(itemType, null, validators, converterRegistry);
+				complexTypeValidator.validate(itemType, null, validators, converterRegistry, validatedComplexTypes);
 			}
 		}
 
@@ -112,7 +113,8 @@ public final class ArrayPropertyValidator implements IPropertyValidator<ConfigAr
 						"array",
 						converterRegistry,
 						validators,
-						complexTypeValidator);
+						complexTypeValidator,
+						validatedComplexTypes);
 			}
 		}
 	}

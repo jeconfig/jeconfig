@@ -61,7 +61,8 @@ public final class SetPropertyValidator implements IPropertyValidator<ConfigSetP
 		final Set<Annotation> otherAnnotations,
 		final ISimpleTypeConverterRegistry converterRegistry,
 		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
-		final ComplexTypeValidator complexTypeValidator) {
+		final ComplexTypeValidator complexTypeValidator,
+		final Set<Class<?>> validatedComplexTypes) {
 
 		if (annotation.itemType().isPrimitive() && annotation.polymorph()) {
 			throw new IllegalArgumentException("'polymorph'='true' is not supported for primitive types!");
@@ -83,7 +84,7 @@ public final class SetPropertyValidator implements IPropertyValidator<ConfigSetP
 					+ ConfigComplexType.class.getSimpleName()
 					+ " or make the set polymorph!");
 			} else if (complexTypeAnnotation != null) {
-				complexTypeValidator.validate(annotation.itemType(), null, validators, converterRegistry);
+				complexTypeValidator.validate(annotation.itemType(), null, validators, converterRegistry, validatedComplexTypes);
 
 				if (getIdProperty(annotation.itemType()) == null) {
 					throw new IllegalArgumentException("The class '"
@@ -107,7 +108,8 @@ public final class SetPropertyValidator implements IPropertyValidator<ConfigSetP
 						"set",
 						converterRegistry,
 						validators,
-						complexTypeValidator);
+						complexTypeValidator,
+						validatedComplexTypes);
 			}
 
 			if (complexTypeAnnotation != null && !annotation.polymorph()) {

@@ -58,7 +58,12 @@ public final class ComplexTypeValidator {
 		final Class<?> type,
 		final Object complexConfig,
 		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
-		final ISimpleTypeConverterRegistry converterRegistry) {
+		final ISimpleTypeConverterRegistry converterRegistry,
+		final Set<Class<?>> validatedComplexTypes) {
+		if (validatedComplexTypes.contains(type)) {
+			return;
+		}
+		validatedComplexTypes.add(type);
 
 		if ((type.getModifiers() & Modifier.FINAL) != 0) {
 			throw new IllegalArgumentException("The configuration class '" + type + "' must not be final!");
@@ -91,7 +96,8 @@ public final class ComplexTypeValidator {
 						otherAnnotations,
 						converterRegistry,
 						validators,
-						this);
+						this,
+						validatedComplexTypes);
 			}
 		}
 	}
