@@ -161,6 +161,10 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 		Assert.paramNotNull(configClass, "configClass"); //$NON-NLS-1$
 		Assert.paramNotNull(scopePath, "scope"); //$NON-NLS-1$
 
+		if (LOG.isDebugEnabled()) {
+			LOG.debug("loading config for scope: " + scopePath); //$NON-NLS-1$
+		}
+
 		final Class<T> realClass = ProxyUtil.getConfigClass(configClass);
 
 		configValidator.validate(realClass, scopePath);
@@ -223,7 +227,6 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 		final IScopePath scopePath,
 		final List<ComplexConfigDTO> configs) {
 		if (scopePath != null) {
-			LOG.info("loading config for scope: " + scopePath); //$NON-NLS-1$
 			if (ClassScopeDescriptor.NAME.equals(scopePath.getLastScope().getName())) {
 				configs.add(dtoMapper.serialize(classInstantiation.newInstance(configClass), scopePath));
 				// no further recursion - must be the root of the tree

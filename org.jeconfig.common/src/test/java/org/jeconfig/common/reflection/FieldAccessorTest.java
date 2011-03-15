@@ -27,14 +27,12 @@
 
 package org.jeconfig.common.reflection;
 
-import org.jeconfig.common.reflection.FieldAccessor;
+import java.lang.reflect.Field;
+
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
-/**
- * 
- */
 public class FieldAccessorTest {
 	private FieldAccessor accessor;
 	private TestBean testBean;
@@ -49,7 +47,25 @@ public class FieldAccessorTest {
 	public void testRead() {
 		final String value = "value"; //$NON-NLS-1$
 		testBean.setName(value);
-		final String actual = (String) accessor.read(testBean, TestBean.PROP_NAME);
+		String actual = (String) accessor.read(testBean, TestBean.PROP_NAME);
+		Assert.assertEquals(value, actual);
+		// test that cached accessor also works
+		actual = (String) accessor.read(testBean, TestBean.PROP_NAME);
+		Assert.assertEquals(value, actual);
+	}
+
+	@Test
+	public void testFieldType() {
+		final Class<?> clazz = accessor.getFieldType(testBean.getClass(), TestBean.PROP_NAME);
+		Assert.assertEquals(String.class, clazz);
+	}
+
+	@Test
+	public void testField() throws IllegalAccessException {
+		final String value = "value"; //$NON-NLS-1$
+		testBean.setName(value);
+		final Field field = accessor.getField(testBean.getClass(), TestBean.PROP_NAME);
+		final Object actual = field.get(testBean);
 		Assert.assertEquals(value, actual);
 	}
 

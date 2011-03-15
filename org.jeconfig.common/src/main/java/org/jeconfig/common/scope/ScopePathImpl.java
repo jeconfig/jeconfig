@@ -137,10 +137,9 @@ public final class ScopePathImpl implements IScopePath {
 			final IScope scope = scopes.get(i);
 			sb.append(scope);
 			if (i < scopes.size() - 1) {
-				sb.append(" / "); //$NON-NLS-1$
+				sb.append("/"); //$NON-NLS-1$
 			}
 		}
-
 		return sb.toString();
 	}
 }
