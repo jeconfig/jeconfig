@@ -29,11 +29,14 @@ package org.jeconfig.client.proxy;
 
 import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+
+import javassist.util.proxy.MethodHandler;
 
 import org.jeconfig.api.annotation.ConfigComplexProperty;
 import org.jeconfig.api.annotation.ConfigCrossReference;
@@ -43,8 +46,6 @@ import org.jeconfig.api.annotation.ConfigSetProperty;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.client.internal.ConfigAnnotations;
 import org.jeconfig.common.reflection.PropertyAccessor;
-
-import javassist.util.proxy.MethodHandler;
 
 public class ConfigProxyMethodHandler extends AbstractConfigProxy<ComplexConfigDTO> implements MethodHandler {
 	private static final String CROSS_REFERENCES_ARE_READONLY = "Cross References are readonly"; //$NON-NLS-1$
@@ -109,7 +110,13 @@ public class ConfigProxyMethodHandler extends AbstractConfigProxy<ComplexConfigD
 		}
 
 		if (proceed == null) {
-			return thisMethod.invoke(this, args);
+			try {
+				return thisMethod.invoke(this, args);
+			} catch (final InvocationTargetException e) {
+				if (e.getTargetException() instanceof RuntimeException) {
+					throw e.getTargetException();
+				}
+			}
 		}
 		// check whether thisMethod is a modifying method - note that
 		// it is important to use thisMethod and not proceed as proceed is
@@ -127,13 +134,20 @@ public class ConfigProxyMethodHandler extends AbstractConfigProxy<ComplexConfigD
 			setDirty();
 		}
 
-		final Object result = proceed.invoke(self, args);
+		try {
+			final Object result = proceed.invoke(self, args);
 
-		if (shouldAttachNewValue && shouldUpdateProxy()) {
-			proxyUpdater.updateConfig(self, getConfigDTOs());
+			if (shouldAttachNewValue && shouldUpdateProxy()) {
+				proxyUpdater.updateConfig(self, getConfigDTOs());
+			}
+
+			return result;
+		} catch (final InvocationTargetException e) {
+			if (e.getTargetException() instanceof RuntimeException) {
+				throw e.getTargetException();
+			}
+			throw e;
 		}
-
-		return result;
 	}
 
 	private boolean shouldAttachNewValue(final Object newValue, final ModifyingMethodInfo methodInfo) {
@@ -164,7 +178,7 @@ public class ConfigProxyMethodHandler extends AbstractConfigProxy<ComplexConfigD
 					newValue,
 					self,
 					ConfigAnnotations.isCollectionAnnotation(methodInfo.getConfigPropertyAnnotation()));
-		} else {
+		} else if (!isInitializing()) {
 			throw new IllegalArgumentException(
 				"illegal argument use IConfigService.create* methods to create Config (sub)Objects for: " + newValue.getClass()); //$NON-NLS-1$
 		}

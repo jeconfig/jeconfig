@@ -75,6 +75,11 @@ public class ConfigServiceTest extends AbstractConfigServiceTest {
 	}
 
 	@Test
+	public void testSelfReferenceConfig() {
+		getConfigService().load(SelfReferenceRootConfig.class);
+	}
+
+	@Test
 	public void testScopePathListenerRefresh() {
 		final TestConfiguration globalConfiguration = getConfigService().load(TestConfiguration.class);
 		final IScopePath scope = getConfigService().getScopePathBuilderFactory(TestConfiguration.class).annotatedPath().create();

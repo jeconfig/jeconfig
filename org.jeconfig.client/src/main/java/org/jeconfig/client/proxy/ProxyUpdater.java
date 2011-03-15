@@ -40,6 +40,8 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
+import javassist.util.proxy.ProxyObject;
+
 import org.jeconfig.api.annotation.ConfigArrayProperty;
 import org.jeconfig.api.annotation.ConfigComplexProperty;
 import org.jeconfig.api.annotation.ConfigComplexType;
@@ -60,8 +62,6 @@ import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.client.internal.ConfigIdPropertyUtil;
 import org.jeconfig.common.reflection.ClassInstantiation;
 import org.jeconfig.common.reflection.PropertyAccessor;
-
-import javassist.util.proxy.ProxyObject;
 
 /**
  * Scans for not wrapped collections/complex types and wraps them. updated configDto of defining scope

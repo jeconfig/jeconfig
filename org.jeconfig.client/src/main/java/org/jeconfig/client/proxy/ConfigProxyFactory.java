@@ -31,16 +31,16 @@ import java.lang.reflect.Method;
 import java.util.Collections;
 import java.util.concurrent.ConcurrentHashMap;
 
+import javassist.util.proxy.MethodFilter;
+import javassist.util.proxy.ProxyFactory;
+import javassist.util.proxy.ProxyObject;
+
 import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.scope.IScopePath;
 import org.jeconfig.client.internal.AnnotationUtil;
-
-import javassist.util.proxy.MethodFilter;
-import javassist.util.proxy.ProxyFactory;
-import javassist.util.proxy.ProxyObject;
 
 public final class ConfigProxyFactory implements IConfigObjectFactory {
 	private static final MethodFilter FINALIZE_FILTER = new MethodFilter() {
@@ -85,7 +85,12 @@ public final class ConfigProxyFactory implements IConfigObjectFactory {
 		((ProxyObject) result).setHandler(new RootConfigProxyMethodHandler(configClass, scope, proxyUpdater));
 
 		// also create proxies for objects which may be created by the constructor of the configuration
-		proxyUpdater.updateConfig(result, Collections.<ComplexConfigDTO> emptyList());
+		((IConfigProxy<?>) result).setInitializingWhile(new Runnable() {
+			@Override
+			public void run() {
+				proxyUpdater.updateConfig(result, Collections.<ComplexConfigDTO> emptyList());
+			}
+		});
 
 		return result;
 	}
