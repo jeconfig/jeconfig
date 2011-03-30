@@ -34,15 +34,15 @@ import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jeconfig.dbpersister.DbConfigPersister;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Helper class for DbPersister.
  */
 public class DbUtils {
-	private static final Log LOG = LogFactory.getLog(DbConfigPersister.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DbConfigPersister.class);
 
 	/**
 	 * Closes sql connections ignoring null and exception.

@@ -39,8 +39,6 @@ import java.util.Map;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.filefilter.FileFilterUtils;
 import org.apache.commons.io.filefilter.TrueFileFilter;
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.exception.StaleConfigException;
 import org.jeconfig.api.exception.StoreConfigException;
@@ -50,14 +48,15 @@ import org.jeconfig.api.scope.IScopePath;
 import org.jeconfig.api.util.Assert;
 import org.jeconfig.server.marshalling.IConfigMarshaller;
 import org.jeconfig.server.persister.DefaultScopePathGenerator;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * A Persister implementation that stores configs in files
  */
 public final class FileConfigPersister implements IConfigPersister {
-
 	public static final String ID = FileConfigPersister.class.getName();
-	private static final Log LOG = LogFactory.getLog(FileConfigPersister.class);
+	private static final Logger LOG = LoggerFactory.getLogger(FileConfigPersister.class);
 	private final IConfigMarshaller marshaller;
 	private final IScopePathGenerator gen;
 	private final String rootDirectory;

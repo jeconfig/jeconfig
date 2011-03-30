@@ -32,8 +32,8 @@ import java.sql.SQLException;
 
 import javax.sql.DataSource;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Class to encapsulate exception handling and sql specific boilerplate code from DbPersister.
@@ -42,7 +42,7 @@ import org.apache.commons.logging.LogFactory;
  * @param <T>
  */
 public class JdbcTemplate<T> {
-	private static final Log LOG = LogFactory.getLog(JdbcTemplate.class);
+	private static final Logger LOG = LoggerFactory.getLogger(JdbcTemplate.class);
 	private static ThreadLocal<Connection> connectionHolder = new ThreadLocal<Connection>();
 
 	private final DataSource dataSource;

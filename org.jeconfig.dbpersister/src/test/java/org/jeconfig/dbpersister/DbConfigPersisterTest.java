@@ -36,8 +36,6 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.h2.jdbcx.JdbcDataSource;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
@@ -54,11 +52,13 @@ import org.jeconfig.server.marshalling.XStreamXmlMarshaller;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @SuppressWarnings("nls")
 public class DbConfigPersisterTest extends AbstractConfigPersisterTest {
 
-	private static final Log LOG = LogFactory.getLog(DbConfigPersisterTest.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DbConfigPersisterTest.class);
 	private DbConfigPersister persister;
 	private JdbcDataSource dataSource;
 	private Connection con = null;

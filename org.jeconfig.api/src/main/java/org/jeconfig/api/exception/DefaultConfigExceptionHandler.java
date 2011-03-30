@@ -27,16 +27,16 @@
 
 package org.jeconfig.api.exception;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jeconfig.api.scope.IScopePath;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Default implementation of the {@link IConfigExceptionHandler} interface.<br>
  * Logs all exceptions and uses default failure solution strategies.
  */
 public class DefaultConfigExceptionHandler implements IConfigExceptionHandler {
-	private static final Log LOG = LogFactory.getLog(DefaultConfigExceptionHandler.class);
+	private static final Logger LOG = LoggerFactory.getLogger(DefaultConfigExceptionHandler.class);
 
 	@Override
 	public LoadFailureSolutionStrategy loadFailed(

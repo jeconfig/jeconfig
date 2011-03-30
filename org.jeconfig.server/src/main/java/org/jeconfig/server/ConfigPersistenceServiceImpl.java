@@ -34,8 +34,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.exception.StaleConfigException;
 import org.jeconfig.api.persister.IConfigPersistenceService;
@@ -46,6 +44,8 @@ import org.jeconfig.api.util.Assert;
 import org.jeconfig.common.datastructure.CacheEntry;
 import org.jeconfig.common.datastructure.LRUCache;
 import org.jeconfig.server.persister.DefaultPersisterSelector;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Configuration persistence service.
@@ -53,7 +53,7 @@ import org.jeconfig.server.persister.DefaultPersisterSelector;
  * Persister which delegates to a persister which is chosen by a persister selector.
  */
 public final class ConfigPersistenceServiceImpl implements IConfigPersistenceService {
-	private static final Log LOG = LogFactory.getLog(ConfigPersistenceServiceImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ConfigPersistenceServiceImpl.class);
 	private static final int CACHE_SIZE = 400;
 
 	private final Map<String, IConfigPersister> configPersisters;

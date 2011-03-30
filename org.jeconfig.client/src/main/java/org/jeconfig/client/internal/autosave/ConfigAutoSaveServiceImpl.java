@@ -34,8 +34,6 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jeconfig.api.ConfigServiceAccessor;
 import org.jeconfig.api.IConfigService;
 import org.jeconfig.api.autosave.IConfigAutoSaveService;
@@ -45,9 +43,11 @@ import org.jeconfig.api.util.Assert;
 import org.jeconfig.client.proxy.IConfigDirtyStateListener;
 import org.jeconfig.client.proxy.IRootConfigProxy;
 import org.jeconfig.client.proxy.ProxyUtil;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ConfigAutoSaveServiceImpl implements IConfigAutoSaveService {
-	private static final Log LOG = LogFactory.getLog(ConfigAutoSaveServiceImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ConfigAutoSaveServiceImpl.class);
 	private static final long DEFAULT_AUTOSAVE_TIME = 5 * 60 * 1000;
 
 	private final ConcurrentHashMap<IScopePath, IRootConfigProxy> dirtyConfigs;

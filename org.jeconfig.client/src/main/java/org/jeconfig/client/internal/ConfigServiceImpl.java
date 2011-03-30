@@ -37,8 +37,6 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 import org.jeconfig.api.IConfigSetupService;
 import org.jeconfig.api.IConfigUnsetter;
 import org.jeconfig.api.IScopePathListener;
@@ -74,9 +72,11 @@ import org.jeconfig.client.proxy.ProxyUtil;
 import org.jeconfig.common.datastructure.CacheEntry;
 import org.jeconfig.common.datastructure.LRUCache;
 import org.jeconfig.common.reflection.ClassInstantiation;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class ConfigServiceImpl implements IConfigSetupService, IInternalConfigService {
-	private static final Log LOG = LogFactory.getLog(ConfigServiceImpl.class);
+	private static final Logger LOG = LoggerFactory.getLogger(ConfigServiceImpl.class);
 	private static final int CACHE_SIZE = 200;
 
 	private final IScopeRegistry scopeRegistry = new ScopeRegistryImpl();
