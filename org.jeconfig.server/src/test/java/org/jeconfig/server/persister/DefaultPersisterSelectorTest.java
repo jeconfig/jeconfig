@@ -26,8 +26,8 @@
  */
 package org.jeconfig.server.persister;
 
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 import junit.framework.Assert;
 
@@ -46,7 +46,7 @@ public class DefaultPersisterSelectorTest {
 	@Test(expected = IllegalStateException.class)
 	public void testExceptionIfNoPersister() {
 		final DefaultPersisterSelector defaultPersisterSelector = new DefaultPersisterSelector();
-		defaultPersisterSelector.getPersisterId(null, new ArrayList<String>());
+		defaultPersisterSelector.getPersisterId(null, Collections.<String> emptyList());
 	}
 
 	@Test(expected = IllegalStateException.class)

@@ -32,6 +32,7 @@ import java.util.Collection;
 import org.jeconfig.api.persister.IPersisterSelector;
 import org.jeconfig.api.scope.IScopePath;
 import org.jeconfig.api.scope.UserScopeDescriptor;
+import org.jeconfig.api.util.Assert;
 
 /**
  * Persister selector which can be used while development.<br>
@@ -44,6 +45,7 @@ public final class DevelopmentModePersisterSelector implements IPersisterSelecto
 	private boolean developmentMode;
 
 	public DevelopmentModePersisterSelector(final IPersisterSelector persisterSelector, final boolean developmentMode) {
+		Assert.paramNotNull(persisterSelector, "persisterSelector"); //$NON-NLS-1$
 		this.persisterSelector = persisterSelector;
 		this.developmentMode = developmentMode;
 	}
@@ -53,7 +55,7 @@ public final class DevelopmentModePersisterSelector implements IPersisterSelecto
 		if (configPersisterIds.size() == 0) {
 			throw new IllegalStateException("Didn't get any configuration persister!"); //$NON-NLS-1$
 		}
-		if (developmentMode && scopePath.findScopeByName(UserScopeDescriptor.NAME) != null) {
+		if (developmentMode && scopePath != null && scopePath.findScopeByName(UserScopeDescriptor.NAME) != null) {
 			return InMemoryPersister.ID;
 		}
 		return persisterSelector.getPersisterId(scopePath, configPersisterIds);
