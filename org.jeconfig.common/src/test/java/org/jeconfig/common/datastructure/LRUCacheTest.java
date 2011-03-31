@@ -27,24 +27,22 @@
 
 package org.jeconfig.common.datastructure;
 
-import org.jeconfig.common.datastructure.LRUCache;
 import org.junit.Assert;
 import org.junit.Test;
 
-/**
- * 
- */
 public class LRUCacheTest {
 
 	@Test
 	public void testAutomaticRemove() {
-		final LRUCache<Integer, String> cache = new LRUCache<Integer, String>(2);
-		cache.put(Integer.valueOf(1), null);
-		cache.put(Integer.valueOf(2), null);
-		cache.get(Integer.valueOf(1));
+		final LRUCache<Integer, CacheEntry<String>> cache = new LRUCache<Integer, CacheEntry<String>>(2);
+		cache.put(Integer.valueOf(1), new CacheEntry<String>("test")); //$NON-NLS-1$
+		cache.put(Integer.valueOf(2), new CacheEntry<String>(null));
+		final CacheEntry<String> cacheEntry = cache.get(Integer.valueOf(1));
+
 		cache.put(Integer.valueOf(3), null);
 
 		// because 1 was accessed after addition of 2, 2 must be removed
+		Assert.assertEquals("test", cacheEntry.getElement()); //$NON-NLS-1$
 		Assert.assertTrue(cache.containsKey(Integer.valueOf(1)));
 		Assert.assertFalse(cache.containsKey(Integer.valueOf(2)));
 		Assert.assertTrue(cache.containsKey(Integer.valueOf(3)));
