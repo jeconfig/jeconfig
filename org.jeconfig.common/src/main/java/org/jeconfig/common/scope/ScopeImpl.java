@@ -32,6 +32,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import org.jeconfig.api.scope.IScope;
+import org.jeconfig.api.util.Assert;
 
 /**
  * internal API do not use!!
@@ -49,6 +50,9 @@ public final class ScopeImpl implements IScope {
 	 * @param properties
 	 */
 	public ScopeImpl(final String scopeName, final Map<String, String> properties) {
+		Assert.paramNotNull(scopeName, "scopeName"); //$NON-NLS-1$
+		Assert.paramNotEmpty(scopeName, "scopeName"); //$NON-NLS-1$
+		Assert.paramNotNull(properties, "properties"); //$NON-NLS-1$
 		this.scopeName = scopeName;
 		this.properties = new HashMap<String, String>(properties);
 	}
