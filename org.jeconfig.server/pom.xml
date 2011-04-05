@@ -3,12 +3,12 @@
 	<parent>
 		<groupId>org.jeconfig</groupId>
 		<artifactId>org.jeconfig.main</artifactId>
-		<version>0.9.8-SNAPSHOT</version>
+		<version>0.9.8</version>
 	</parent>
 
 	<groupId>org.jeconfig</groupId>
 	<artifactId>org.jeconfig.server</artifactId>
-	<version>0.9.8-SNAPSHOT</version>
+	<version>0.9.8</version>
 	<name>${project.artifactId}</name>
 	<packaging>bundle</packaging>
 
