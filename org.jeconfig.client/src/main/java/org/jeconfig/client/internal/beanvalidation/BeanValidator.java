@@ -31,15 +31,19 @@ import java.util.Set;
 
 import javax.validation.ConstraintViolation;
 import javax.validation.Validation;
+import javax.validation.ValidationException;
 import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 import javax.validation.groups.Default;
 
 import org.jeconfig.api.exception.InvalidConfigException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public final class BeanValidator {
+	private static final Logger LOG = LoggerFactory.getLogger(BeanValidator.class.getName());
 
-	private final Validator validator;
+	private Validator validator = null;
 
 	public BeanValidator() {
 		final ClassLoader current = Thread.currentThread().getContextClassLoader();
@@ -47,15 +51,19 @@ public final class BeanValidator {
 			Thread.currentThread().setContextClassLoader(this.getClass().getClassLoader());
 			final ValidatorFactory factory = Validation.buildDefaultValidatorFactory();
 			validator = factory.getValidator();
+		} catch (final ValidationException e) {
+			LOG.info("no bean validation(jsr303) implementation provided. discarding validation!"); //$NON-NLS-1$
 		} finally {
 			Thread.currentThread().setContextClassLoader(current);
 		}
 	}
 
 	public void validate(final Object config) {
-		final Set<ConstraintViolation<Object>> constraintViolations = validator.validate(config, Default.class);
-		if (constraintViolations.size() > 0) {
-			throw new InvalidConfigException(constraintViolations);
+		if (validator != null) {
+			final Set<ConstraintViolation<Object>> constraintViolations = validator.validate(config, Default.class);
+			if (constraintViolations.size() > 0) {
+				throw new InvalidConfigException(constraintViolations);
+			}
 		}
 	}
 }
