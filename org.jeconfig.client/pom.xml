@@ -17,21 +17,18 @@
 			<groupId>org.jeconfig</groupId>
 			<artifactId>org.jeconfig.api</artifactId>
 			<version>${project.parent.version}</version>
-			<type>bundle</type>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jeconfig</groupId>
 			<artifactId>org.jeconfig.common</artifactId>
 			<version>${project.parent.version}</version>
-			<type>bundle</type>
 		</dependency>
 
 		<dependency>
 			<groupId>org.jeconfig</groupId>
 			<artifactId>org.jeconfig.server</artifactId>
 			<version>${project.parent.version}</version>
-			<type>bundle</type>
 			<scope>test</scope>
 		</dependency>
 

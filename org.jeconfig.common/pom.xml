@@ -17,7 +17,6 @@
 			<groupId>org.jeconfig</groupId>
 			<artifactId>org.jeconfig.api</artifactId>
 			<version>${project.parent.version}</version>
-			<type>bundle</type>
 		</dependency>
 	</dependencies>
 
