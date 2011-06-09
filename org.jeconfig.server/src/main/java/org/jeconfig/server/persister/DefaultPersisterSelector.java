@@ -41,10 +41,12 @@ public final class DefaultPersisterSelector implements IPersisterSelector {
 	@Override
 	public String getPersisterId(final IScopePath scope, final Collection<String> configPersisterIds) {
 		if (configPersisterIds.size() == 0) {
-			throw new IllegalStateException("Didn't get any configuration persister!"); //$NON-NLS-1$
+			throw new IllegalStateException(
+				"DefaultPersisterSelector needs exactly one configuration persister! got: " + configPersisterIds.size()); //$NON-NLS-1$
 		}
 		if (configPersisterIds.size() > 1) {
-			throw new IllegalStateException("Got more than one configuration persister!"); //$NON-NLS-1$
+			throw new IllegalStateException(
+				"DefaultPersisterSelector needs exactly one configuration persister! got: " + configPersisterIds.size()); //$NON-NLS-1$
 		}
 		return configPersisterIds.iterator().next();
 	}

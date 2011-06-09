@@ -50,6 +50,20 @@
 			<groupId>com.thoughtworks.xstream</groupId>
 			<artifactId>com.springsource.com.thoughtworks.xstream</artifactId>
 		</dependency>
+		
+		<dependency>
+			<groupId>ch.qos.logback</groupId>
+			<artifactId>com.springsource.ch.qos.logback.classic</artifactId>
+			<scope>test</scope>
+		</dependency>
+		
+		<dependency>
+			<groupId>org.easymock</groupId>
+			<artifactId>easymock</artifactId>
+			<version>3.0</version>
+			<type>jar</type>
+			<scope>test</scope>
+		</dependency>
 	</dependencies>
 
 	<distributionManagement>
