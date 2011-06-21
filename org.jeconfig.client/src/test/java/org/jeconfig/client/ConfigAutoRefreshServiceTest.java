@@ -30,7 +30,7 @@ package org.jeconfig.client;
 import junit.framework.Assert;
 
 import org.jeconfig.api.exception.DefaultConfigExceptionHandler;
-import org.jeconfig.api.persister.IConfigPersister;
+import org.jeconfig.api.persister.ConfigPersister;
 import org.jeconfig.client.internal.autorefresh.ConfigAutoRefreshServiceImpl;
 import org.jeconfig.server.persister.InMemoryPersister;
 import org.junit.After;
@@ -43,7 +43,7 @@ public class ConfigAutoRefreshServiceTest extends AbstractConfigServiceTest {
 	private ConfigAutoRefreshServiceImpl autoRefreshService;
 
 	@Override
-	protected IConfigPersister createPersister() {
+	protected ConfigPersister createPersister() {
 		return new InMemoryPersister();
 	}
 

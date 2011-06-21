@@ -33,13 +33,13 @@ import java.util.List;
 import junit.framework.Assert;
 
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.client.AbstractConfigServiceTest;
 import org.jeconfig.client.annotation.simple.TestConfigEnum;
 import org.jeconfig.client.testconfigs.BaseClass;
 import org.jeconfig.client.testconfigs.ComplexSubtype;
-import org.jeconfig.client.testconfigs.IMyInferfaceForNonPolymorphTest;
-import org.jeconfig.client.testconfigs.IMyInterface;
+import org.jeconfig.client.testconfigs.MyInferfaceForNonPolymorphTest;
+import org.jeconfig.client.testconfigs.MyInterface;
 import org.jeconfig.client.testconfigs.SubClass1;
 import org.jeconfig.client.testconfigs.SubClass2;
 import org.junit.Test;
@@ -107,7 +107,7 @@ public class ConfigListPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeUseChildPrimitiveField() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(ListTestConfiguration.class);
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(ListTestConfiguration.class);
 
 		final ListTestConfiguration globalConfig = getConfigService().load(
 				ListTestConfiguration.class,
@@ -131,7 +131,7 @@ public class ConfigListPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeUseParentSimpleField() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(ListTestConfiguration.class);
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(ListTestConfiguration.class);
 
 		final ListTestConfiguration globalConfig = getConfigService().load(
 				ListTestConfiguration.class,
@@ -155,7 +155,7 @@ public class ConfigListPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeUseChildComplexTypeField() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(ListTestConfiguration.class);
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(ListTestConfiguration.class);
 
 		final ListTestConfiguration globalConfig = getConfigService().load(
 				ListTestConfiguration.class,
@@ -227,9 +227,9 @@ public class ConfigListPropertyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testPolymorphTrueIMyInterfaceField() {
 		final ListTestConfiguration testConfig = getConfigService().load(ListTestConfiguration.class);
-		final IMyInterface[] array = new IMyInterface[] {
+		final MyInterface[] array = new MyInterface[] {
 				SubClass1.create(getConfigService(), "data1", 0), SubClass2.create(getConfigService(), "data2", 0.0f)};
-		final List<IMyInterface> list = getConfigService().createList();
+		final List<MyInterface> list = getConfigService().createList();
 		list.addAll(Arrays.asList(array));
 		testConfig.setImplClass(list);
 		getConfigService().save(testConfig);
@@ -240,9 +240,9 @@ public class ConfigListPropertyTest extends AbstractConfigServiceTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testPolymorphFalseIMyInterfaceField() {
 		final ListTestConfigurationNonPolymorph testConfig = getConfigService().load(ListTestConfigurationNonPolymorph.class);
-		final IMyInferfaceForNonPolymorphTest[] array = new IMyInferfaceForNonPolymorphTest[] {
+		final MyInferfaceForNonPolymorphTest[] array = new MyInferfaceForNonPolymorphTest[] {
 				SubClass1.create(getConfigService(), "data1", 0), SubClass2.create(getConfigService(), "data2", 0.0f)};
-		final List<IMyInferfaceForNonPolymorphTest> list = getConfigService().createList();
+		final List<MyInferfaceForNonPolymorphTest> list = getConfigService().createList();
 		list.addAll(Arrays.asList(array));
 		testConfig.setImplClass2(list);
 		getConfigService().save(testConfig);

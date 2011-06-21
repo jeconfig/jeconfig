@@ -27,7 +27,7 @@
 
 package org.jeconfig.exporter.test.configs;
 
-import org.jeconfig.api.IConfigService;
+import org.jeconfig.api.ConfigService;
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
 
@@ -61,7 +61,7 @@ public class ComplexType {
 		this.name = name;
 	}
 
-	public static ComplexType create(final IConfigService cs, final int id, final String name) {
+	public static ComplexType create(final ConfigService cs, final int id, final String name) {
 		final ComplexType cfg = cs.createComplexObject(ComplexType.class);
 		cfg.setId(id);
 		cfg.setName(name);

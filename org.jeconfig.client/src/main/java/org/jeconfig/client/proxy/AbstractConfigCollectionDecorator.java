@@ -30,20 +30,20 @@ package org.jeconfig.client.proxy;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.jeconfig.api.dto.IConfigDTO;
+import org.jeconfig.api.dto.ConfigDTO;
 import org.jeconfig.api.util.Assert;
 
 /**
  * @param <E>
  * @param <DTO_TYPE>
  */
-public abstract class AbstractConfigCollectionDecorator<E, DTO_TYPE extends IConfigDTO> extends AbstractConfigProxy<DTO_TYPE> implements
+public abstract class AbstractConfigCollectionDecorator<E, DTO_TYPE extends ConfigDTO> extends AbstractConfigProxy<DTO_TYPE> implements
 		Collection<E> {
 	private final Collection<E> target;
 
 	public AbstractConfigCollectionDecorator(final Collection<E> target) {
 		Assert.paramNotNull(target, "target"); //$NON-NLS-1$
-		if (target instanceof IConfigProxy) {
+		if (target instanceof ConfigProxy) {
 			throw new IllegalArgumentException("Attempt to decorate a collection twice!"); //$NON-NLS-1$
 		}
 
@@ -199,8 +199,8 @@ public abstract class AbstractConfigCollectionDecorator<E, DTO_TYPE extends ICon
 			return true;
 		} else {
 			for (final E theE : target) {
-				if (theE instanceof IConfigProxy) {
-					final IConfigProxy<?> proxyE = (IConfigProxy<?>) theE;
+				if (theE instanceof ConfigProxy) {
+					final ConfigProxy<?> proxyE = (ConfigProxy<?>) theE;
 					if (proxyE.hasDiff()) {
 						return true;
 					}

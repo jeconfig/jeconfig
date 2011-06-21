@@ -37,12 +37,12 @@ import javassist.util.proxy.ProxyObject;
 
 import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.annotation.ConfigComplexType;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.client.internal.AnnotationUtil;
 
-public final class ConfigProxyFactory implements IConfigObjectFactory {
+public final class ConfigProxyFactory implements ConfigObjectFactory {
 	private static final MethodFilter FINALIZE_FILTER = new MethodFilter() {
 		@Override
 		public boolean isHandled(final Method m) {
@@ -51,16 +51,16 @@ public final class ConfigProxyFactory implements IConfigObjectFactory {
 		}
 	};
 
-	private final ISimpleTypeConverterRegistry simpleTypeConverterRegistry;
+	private final SimpleTypeConverterRegistry simpleTypeConverterRegistry;
 	private final ConcurrentHashMap<Class<?>, ProxyFactory> factoryCache;
 
-	public ConfigProxyFactory(final ISimpleTypeConverterRegistry simpleTypeConverterRegistry) {
+	public ConfigProxyFactory(final SimpleTypeConverterRegistry simpleTypeConverterRegistry) {
 		this.simpleTypeConverterRegistry = simpleTypeConverterRegistry;
 		factoryCache = new ConcurrentHashMap<Class<?>, ProxyFactory>();
 	}
 
 	@Override
-	public <T> T createRootConfigProxy(final Class<T> configClass, final IScopePath scope) {
+	public <T> T createRootConfigProxy(final Class<T> configClass, final ScopePath scope) {
 		if (AnnotationUtil.getAnnotation(configClass, ConfigClass.class) == null) {
 			throw new IllegalArgumentException("Can only create root proxies for classes annotated with @ConfigClass!"); //$NON-NLS-1$
 		}
@@ -69,7 +69,7 @@ public final class ConfigProxyFactory implements IConfigObjectFactory {
 		if (proxyFactory == null) {
 			proxyFactory = new CurrentClassLoaderProxyFactory();
 			proxyFactory.setSuperclass(configClass);
-			proxyFactory.setInterfaces(new Class[] {IRootConfigProxy.class});
+			proxyFactory.setInterfaces(new Class[] {RootConfigProxy.class});
 			proxyFactory.setFilter(FINALIZE_FILTER);
 			factoryCache.putIfAbsent(configClass, proxyFactory);
 			proxyFactory = factoryCache.get(configClass);
@@ -85,7 +85,7 @@ public final class ConfigProxyFactory implements IConfigObjectFactory {
 		((ProxyObject) result).setHandler(new RootConfigProxyMethodHandler(configClass, scope, proxyUpdater));
 
 		// also create proxies for objects which may be created by the constructor of the configuration
-		((IConfigProxy<?>) result).setInitializingWhile(new Runnable() {
+		((ConfigProxy<?>) result).setInitializingWhile(new Runnable() {
 			@Override
 			public void run() {
 				proxyUpdater.updateConfig(result, Collections.<ComplexConfigDTO> emptyList());
@@ -115,7 +115,7 @@ public final class ConfigProxyFactory implements IConfigObjectFactory {
 		if (proxyFactory == null) {
 			proxyFactory = new CurrentClassLoaderProxyFactory();
 			proxyFactory.setSuperclass(propertyClass);
-			proxyFactory.setInterfaces(new Class[] {IConfigProxy.class});
+			proxyFactory.setInterfaces(new Class[] {ConfigProxy.class});
 			proxyFactory.setFilter(FINALIZE_FILTER);
 			factoryCache.putIfAbsent(propertyClass, proxyFactory);
 			proxyFactory = factoryCache.get(propertyClass);

@@ -47,7 +47,7 @@ public enum LoadFailureSolutionStrategy {
 	/**
 	 * Try to load it again.<br>
 	 * You should limit the number of 'retries' for a single load operation to prevent endless loops! This
-	 * can be achieved by using the 'retryCount'-parameter of the {@link IConfigExceptionHandler}-method.
+	 * can be achieved by using the 'retryCount'-parameter of the {@link ConfigExceptionHandler}-method.
 	 */
 	RETRY,
 

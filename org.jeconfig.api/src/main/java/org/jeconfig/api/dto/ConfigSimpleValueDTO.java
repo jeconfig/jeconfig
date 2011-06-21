@@ -27,7 +27,7 @@
 
 package org.jeconfig.api.dto;
 
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 
 /**
  * Holds all information about a simple configuration object.
@@ -50,7 +50,7 @@ public final class ConfigSimpleValueDTO extends AbstractConfigDTO {
 	 * @param scopePath
 	 * @param value
 	 */
-	public ConfigSimpleValueDTO(final String type, final String propName, final IScopePath scopePath, final String value) {
+	public ConfigSimpleValueDTO(final String type, final String propName, final ScopePath scopePath, final String value) {
 
 		setPropertyName(propName);
 		setPropertyType(type);
@@ -132,7 +132,7 @@ public final class ConfigSimpleValueDTO extends AbstractConfigDTO {
 	}
 
 	@Override
-	public ConfigSimpleValueDTO deepCopyToScopePath(final IScopePath scopePath) {
+	public ConfigSimpleValueDTO deepCopyToScopePath(final ScopePath scopePath) {
 		final ConfigSimpleValueDTO result = flatCopy();
 		result.setDefiningScopePath(scopePath);
 		return result;
@@ -148,7 +148,7 @@ public final class ConfigSimpleValueDTO extends AbstractConfigDTO {
 	}
 
 	@Override
-	public void visit(final IConfigDtoVisitor visitor) {
+	public void visit(final ConfigDtoVisitor visitor) {
 		visitor.visitSimpleDto(this);
 	}
 

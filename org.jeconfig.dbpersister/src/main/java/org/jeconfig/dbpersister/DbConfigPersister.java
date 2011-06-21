@@ -45,26 +45,26 @@ import javax.sql.DataSource;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.exception.StaleConfigException;
 import org.jeconfig.api.exception.StoreConfigException;
-import org.jeconfig.api.persister.IConfigPersister;
-import org.jeconfig.api.persister.IScopePathGenerator;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.persister.ConfigPersister;
+import org.jeconfig.api.persister.ScopePathGenerator;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.api.util.Assert;
 import org.jeconfig.dbpersister.internal.DbConfigPersisterQueryCreator;
 import org.jeconfig.dbpersister.internal.DbUtils;
-import org.jeconfig.dbpersister.internal.IDbCallable;
+import org.jeconfig.dbpersister.internal.DbCallable;
 import org.jeconfig.dbpersister.internal.JdbcTemplate;
-import org.jeconfig.server.marshalling.IConfigMarshaller;
+import org.jeconfig.server.marshalling.ConfigMarshaller;
 import org.jeconfig.server.persister.DefaultScopePathGenerator;
 
-public final class DbConfigPersister implements IConfigPersister {
+public final class DbConfigPersister implements ConfigPersister {
 	public static final String ID = DbConfigPersister.class.getName();
 	private static final String SCOPE_PATH_SEPARATOR = "/"; //$NON-NLS-1$
 
 	private final DataSource dataSource;
 	private final DbUtils dbUtils;
 	private final DbConfigPersisterQueryCreator queryGen;
-	private final IScopePathGenerator gen;
-	private final IConfigMarshaller marshaller;
+	private final ScopePathGenerator gen;
+	private final ConfigMarshaller marshaller;
 	private final String configTableName;
 	private final String scopePathColumnName;
 	private final String configColumnName;
@@ -75,7 +75,7 @@ public final class DbConfigPersister implements IConfigPersister {
 		final String scopePathColumnName,
 		final String configVersionColumnName,
 		final String configColumnName,
-		final IConfigMarshaller marshaller,
+		final ConfigMarshaller marshaller,
 		final DataSource dataSource) {
 		Assert.paramNotEmpty(configTableName, "configTableName"); //$NON-NLS-1$
 		Assert.paramNotEmpty(scopePathColumnName, "scopePathColumnName"); //$NON-NLS-1$
@@ -100,10 +100,10 @@ public final class DbConfigPersister implements IConfigPersister {
 	}
 
 	@Override
-	public ComplexConfigDTO loadConfiguration(final IScopePath scopePath) {
+	public ComplexConfigDTO loadConfiguration(final ScopePath scopePath) {
 		Assert.paramNotNull(scopePath, "scope"); //$NON-NLS-1$
 
-		final ComplexConfigDTO result = new JdbcTemplate<ComplexConfigDTO>(dataSource).perform(new IDbCallable() {
+		final ComplexConfigDTO result = new JdbcTemplate<ComplexConfigDTO>(dataSource).perform(new DbCallable() {
 
 			@Override
 			public Object execute(final Connection con) throws Exception {
@@ -147,7 +147,7 @@ public final class DbConfigPersister implements IConfigPersister {
 			throw new StoreConfigException(
 				"Illegal config version. Must be 1 or higher. Occures at scope Path '" + configDTO.getDefiningScopePath() + "'!"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		new JdbcTemplate<ResultSet>(dataSource).perform(new IDbCallable() {
+		new JdbcTemplate<ResultSet>(dataSource).perform(new DbCallable() {
 
 			@Override
 			public Object execute(final Connection con) throws Exception {
@@ -197,7 +197,7 @@ public final class DbConfigPersister implements IConfigPersister {
 	public void updateConfiguration(final ComplexConfigDTO configDTO) {
 		Assert.paramNotNull(configDTO, "configDTO"); //$NON-NLS-1$
 
-		new JdbcTemplate<ResultSet>(dataSource).perform(new IDbCallable() {
+		new JdbcTemplate<ResultSet>(dataSource).perform(new DbCallable() {
 
 			@Override
 			public Object execute(final Connection con) throws Exception {
@@ -238,10 +238,10 @@ public final class DbConfigPersister implements IConfigPersister {
 	}
 
 	@Override
-	public void delete(final IScopePath scope, final boolean deleteChildren) {
+	public void delete(final ScopePath scope, final boolean deleteChildren) {
 		Assert.paramNotNull(scope, "scope"); //$NON-NLS-1$
 
-		new JdbcTemplate<ResultSet>(dataSource).perform(new IDbCallable() {
+		new JdbcTemplate<ResultSet>(dataSource).perform(new DbCallable() {
 
 			@Override
 			public Object execute(final Connection con) throws Exception {
@@ -270,7 +270,7 @@ public final class DbConfigPersister implements IConfigPersister {
 		Assert.paramNotNull(scopeName, "scopeName"); //$NON-NLS-1$
 		Assert.paramNotNull(properties, "properties"); //$NON-NLS-1$
 
-		new JdbcTemplate<ResultSet>(dataSource).perform(new IDbCallable() {
+		new JdbcTemplate<ResultSet>(dataSource).perform(new DbCallable() {
 
 			@Override
 			public Object execute(final Connection con) throws Exception {
@@ -293,11 +293,11 @@ public final class DbConfigPersister implements IConfigPersister {
 	}
 
 	@Override
-	public Collection<IScopePath> listScopes(final String scopeName, final Map<String, String> properties) {
+	public Collection<ScopePath> listScopes(final String scopeName, final Map<String, String> properties) {
 		Assert.paramNotNull(scopeName, "scopeName"); //$NON-NLS-1$
 		Assert.paramNotNull(properties, "properties"); //$NON-NLS-1$
 
-		final Collection<IScopePath> result = new JdbcTemplate<Collection<IScopePath>>(dataSource).perform(new IDbCallable() {
+		final Collection<ScopePath> result = new JdbcTemplate<Collection<ScopePath>>(dataSource).perform(new DbCallable() {
 
 			@Override
 			public Object execute(final Connection con) throws Exception {
@@ -325,7 +325,7 @@ public final class DbConfigPersister implements IConfigPersister {
 		return result;
 	}
 
-	private String createColumnPath(final IScopePath scopePath) {
+	private String createColumnPath(final ScopePath scopePath) {
 		final StringBuilder sb = new StringBuilder();
 		sb.append(gen.getPathFromScopePath(scopePath));
 		sb.append(SCOPE_PATH_SEPARATOR);

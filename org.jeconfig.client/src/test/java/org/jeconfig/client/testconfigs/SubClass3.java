@@ -27,7 +27,7 @@
 
 package org.jeconfig.client.testconfigs;
 
-import org.jeconfig.api.IConfigService;
+import org.jeconfig.api.ConfigService;
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
 
@@ -37,7 +37,7 @@ public class SubClass3 extends AbstractClass {
 	private String test;
 	private int value;
 
-	public static SubClass3 create(final IConfigService cs, final String test, final int value) {
+	public static SubClass3 create(final ConfigService cs, final String test, final int value) {
 		final SubClass3 sub = cs.createComplexObject(SubClass3.class);
 		sub.setTest(test);
 		sub.setValue(value);

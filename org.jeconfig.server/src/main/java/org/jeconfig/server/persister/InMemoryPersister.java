@@ -36,17 +36,17 @@ import java.util.Map;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.exception.StaleConfigException;
-import org.jeconfig.api.persister.IConfigPersister;
-import org.jeconfig.api.scope.IScope;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.persister.ConfigPersister;
+import org.jeconfig.api.scope.Scope;
+import org.jeconfig.api.scope.ScopePath;
 
-public class InMemoryPersister implements IConfigPersister {
+public class InMemoryPersister implements ConfigPersister {
 	public static final String ID = "InMemoryPersister"; //$NON-NLS-1$
 
-	private final Map<IScopePath, ComplexConfigDTO> savedObjects;
+	private final Map<ScopePath, ComplexConfigDTO> savedObjects;
 
 	public InMemoryPersister() {
-		savedObjects = new HashMap<IScopePath, ComplexConfigDTO>();
+		savedObjects = new HashMap<ScopePath, ComplexConfigDTO>();
 	}
 
 	@Override
@@ -58,7 +58,7 @@ public class InMemoryPersister implements IConfigPersister {
 	}
 
 	@Override
-	public ComplexConfigDTO loadConfiguration(final IScopePath scopePath) {
+	public ComplexConfigDTO loadConfiguration(final ScopePath scopePath) {
 		return savedObjects.get(scopePath);
 	}
 
@@ -83,11 +83,11 @@ public class InMemoryPersister implements IConfigPersister {
 	}
 
 	@Override
-	public Collection<IScopePath> listScopes(final String scopeName, final Map<String, String> properties) {
-		final List<IScopePath> resultList = new ArrayList<IScopePath>();
+	public Collection<ScopePath> listScopes(final String scopeName, final Map<String, String> properties) {
+		final List<ScopePath> resultList = new ArrayList<ScopePath>();
 
-		for (final IScopePath tmpScopePath : savedObjects.keySet()) {
-			for (final IScope tmpScope : tmpScopePath.getScopes()) {
+		for (final ScopePath tmpScopePath : savedObjects.keySet()) {
+			for (final Scope tmpScope : tmpScopePath.getScopes()) {
 				if (tmpScope.getName().equals(scopeName) && tmpScope.containsAllProperties(properties)) {
 					resultList.add(tmpScopePath);
 				}
@@ -98,10 +98,10 @@ public class InMemoryPersister implements IConfigPersister {
 	}
 
 	@Override
-	public void delete(final IScopePath scopePath, final boolean deleteChildren) {
+	public void delete(final ScopePath scopePath, final boolean deleteChildren) {
 		if (deleteChildren) {
-			for (final Iterator<IScopePath> it = savedObjects.keySet().iterator(); it.hasNext();) {
-				final IScopePath tmpScopePath = it.next();
+			for (final Iterator<ScopePath> it = savedObjects.keySet().iterator(); it.hasNext();) {
+				final ScopePath tmpScopePath = it.next();
 				if (tmpScopePath.startsPathWith(scopePath)) {
 					it.remove();
 				}
@@ -114,10 +114,10 @@ public class InMemoryPersister implements IConfigPersister {
 	@Override
 	public void deleteAllOccurences(final String scopeName, final Map<String, String> properties) {
 
-		for (final Iterator<IScopePath> it = savedObjects.keySet().iterator(); it.hasNext();) {
-			final IScopePath tmpScopePath = it.next();
+		for (final Iterator<ScopePath> it = savedObjects.keySet().iterator(); it.hasNext();) {
+			final ScopePath tmpScopePath = it.next();
 
-			for (final IScope tmpScope : tmpScopePath.getScopes()) {
+			for (final Scope tmpScope : tmpScopePath.getScopes()) {
 				if (tmpScope.getName().equals(scopeName)) {
 					if (tmpScope.containsAllProperties(properties)) {
 						it.remove();

@@ -42,7 +42,7 @@ public final class ComplexTypeMerger {
 		final ComplexConfigDTO parent,
 		final ComplexConfigDTO child,
 		final Class<?> configClass,
-		final Map<Class<? extends Annotation>, IPropertyMerger> mergers,
+		final Map<Class<? extends Annotation>, PropertyMerger> mergers,
 		final StalePropertiesMergingResultImpl mergingResult) {
 
 		if (child == null) {
@@ -61,7 +61,7 @@ public final class ComplexTypeMerger {
 		for (final PropertyDescriptor propertyDescriptor : propertyAccessor.getPropertyDescriptors(ProxyUtil.getConfigClass(configClass))) {
 			if (propertyDescriptor.getReadMethod() != null) {
 				for (final Annotation annotation : propertyDescriptor.getReadMethod().getAnnotations()) {
-					final IPropertyMerger merger = mergers.get(annotation.annotationType());
+					final PropertyMerger merger = mergers.get(annotation.annotationType());
 					if (merger != null) {
 						merger.merge(result, parent, child, propertyDescriptor, mergers, this, mergingResult);
 						break;

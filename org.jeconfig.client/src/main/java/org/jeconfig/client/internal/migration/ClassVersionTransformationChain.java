@@ -33,7 +33,7 @@ import java.util.List;
 import org.jeconfig.api.annotation.ConfigMigration;
 import org.jeconfig.api.annotation.ConfigTransformer;
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.migration.IConfigTransformer;
+import org.jeconfig.api.migration.ConfigTransformerDelegate;
 import org.jeconfig.client.internal.AnnotationUtil;
 
 public final class ClassVersionTransformationChain {
@@ -176,7 +176,7 @@ public final class ClassVersionTransformationChain {
 
 	private ComplexConfigDTO doConvert(final ComplexConfigDTO dtoToTransform, final List<TransformerContainer> transformPath) {
 		for (final TransformerContainer transformerContaioner : transformPath) {
-			final IConfigTransformer transformer = transformerContaioner.getTransformer();
+			final ConfigTransformerDelegate transformer = transformerContaioner.getTransformer();
 			transformer.transform(new TransformParamImpl(
 				transformerContaioner.getSourceVersion(),
 				transformerContaioner.getDestinationVersion(),
@@ -189,13 +189,13 @@ public final class ClassVersionTransformationChain {
 	private static class TransformerContainer {
 		private final long sourceVersion;
 		private final long destinationVersion;
-		private final Class<? extends IConfigTransformer> transformerClass;
-		private IConfigTransformer transformer;
+		private final Class<? extends ConfigTransformerDelegate> transformerClass;
+		private ConfigTransformerDelegate transformer;
 
 		public TransformerContainer(
 			final long sourceVersion,
 			final long destinationVersion,
-			final Class<? extends IConfigTransformer> transformerClass) {
+			final Class<? extends ConfigTransformerDelegate> transformerClass) {
 
 			this.sourceVersion = sourceVersion;
 			this.destinationVersion = destinationVersion;
@@ -210,7 +210,7 @@ public final class ClassVersionTransformationChain {
 			return sourceVersion;
 		}
 
-		public IConfigTransformer getTransformer() {
+		public ConfigTransformerDelegate getTransformer() {
 			if (transformer == null) {
 				createTransformer();
 			}

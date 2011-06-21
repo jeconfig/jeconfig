@@ -29,12 +29,12 @@ package org.jeconfig.client.internal.mapping;
 
 import java.util.List;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.client.internal.mapping.deserialization.ConfigDTODeserializer;
 import org.jeconfig.client.internal.mapping.serialization.ConfigDTOSerializer;
-import org.jeconfig.client.proxy.IConfigObjectFactory;
+import org.jeconfig.client.proxy.ConfigObjectFactory;
 import org.jeconfig.client.proxy.ProxyUpdater;
 
 public final class ConfigDTOMapper {
@@ -42,21 +42,21 @@ public final class ConfigDTOMapper {
 	private ConfigDTODeserializer deserializer = null;
 
 	public ConfigDTOMapper(
-		final ISimpleTypeConverterRegistry simpleTypeConverterRegistry,
-		final IConfigObjectFactory proxyFactory,
+		final SimpleTypeConverterRegistry simpleTypeConverterRegistry,
+		final ConfigObjectFactory proxyFactory,
 		final ProxyUpdater proxyUpdater) {
 		serializer = new ConfigDTOSerializer(simpleTypeConverterRegistry);
 		deserializer = new ConfigDTODeserializer(simpleTypeConverterRegistry, proxyFactory, proxyUpdater);
 	}
 
-	public <T> ComplexConfigDTO serialize(final T config, final IScopePath scopePath) {
+	public <T> ComplexConfigDTO serialize(final T config, final ScopePath scopePath) {
 		return serializer.createConfigDTO(config, scopePath);
 	}
 
 	public <T> T deserializeRootConfig(
 		final Class<T> configClass,
 		final ComplexConfigDTO mergedConfig,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final List<ComplexConfigDTO> dtos) {
 
 		return deserializer.derserializeRootConfig(configClass, mergedConfig, scopePath, dtos);
@@ -65,7 +65,7 @@ public final class ConfigDTOMapper {
 	public <T> T deserializeComplexConfig(
 		final Class<T> configClass,
 		final ComplexConfigDTO mergedConfig,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final List<ComplexConfigDTO> dtos) {
 
 		return deserializer.deserializeComplexConfig(configClass, mergedConfig, scopePath, dtos);

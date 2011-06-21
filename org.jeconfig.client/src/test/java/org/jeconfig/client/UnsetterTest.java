@@ -34,7 +34,7 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
-import org.jeconfig.api.IConfigUnsetter;
+import org.jeconfig.api.ConfigUnsetter;
 import org.jeconfig.client.annotation.array.ArrayTestConfiguration;
 import org.jeconfig.client.annotation.complex.ComplexPropertyTestConfiguration;
 import org.jeconfig.client.annotation.list.ListTestConfiguration;
@@ -51,7 +51,7 @@ public class UnsetterTest extends AbstractConfigServiceTest {
 	@Test
 	public void testUnsetComplexProperty() {
 		ComplexPropertyTestConfiguration config = getConfigService().load(ComplexPropertyTestConfiguration.class);
-		final IConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
+		final ConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
 		Assert.assertFalse(configUnsetter.isPropertySet(config, "property")); //$NON-NLS-1$
 		config.setProperty(ComplexSubtype.create(getConfigService(), "a", "b")); //$NON-NLS-1$//$NON-NLS-2$
 		Assert.assertTrue(configUnsetter.isPropertySet(config, "property")); //$NON-NLS-1$
@@ -71,21 +71,21 @@ public class UnsetterTest extends AbstractConfigServiceTest {
 	@Test
 	public void testUnsetNotSupported() {
 		final SimplePropertyTestConfiguration config = new SimplePropertyTestConfiguration();
-		final IConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
+		final ConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
 		Assert.assertFalse(configUnsetter.canUnsetConfig(config));
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testUnsetAllNotSupportedThrowsEx() {
 		final SimplePropertyTestConfiguration config = new SimplePropertyTestConfiguration();
-		final IConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
+		final ConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
 		configUnsetter.unsetAllProperties(config);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testUnsetPropertyNotSupportedThrowsEx() {
 		final SimplePropertyTestConfiguration config = new SimplePropertyTestConfiguration();
-		final IConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
+		final ConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
 		configUnsetter.unsetProperties(config, "asdf"); //$NON-NLS-1$
 	}
 
@@ -96,7 +96,7 @@ public class UnsetterTest extends AbstractConfigServiceTest {
 		getConfigService().save(config);
 
 		config = getConfigService().load(SimplePropertyTestConfiguration.class);
-		final IConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
+		final ConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
 		configUnsetter.unsetProperties(config, "intValue"); //$NON-NLS-1$
 
 		Assert.assertFalse(configUnsetter.isPropertySet(config, "intValue")); //$NON-NLS-1$
@@ -110,7 +110,7 @@ public class UnsetterTest extends AbstractConfigServiceTest {
 	@Test
 	public void testDontSetCleanConfigDirtyOnUnset() {
 		final SimplePropertyTestConfiguration config = getConfigService().load(SimplePropertyTestConfiguration.class);
-		final IConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
+		final ConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
 		configUnsetter.unsetProperties(config, "intValue"); //$NON-NLS-1$
 		getConfigService().save(config);
 		Assert.assertEquals(0, getCountingDummyPersister().getSaveCount());
@@ -126,7 +126,7 @@ public class UnsetterTest extends AbstractConfigServiceTest {
 		getConfigService().save(config);
 
 		config = getConfigService().load(ListTestConfiguration.class);
-		final IConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
+		final ConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
 		configUnsetter.unsetProperties(config, "stringField"); //$NON-NLS-1$
 
 		Assert.assertFalse(configUnsetter.isPropertySet(config, "stringField")); //$NON-NLS-1$
@@ -147,7 +147,7 @@ public class UnsetterTest extends AbstractConfigServiceTest {
 		getConfigService().save(config);
 
 		config = getConfigService().load(ListTestConfiguration.class);
-		final IConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
+		final ConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
 		configUnsetter.unsetProperties(config, "complex"); //$NON-NLS-1$
 
 		Assert.assertFalse(configUnsetter.isPropertySet(config, "complex")); //$NON-NLS-1$
@@ -167,7 +167,7 @@ public class UnsetterTest extends AbstractConfigServiceTest {
 		getConfigService().save(config);
 
 		config = getConfigService().load(MapPropertyTestConfiguration.class);
-		final IConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
+		final ConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
 		configUnsetter.unsetProperties(config, "userID"); //$NON-NLS-1$
 
 		Assert.assertFalse(configUnsetter.isPropertySet(config, "userID")); //$NON-NLS-1$
@@ -187,7 +187,7 @@ public class UnsetterTest extends AbstractConfigServiceTest {
 		getConfigService().save(config);
 
 		config = getConfigService().load(ComplexMapTestConfiguration.class);
-		final IConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
+		final ConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
 		configUnsetter.unsetProperties(config, "property"); //$NON-NLS-1$
 
 		Assert.assertFalse(configUnsetter.isPropertySet(config, "property")); //$NON-NLS-1$
@@ -208,7 +208,7 @@ public class UnsetterTest extends AbstractConfigServiceTest {
 		getConfigService().save(config);
 
 		config = getConfigService().load(SetPropertyTestConfiguration.class);
-		final IConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
+		final ConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
 		configUnsetter.unsetProperties(config, "data"); //$NON-NLS-1$
 
 		Assert.assertFalse(configUnsetter.isPropertySet(config, "data")); //$NON-NLS-1$
@@ -227,7 +227,7 @@ public class UnsetterTest extends AbstractConfigServiceTest {
 		config.setSubTypeSet(set);
 
 		config = getConfigService().load(ComplexSetPropertyTestConfiguration.class);
-		final IConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
+		final ConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
 		configUnsetter.unsetProperties(config, "subTypeSet"); //$NON-NLS-1$
 
 		Assert.assertFalse(configUnsetter.isPropertySet(config, "subTypeSet")); //$NON-NLS-1$
@@ -246,7 +246,7 @@ public class UnsetterTest extends AbstractConfigServiceTest {
 		getConfigService().save(config);
 
 		config = getConfigService().load(ArrayTestConfiguration.class);
-		final IConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
+		final ConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
 		configUnsetter.unsetProperties(config, "intField"); //$NON-NLS-1$
 
 		Assert.assertFalse(configUnsetter.isPropertySet(config, "intField")); //$NON-NLS-1$
@@ -265,7 +265,7 @@ public class UnsetterTest extends AbstractConfigServiceTest {
 		getConfigService().save(config);
 
 		config = getConfigService().load(ArrayTestConfiguration.class);
-		final IConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
+		final ConfigUnsetter configUnsetter = getConfigService().getConfigUnsetter();
 		configUnsetter.unsetProperties(config, "complex"); //$NON-NLS-1$
 
 		Assert.assertFalse(configUnsetter.isPropertySet(config, "complex")); //$NON-NLS-1$

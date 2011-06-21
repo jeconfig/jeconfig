@@ -31,20 +31,20 @@ import java.util.HashSet;
 import java.util.Set;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.dto.IConfigDTO;
+import org.jeconfig.api.dto.ConfigDTO;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
 
-public abstract class AbstractPropertyMerger implements IPropertyMerger {
+public abstract class AbstractPropertyMerger implements PropertyMerger {
 
-	protected boolean isChildStale(final IConfigDTO parentDTO, final IConfigDTO childDTO) {
+	protected boolean isChildStale(final ConfigDTO parentDTO, final ConfigDTO childDTO) {
 		final boolean stale = !parentDTO.getDefiningScopePath().getLastScope().getName().equals(childDTO.getParentScopeName())
 			|| parentDTO.getVersion() != childDTO.getParentVersion();
 
 		return stale;
 	}
 
-	protected boolean isClassOrCodeDefaultDTO(final IConfigDTO configDTO) {
+	protected boolean isClassOrCodeDefaultDTO(final ConfigDTO configDTO) {
 		if (ClassScopeDescriptor.NAME.equals(configDTO.getDefiningScopePath().getLastScope().getName())
 			|| CodeDefaultScopeDescriptor.NAME.equals(configDTO.getDefiningScopePath().getLastScope().getName())) {
 			return true;
@@ -52,7 +52,7 @@ public abstract class AbstractPropertyMerger implements IPropertyMerger {
 		return false;
 	}
 
-	protected IConfigDTO createChildWithMissingProperties(final IConfigDTO parentDTO, final IConfigDTO childDTO) {
+	protected ConfigDTO createChildWithMissingProperties(final ConfigDTO parentDTO, final ConfigDTO childDTO) {
 		if (parentDTO instanceof ComplexConfigDTO) {
 			final ComplexConfigDTO complexParentDTO = (ComplexConfigDTO) parentDTO;
 			final ComplexConfigDTO result = ((ComplexConfigDTO) childDTO).deepCopy();

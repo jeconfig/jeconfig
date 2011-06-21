@@ -29,8 +29,8 @@ package org.jeconfig.server.persister;
 
 import java.util.Collection;
 
-import org.jeconfig.api.persister.IPersisterSelector;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.persister.PersisterSelector;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.jeconfig.api.util.Assert;
 
@@ -38,20 +38,20 @@ import org.jeconfig.api.util.Assert;
  * Persister selector which can be used while development.<br>
  * When in development mode, it saves user configurations in memory and not physically. <br>
  * <br>
- * Set this persister selector at the IConfigPersistenceService to use it.
+ * Set this persister selector at the ConfigPersistenceService to use it.
  */
-public final class DevelopmentModePersisterSelector implements IPersisterSelector {
-	private final IPersisterSelector persisterSelector;
+public final class DevelopmentModePersisterSelector implements PersisterSelector {
+	private final PersisterSelector persisterSelector;
 	private boolean developmentMode;
 
-	public DevelopmentModePersisterSelector(final IPersisterSelector persisterSelector, final boolean developmentMode) {
+	public DevelopmentModePersisterSelector(final PersisterSelector persisterSelector, final boolean developmentMode) {
 		Assert.paramNotNull(persisterSelector, "persisterSelector"); //$NON-NLS-1$
 		this.persisterSelector = persisterSelector;
 		this.developmentMode = developmentMode;
 	}
 
 	@Override
-	public String getPersisterId(final IScopePath scopePath, final Collection<String> configPersisterIds) {
+	public String getPersisterId(final ScopePath scopePath, final Collection<String> configPersisterIds) {
 		if (configPersisterIds.size() == 0) {
 			throw new IllegalStateException("Didn't get any configuration persister!"); //$NON-NLS-1$
 		}

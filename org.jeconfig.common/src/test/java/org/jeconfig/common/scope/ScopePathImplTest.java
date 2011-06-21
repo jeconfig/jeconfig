@@ -33,8 +33,8 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
-import org.jeconfig.api.scope.IScope;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.Scope;
+import org.jeconfig.api.scope.ScopePath;
 import org.junit.Test;
 
 public class ScopePathImplTest {
@@ -46,46 +46,46 @@ public class ScopePathImplTest {
 
 	@Test
 	public void testGetScopes() {
-		final IScopePath testScopePath = createTestScopePath();
+		final ScopePath testScopePath = createTestScopePath();
 		Assert.assertEquals(2, testScopePath.getScopes().size());
 	}
 
 	@Test
 	public void testGetRootScope() {
-		final IScopePath testScopePath = createTestScopePath();
+		final ScopePath testScopePath = createTestScopePath();
 		Assert.assertEquals("test", testScopePath.getRootScope().getName()); //$NON-NLS-1$
 	}
 
 	@Test
 	public void testGetParentScopePath() {
-		final IScopePath testScopePath = createTestScopePath();
+		final ScopePath testScopePath = createTestScopePath();
 		Assert.assertEquals("test", testScopePath.getParentPath().getRootScope().getName()); //$NON-NLS-1$
 	}
 
 	@Test
 	public void testFindScopeByName() {
-		final IScopePath testScopePath = createTestScopePath();
+		final ScopePath testScopePath = createTestScopePath();
 		Assert.assertEquals("value", testScopePath.findScopeByName("test").getProperty("test")); //$NON-NLS-1$ //$NON-NLS-2$ //$NON-NLS-3$
 	}
 
 	@Test
 	public void testGetLastScope() {
-		final IScopePath testScopePath = createTestScopePath();
+		final ScopePath testScopePath = createTestScopePath();
 		Assert.assertEquals("test2", testScopePath.getLastScope().getName()); //$NON-NLS-1$
 	}
 
 	@Test
 	public void testStartsPathWith() {
-		final IScopePath testScopePath = createTestScopePath();
-		final IScopePath parentPath = testScopePath.getParentPath();
+		final ScopePath testScopePath = createTestScopePath();
+		final ScopePath parentPath = testScopePath.getParentPath();
 		Assert.assertTrue(testScopePath.startsPathWith(parentPath));
 	}
 
-	private IScopePath createTestScopePath() {
+	private ScopePath createTestScopePath() {
 		final Map<String, String> props = new HashMap<String, String>();
 		props.put("test", "value"); //$NON-NLS-1$//$NON-NLS-2$
-		final IScope scope = new ScopeImpl("test", props); //$NON-NLS-1$
-		final IScope scope2 = new ScopeImpl("test2", Collections.<String, String> emptyMap()); //$NON-NLS-1$
+		final Scope scope = new ScopeImpl("test", props); //$NON-NLS-1$
+		final Scope scope2 = new ScopeImpl("test2", Collections.<String, String> emptyMap()); //$NON-NLS-1$
 		return new ScopePathImpl(Arrays.asList(scope, scope2));
 	}
 }

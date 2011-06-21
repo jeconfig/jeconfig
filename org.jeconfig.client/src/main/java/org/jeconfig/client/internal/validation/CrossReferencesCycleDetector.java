@@ -34,7 +34,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jeconfig.api.IConfigService;
+import org.jeconfig.api.ConfigService;
 import org.jeconfig.api.annotation.ConfigArrayProperty;
 import org.jeconfig.api.annotation.ConfigComplexProperty;
 import org.jeconfig.api.annotation.ConfigComplexType;
@@ -42,9 +42,9 @@ import org.jeconfig.api.annotation.ConfigCrossReference;
 import org.jeconfig.api.annotation.ConfigListProperty;
 import org.jeconfig.api.annotation.ConfigMapProperty;
 import org.jeconfig.api.annotation.ConfigSetProperty;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilder;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilder;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.api.scope.InstanceScopeDescriptor;
 import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.client.proxy.ProxyUtil;
@@ -56,22 +56,22 @@ import org.jeconfig.common.reflection.PropertyAccessor;
  * Note that cycles caused by polymorph properties are not detected!
  */
 public final class CrossReferencesCycleDetector {
-	private final IConfigService configService;
+	private final ConfigService configService;
 	private final PropertyAccessor propertyAccessor;
 
-	public CrossReferencesCycleDetector(final IConfigService configService) {
+	public CrossReferencesCycleDetector(final ConfigService configService) {
 		this.configService = configService;
 		propertyAccessor = new PropertyAccessor();
 	}
 
-	public void detectCycles(final Class<?> configClass, final IScopePath scope) {
-		final List<IScopePath> usedScopes = new ArrayList<IScopePath>();
+	public void detectCycles(final Class<?> configClass, final ScopePath scope) {
+		final List<ScopePath> usedScopes = new ArrayList<ScopePath>();
 		usedScopes.add(scope);
 		final Set<Class<?>> checkedTypes = new HashSet<Class<?>>();
 		detectCycles(configClass, usedScopes, checkedTypes);
 	}
 
-	private void detectCycles(final Class<?> type, final List<IScopePath> usedScopes, final Set<Class<?>> checkedTypes) {
+	private void detectCycles(final Class<?> type, final List<ScopePath> usedScopes, final Set<Class<?>> checkedTypes) {
 		final Class<?> configClass = ProxyUtil.getConfigClass(type);
 		if (checkedTypes.contains(configClass)) {
 			return;
@@ -106,7 +106,7 @@ public final class CrossReferencesCycleDetector {
 	private void handleMapProperty(
 		final PropertyDescriptor propertyDescriptor,
 		final ConfigMapProperty annotation,
-		final List<IScopePath> usedScopes,
+		final List<ScopePath> usedScopes,
 		final Set<Class<?>> checkedTypes) {
 
 		if (isComplexType(annotation.valueType())) {
@@ -117,7 +117,7 @@ public final class CrossReferencesCycleDetector {
 	private void handleSetProperty(
 		final PropertyDescriptor propertyDescriptor,
 		final ConfigSetProperty annotation,
-		final List<IScopePath> usedScopes,
+		final List<ScopePath> usedScopes,
 		final Set<Class<?>> checkedTypes) {
 
 		if (isComplexType(annotation.itemType())) {
@@ -128,7 +128,7 @@ public final class CrossReferencesCycleDetector {
 	private void handleListProperty(
 		final PropertyDescriptor propertyDescriptor,
 		final ConfigListProperty annotation,
-		final List<IScopePath> usedScopes,
+		final List<ScopePath> usedScopes,
 		final Set<Class<?>> checkedTypes) {
 
 		if (isComplexType(annotation.itemType())) {
@@ -139,7 +139,7 @@ public final class CrossReferencesCycleDetector {
 	private void handleArrayProperty(
 		final PropertyDescriptor propertyDescriptor,
 		final ConfigArrayProperty annotation,
-		final List<IScopePath> usedScopes,
+		final List<ScopePath> usedScopes,
 		final Set<Class<?>> checkedTypes) {
 
 		final Class<?> itemType = propertyDescriptor.getPropertyType().getComponentType();
@@ -151,7 +151,7 @@ public final class CrossReferencesCycleDetector {
 	private void handleComplexType(
 		final PropertyDescriptor propertyDescriptor,
 		final ConfigComplexProperty annotation,
-		final List<IScopePath> usedScopes,
+		final List<ScopePath> usedScopes,
 		final Set<Class<?>> checkedTypes) {
 
 		if (isComplexType(propertyDescriptor.getPropertyType())) {
@@ -162,24 +162,24 @@ public final class CrossReferencesCycleDetector {
 	private void handleCrossReference(
 		final Class<?> crossReferenceType,
 		final ConfigCrossReference annotation,
-		final List<IScopePath> usedScopes,
+		final List<ScopePath> usedScopes,
 		final Set<Class<?>> checkedTypes) {
-		final IScopePath scopeOfReference = getScope(crossReferenceType, annotation);
+		final ScopePath scopeOfReference = getScope(crossReferenceType, annotation);
 		if (usedScopes.contains(scopeOfReference)) {
 			throw new IllegalArgumentException("Detected cross references cycle:\n" //$NON-NLS-1$
 				+ getCycleString(usedScopes, scopeOfReference));
 		}
 
-		final List<IScopePath> usedScopesForReference = new ArrayList<IScopePath>(usedScopes);
+		final List<ScopePath> usedScopesForReference = new ArrayList<ScopePath>(usedScopes);
 		usedScopesForReference.add(scopeOfReference);
 
 		detectCycles(crossReferenceType, usedScopesForReference, checkedTypes);
 	}
 
-	private String getCycleString(final List<IScopePath> usedScopes, final IScopePath nextScope) {
+	private String getCycleString(final List<ScopePath> usedScopes, final ScopePath nextScope) {
 		final StringBuilder sb = new StringBuilder();
 
-		for (final IScopePath scope : usedScopes) {
+		for (final ScopePath scope : usedScopes) {
 			sb.append(scope).append("\n --> "); //$NON-NLS-1$
 		}
 		sb.append(nextScope);
@@ -187,9 +187,9 @@ public final class CrossReferencesCycleDetector {
 		return sb.toString();
 	}
 
-	private IScopePath getScope(final Class<?> configClass, final ConfigCrossReference crossReferenceAnnotation) {
-		final IScopePathBuilderFactory scopeFactory = configService.getScopePathBuilderFactory(configClass);
-		IScopePathBuilder builder;
+	private ScopePath getScope(final Class<?> configClass, final ConfigCrossReference crossReferenceAnnotation) {
+		final ScopePathBuilderFactory scopeFactory = configService.getScopePathBuilderFactory(configClass);
+		ScopePathBuilder builder;
 		if (crossReferenceAnnotation.scopePath().length > 0) {
 			builder = scopeFactory.stub().appendAll(crossReferenceAnnotation.scopePath());
 		} else {

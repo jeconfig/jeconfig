@@ -34,23 +34,23 @@ import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.annotation.ConfigListProperty;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
 import org.jeconfig.api.scope.UserScopeDescriptor;
-import org.jeconfig.client.testconfigs.IMyInterface;
+import org.jeconfig.client.testconfigs.MyInterface;
 
 @ConfigClass(scopePath = {GlobalScopeDescriptor.NAME, UserScopeDescriptor.NAME})
 public class ComplexTypeInListConfig {
 
-	private List<IMyInterface> list;
+	private List<MyInterface> list;
 
 	public ComplexTypeInListConfig() {
-		list = new LinkedList<IMyInterface>();
+		list = new LinkedList<MyInterface>();
 	}
 
-	@ConfigListProperty(itemType = IMyInterface.class, polymorph = true)
-	public List<IMyInterface> getList() {
+	@ConfigListProperty(itemType = MyInterface.class, polymorph = true)
+	public List<MyInterface> getList() {
 		return list;
 	}
 
-	public void setList(final List<IMyInterface> list) {
+	public void setList(final List<MyInterface> list) {
 		this.list = list;
 	}
 

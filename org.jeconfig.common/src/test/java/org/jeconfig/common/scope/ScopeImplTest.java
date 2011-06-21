@@ -32,7 +32,7 @@ import java.util.Map;
 
 import junit.framework.Assert;
 
-import org.jeconfig.api.scope.IScope;
+import org.jeconfig.api.scope.Scope;
 import org.junit.Test;
 
 public class ScopeImplTest {
@@ -54,7 +54,7 @@ public class ScopeImplTest {
 
 	@Test
 	public void testGetScopeName() {
-		final IScope scope = new ScopeImpl("test", Collections.<String, String> emptyMap()); //$NON-NLS-1$
+		final Scope scope = new ScopeImpl("test", Collections.<String, String> emptyMap()); //$NON-NLS-1$
 		Assert.assertEquals("test", scope.getName()); //$NON-NLS-1$
 	}
 
@@ -62,7 +62,7 @@ public class ScopeImplTest {
 	public void testGetProperty() {
 		final Map<String, String> props = new HashMap<String, String>();
 		props.put("test", "value"); //$NON-NLS-1$//$NON-NLS-2$
-		final IScope scope = new ScopeImpl("test", props); //$NON-NLS-1$
+		final Scope scope = new ScopeImpl("test", props); //$NON-NLS-1$
 		Assert.assertEquals("value", scope.getProperty("test")); //$NON-NLS-1$ //$NON-NLS-2$
 	}
 
@@ -70,10 +70,10 @@ public class ScopeImplTest {
 	public void testEqualsIncludesPropertiesAndName() {
 		final Map<String, String> props = new HashMap<String, String>();
 		props.put("test", "value"); //$NON-NLS-1$//$NON-NLS-2$
-		final IScope scope = new ScopeImpl("test", props); //$NON-NLS-1$
-		final IScope notEqualScope1 = new ScopeImpl("test", Collections.<String, String> emptyMap()); //$NON-NLS-1$
-		final IScope notEqualScope2 = new ScopeImpl("test2", props); //$NON-NLS-1$
-		final IScope equalScope = new ScopeImpl("test", props); //$NON-NLS-1$
+		final Scope scope = new ScopeImpl("test", props); //$NON-NLS-1$
+		final Scope notEqualScope1 = new ScopeImpl("test", Collections.<String, String> emptyMap()); //$NON-NLS-1$
+		final Scope notEqualScope2 = new ScopeImpl("test2", props); //$NON-NLS-1$
+		final Scope equalScope = new ScopeImpl("test", props); //$NON-NLS-1$
 
 		Assert.assertEquals(scope, equalScope);
 		Assert.assertFalse(scope.equals(notEqualScope1));
@@ -86,7 +86,7 @@ public class ScopeImplTest {
 		props.put("test", "value"); //$NON-NLS-1$//$NON-NLS-2$
 		final Map<String, String> props2 = new HashMap<String, String>();
 		props2.put("asdf", "value"); //$NON-NLS-1$//$NON-NLS-2$
-		final IScope scope = new ScopeImpl("test", props); //$NON-NLS-1$
+		final Scope scope = new ScopeImpl("test", props); //$NON-NLS-1$
 
 		Assert.assertTrue(scope.containsAllProperties(props));
 		Assert.assertFalse(scope.containsAllProperties(props2));

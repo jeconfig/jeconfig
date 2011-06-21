@@ -27,13 +27,13 @@
 
 package org.jeconfig.api.annotation.merging;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
 import org.jeconfig.api.util.Assert;
 
 /**
- * Parameter for {@link ISimpleValueMergingStrategy}. Holds all information which may
+ * Parameter for {@link SimpleValueMergingStrategy}. Holds all information which may
  * be needed to decide which value should be the result of the merge step.<br>
  * 
  * The merging strategy may return the parent value DTO or the child value DTO as the merge result.
@@ -45,7 +45,7 @@ import org.jeconfig.api.util.Assert;
 public final class PropertyMergingParameter<T> {
 	private final ConfigSimpleValueDTO parentValueDTO;
 	private final ConfigSimpleValueDTO childValueDTO;
-	private final ISimpleTypeConverter<T> converter;
+	private final SimpleTypeConverter<T> converter;
 	private final ComplexConfigDTO parentConfigDTO;
 	private final Class<T> propertyType;
 	private final ComplexConfigDTO childConfigDTO;
@@ -53,7 +53,7 @@ public final class PropertyMergingParameter<T> {
 	public PropertyMergingParameter(
 		final ConfigSimpleValueDTO parentValueDTO,
 		final ConfigSimpleValueDTO childValueDTO,
-		final ISimpleTypeConverter<T> converter,
+		final SimpleTypeConverter<T> converter,
 		final ComplexConfigDTO parentConfigDTO,
 		final ComplexConfigDTO childConfigDTO,
 		final Class<T> propertyType,

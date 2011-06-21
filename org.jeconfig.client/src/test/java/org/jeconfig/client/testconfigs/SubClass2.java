@@ -27,12 +27,12 @@
 
 package org.jeconfig.client.testconfigs;
 
-import org.jeconfig.api.IConfigService;
+import org.jeconfig.api.ConfigService;
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
 
 @ConfigComplexType
-public class SubClass2 extends BaseClass implements IMyInterface, IMyInferfaceForNonPolymorphTest {
+public class SubClass2 extends BaseClass implements MyInterface, MyInferfaceForNonPolymorphTest {
 	private float someFloatValue = 0.99f;
 	private String id;
 
@@ -60,11 +60,11 @@ public class SubClass2 extends BaseClass implements IMyInterface, IMyInferfaceFo
 		this.id = id;
 	}
 
-	public static SubClass2 create(final IConfigService cs, final String someString, final float someFloat) {
+	public static SubClass2 create(final ConfigService cs, final String someString, final float someFloat) {
 		return create(cs, someString, someFloat, "1"); //$NON-NLS-1$
 	}
 
-	public static SubClass2 create(final IConfigService cs, final String someString, final float someFloat, final String id) {
+	public static SubClass2 create(final ConfigService cs, final String someString, final float someFloat, final String id) {
 		final SubClass2 sub = cs.createComplexObject(SubClass2.class);
 		sub.setSomeString(someString);
 		sub.setSomeFloatValue(someFloat);

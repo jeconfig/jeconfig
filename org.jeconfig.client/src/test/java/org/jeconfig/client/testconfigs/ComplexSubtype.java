@@ -27,7 +27,7 @@
 
 package org.jeconfig.client.testconfigs;
 
-import org.jeconfig.api.IConfigService;
+import org.jeconfig.api.ConfigService;
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.annotation.ConfigIdProperty;
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
@@ -69,7 +69,7 @@ public class ComplexSubtype {
 		this.id = id;
 	}
 
-	public static ComplexSubtype create(final IConfigService service, final String id, final String name) {
+	public static ComplexSubtype create(final ConfigService service, final String id, final String name) {
 		final ComplexSubtype sub = service.createComplexObject(ComplexSubtype.class);
 		sub.setId(id);
 		sub.setName(name);

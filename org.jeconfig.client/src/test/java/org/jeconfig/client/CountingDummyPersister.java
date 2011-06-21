@@ -28,7 +28,7 @@
 package org.jeconfig.client;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.server.persister.InMemoryPersister;
 
 public class CountingDummyPersister extends InMemoryPersister {
@@ -37,7 +37,7 @@ public class CountingDummyPersister extends InMemoryPersister {
 	private int updateCount = 0;
 
 	@Override
-	public ComplexConfigDTO loadConfiguration(final IScopePath scope) {
+	public ComplexConfigDTO loadConfiguration(final ScopePath scope) {
 		loadCount++;
 		return super.loadConfiguration(scope);
 	}

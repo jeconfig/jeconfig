@@ -52,7 +52,7 @@ import org.jeconfig.client.annotation.list.ListTestConfiguration;
 import org.jeconfig.client.annotation.map.MapPropertyTestConfiguration;
 import org.jeconfig.client.annotation.set.SetPropertyTestConfiguration;
 import org.jeconfig.client.annotation.simple.SimplePropertyTestConfiguration;
-import org.jeconfig.client.proxy.IRootConfigProxy;
+import org.jeconfig.client.proxy.RootConfigProxy;
 import org.jeconfig.client.proxy.ProxyUtil;
 import org.jeconfig.client.testconfigs.ComplexSubtype;
 import org.junit.Assert;
@@ -226,7 +226,7 @@ public class DTOSerializerTest extends AbstractConfigServiceTest {
 	}
 
 	private void assertPropertyDiff(final Object config, final String propertyName) {
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		Assert.assertEquals(1, proxy.getPropertiesWithDiff().size());
 		Assert.assertTrue(proxy.getPropertiesWithDiff().contains(propertyName));
 		final ComplexConfigDTO rootDTO = getLastOriginalDto(proxy);
@@ -254,7 +254,7 @@ public class DTOSerializerTest extends AbstractConfigServiceTest {
 	}
 
 	private void assertNoDiff(final Object config) {
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		Assert.assertEquals(0, proxy.getPropertiesWithDiff().size());
 		Assert.assertFalse(proxy.hasDiff());
 		assertLastScope(config, ClassScopeDescriptor.NAME);
@@ -265,7 +265,7 @@ public class DTOSerializerTest extends AbstractConfigServiceTest {
 	}
 
 	private ComplexConfigDTO getLastOriginalDto(final Object config) {
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		return proxy.getConfigDTOs().get(proxy.getConfigDTOs().size() - 1);
 	}
 

@@ -30,8 +30,8 @@ package org.jeconfig.aspect.test;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.api.scope.InstanceScopeDescriptor;
 import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.junit.Assert;
@@ -71,9 +71,9 @@ public class ConfigInjectAspectTest extends AbstractConfigInjectTest {
 
 	@Test
 	public void testAnnotatedScopePath() {
-		final IScopePathBuilderFactory scopePathBuilderFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory scopePathBuilderFactory = getConfigService().getScopePathBuilderFactory(
 				InjectTestConfig.class);
-		final IScopePath userScopePath = scopePathBuilderFactory.annotatedPath().append(UserScopeDescriptor.NAME).create();
+		final ScopePath userScopePath = scopePathBuilderFactory.annotatedPath().append(UserScopeDescriptor.NAME).create();
 
 		final InjectTestConfig userConfig = getConfigService().load(InjectTestConfig.class, userScopePath);
 		userConfig.setI(1337);
@@ -87,9 +87,9 @@ public class ConfigInjectAspectTest extends AbstractConfigInjectTest {
 	public void testAnnotatedInstanceName() {
 		final Map<String, String> properties = new HashMap<String, String>();
 		properties.put(InstanceScopeDescriptor.PROP_INSTANCE_NAME, "FirstInstance"); //$NON-NLS-1$
-		final IScopePathBuilderFactory scopePathBuilderFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory scopePathBuilderFactory = getConfigService().getScopePathBuilderFactory(
 				InjectTestConfig.class);
-		final IScopePath instanceScopePath = scopePathBuilderFactory.annotatedPath().append(
+		final ScopePath instanceScopePath = scopePathBuilderFactory.annotatedPath().append(
 				InstanceScopeDescriptor.NAME,
 				properties).create();
 

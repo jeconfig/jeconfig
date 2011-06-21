@@ -29,9 +29,9 @@ package org.jeconfig.exporter.internal;
 
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
-import org.jeconfig.api.scope.IScope;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilder;
+import org.jeconfig.api.scope.Scope;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilder;
 import org.jeconfig.common.scope.InternalScopePathBuilderFactory;
 
 /**
@@ -48,11 +48,11 @@ public final class ExportScopePathGenerator {
 	 * @param configClass the type of the configuration
 	 * @return the new scope containing export scope
 	 */
-	public <T> IScopePath buildExportScopePath(final IScopePath scopePath, final Class<T> configClass) {
-		final IScopePathBuilder builder = new InternalScopePathBuilderFactory().createBuilder();
+	public <T> ScopePath buildExportScopePath(final ScopePath scopePath, final Class<T> configClass) {
+		final ScopePathBuilder builder = new InternalScopePathBuilderFactory().createBuilder();
 
 		boolean previousScopeWasClassOrCodeDefault = false;
-		for (final IScope scope : scopePath.getScopes()) {
+		for (final Scope scope : scopePath.getScopes()) {
 			if (previousScopeWasClassOrCodeDefault && !isClassOrCodeDefault(scope)) {
 				builder.append(ExportScopeDescriptor.NAME);
 			}
@@ -63,7 +63,7 @@ public final class ExportScopePathGenerator {
 		return builder.create();
 	}
 
-	private boolean isClassOrCodeDefault(final IScope scope) {
+	private boolean isClassOrCodeDefault(final Scope scope) {
 		return ClassScopeDescriptor.NAME.equals(scope.getName()) || CodeDefaultScopeDescriptor.NAME.equals(scope.getName());
 	}
 }

@@ -30,7 +30,7 @@ package org.jeconfig.client.annotation.map;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jeconfig.api.IConfigService;
+import org.jeconfig.api.ConfigService;
 import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.annotation.ConfigMapProperty;
@@ -59,7 +59,7 @@ public class MapPropertyTestConfiguration {
 		return result;
 	}
 
-	public static MapPropertyTestConfiguration create(final IConfigService cs) {
+	public static MapPropertyTestConfiguration create(final ConfigService cs) {
 		return cs.createComplexObject(MapPropertyTestConfiguration.class);
 	}
 

@@ -34,23 +34,23 @@ import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.annotation.ConfigMapProperty;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
 import org.jeconfig.api.scope.UserScopeDescriptor;
-import org.jeconfig.client.testconfigs.IMyInterface;
+import org.jeconfig.client.testconfigs.MyInterface;
 
 @ConfigClass(scopePath = {GlobalScopeDescriptor.NAME, UserScopeDescriptor.NAME})
 public class ComplexTypeInMapAsValueConfig {
 
-	private Map<String, IMyInterface> map;
+	private Map<String, MyInterface> map;
 
 	public ComplexTypeInMapAsValueConfig() {
-		map = new HashMap<String, IMyInterface>();
+		map = new HashMap<String, MyInterface>();
 	}
 
-	@ConfigMapProperty(keyType = String.class, valueType = IMyInterface.class, polymorph = true)
-	public Map<String, IMyInterface> getMap() {
+	@ConfigMapProperty(keyType = String.class, valueType = MyInterface.class, polymorph = true)
+	public Map<String, MyInterface> getMap() {
 		return map;
 	}
 
-	public void setMap(final Map<String, IMyInterface> map) {
+	public void setMap(final Map<String, MyInterface> map) {
 		this.map = map;
 	}
 

@@ -35,7 +35,7 @@ import junit.framework.Assert;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.common.scope.InternalScopePathBuilderFactory;
 import org.junit.Test;
 
@@ -49,7 +49,7 @@ public class ScopePathBuilderTest {
 		final Map<String, String> properties = new HashMap<String, String>();
 		properties.put(ClassScopeDescriptor.PROP_CLASS_NAME, "value"); //$NON-NLS-1$
 		final InternalScopePathBuilderFactory builderFactory = new InternalScopePathBuilderFactory();
-		final IScopePath scopePath = builderFactory.createBuilder().append(scope1, properties).append(scope2).append(scope3).append(
+		final ScopePath scopePath = builderFactory.createBuilder().append(scope1, properties).append(scope2).append(scope3).append(
 				scope3).create();
 		scopePath.toString();
 	}
@@ -62,7 +62,7 @@ public class ScopePathBuilderTest {
 		properties.put(ClassScopeDescriptor.PROP_CLASS_NAME, "value"); //$NON-NLS-1$
 
 		final InternalScopePathBuilderFactory builderFactory = new InternalScopePathBuilderFactory();
-		final IScopePath scopePath = builderFactory.createBuilder().append(scope1, properties).append(scope2).create();
+		final ScopePath scopePath = builderFactory.createBuilder().append(scope1, properties).append(scope2).create();
 		Assert.assertEquals(2, scopePath.getScopes().size());
 		Assert.assertEquals(scope1, scopePath.getRootScope().getName());
 		Assert.assertEquals(scope2, scopePath.getLastScope().getName());

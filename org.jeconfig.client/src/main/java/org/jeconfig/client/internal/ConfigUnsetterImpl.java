@@ -31,16 +31,16 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import org.jeconfig.api.IConfigUnsetter;
+import org.jeconfig.api.ConfigUnsetter;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.client.internal.mapping.ConfigDTOMapper;
 import org.jeconfig.client.internal.merging.ConfigMerger;
-import org.jeconfig.client.proxy.IConfigProxy;
-import org.jeconfig.client.proxy.IRootConfigProxy;
+import org.jeconfig.client.proxy.ConfigProxy;
+import org.jeconfig.client.proxy.RootConfigProxy;
 import org.jeconfig.client.proxy.ProxyUtil;
 import org.jeconfig.common.reflection.PropertyAccessor;
 
-public class ConfigUnsetterImpl implements IConfigUnsetter {
+public class ConfigUnsetterImpl implements ConfigUnsetter {
 	private final ConfigMerger configMerger;
 	private final ConfigDTOMapper configDtoMapper;
 	private final PropertyAccessor propertyAccessor = new PropertyAccessor();
@@ -53,8 +53,8 @@ public class ConfigUnsetterImpl implements IConfigUnsetter {
 	@SuppressWarnings("unchecked")
 	@Override
 	public boolean canUnsetConfig(final Object config) {
-		if (config instanceof IConfigProxy) {
-			final IConfigProxy<ComplexConfigDTO> proxy = (IConfigProxy<ComplexConfigDTO>) config;
+		if (config instanceof ConfigProxy) {
+			final ConfigProxy<ComplexConfigDTO> proxy = (ConfigProxy<ComplexConfigDTO>) config;
 			return !proxy.isDetached() && proxy.getConfigDTOs() != null && proxy.getConfigDTOs().size() > 0;
 		}
 
@@ -65,7 +65,7 @@ public class ConfigUnsetterImpl implements IConfigUnsetter {
 	@Override
 	public void unsetProperties(final Object config, final String... properties) {
 		if (canUnsetConfig(config)) {
-			final IConfigProxy<ComplexConfigDTO> proxy = (IConfigProxy<ComplexConfigDTO>) config;
+			final ConfigProxy<ComplexConfigDTO> proxy = (ConfigProxy<ComplexConfigDTO>) config;
 			final Set<String> newUnsetProperties = getNewUnsetProperties(proxy, properties);
 			final Set<String> newPropertiesWithDiff = new HashSet<String>(proxy.getPropertiesWithDiff());
 			newPropertiesWithDiff.removeAll(newUnsetProperties);
@@ -85,7 +85,7 @@ public class ConfigUnsetterImpl implements IConfigUnsetter {
 	@Override
 	public void unsetAllProperties(final Object config) {
 		if (canUnsetConfig(config)) {
-			final IConfigProxy<ComplexConfigDTO> proxy = (IConfigProxy<ComplexConfigDTO>) config;
+			final ConfigProxy<ComplexConfigDTO> proxy = (ConfigProxy<ComplexConfigDTO>) config;
 			final Set<String> newUnsetProperties = new HashSet<String>(proxy.getPropertiesWithDiff());
 			final boolean hasChanges = newUnsetProperties.size() > 0;
 			if (hasChanges) {
@@ -99,7 +99,7 @@ public class ConfigUnsetterImpl implements IConfigUnsetter {
 		}
 	}
 
-	private Set<String> getNewUnsetProperties(final IConfigProxy<ComplexConfigDTO> config, final String[] unsetProperties) {
+	private Set<String> getNewUnsetProperties(final ConfigProxy<ComplexConfigDTO> config, final String[] unsetProperties) {
 		final Set<String> result = new HashSet<String>();
 
 		for (final String unsetProperty : unsetProperties) {
@@ -112,21 +112,21 @@ public class ConfigUnsetterImpl implements IConfigUnsetter {
 	}
 
 	private void updateNewUnsetPropertiesOfConfig(
-		final IConfigProxy<ComplexConfigDTO> config,
+		final ConfigProxy<ComplexConfigDTO> config,
 		final Object newConfig,
 		final Set<String> newUnsetProperties) {
 
 		for (final String propertyName : newUnsetProperties) {
 			final Object newProperty = propertyAccessor.read(newConfig, propertyName);
-			if (newProperty instanceof IConfigProxy) {
-				((IConfigProxy<?>) newProperty).setParentProxy(null);
+			if (newProperty instanceof ConfigProxy) {
+				((ConfigProxy<?>) newProperty).setParentProxy(null);
 			}
 
 			propertyAccessor.write(config, propertyName, newProperty);
 		}
 	}
 
-	private Object getNewMergedConfig(final IConfigProxy<ComplexConfigDTO> configProxy, final Set<String> newPropertiesWithDiff) {
+	private Object getNewMergedConfig(final ConfigProxy<ComplexConfigDTO> configProxy, final Set<String> newPropertiesWithDiff) {
 		final Class<?> configClass = ProxyUtil.getConfigClass(configProxy.getClass());
 
 		final List<ComplexConfigDTO> originalDtos = configProxy.getConfigDTOs();
@@ -138,7 +138,7 @@ public class ConfigUnsetterImpl implements IConfigUnsetter {
 
 		final ComplexConfigDTO mergedDto = configMerger.mergeWithoutStalenessNotification(originalDtos, configClass);
 
-		if (configProxy instanceof IRootConfigProxy) {
+		if (configProxy instanceof RootConfigProxy) {
 			return configDtoMapper.deserializeRootConfig(configClass, mergedDto, configProxy.getScopePath(), originalDtos);
 		}
 
@@ -147,7 +147,7 @@ public class ConfigUnsetterImpl implements IConfigUnsetter {
 				mergedDto,
 				configProxy.getScopePath(),
 				originalDtos);
-		((IConfigProxy<?>) result).setParentProxy(configProxy.getParentProxy());
+		((ConfigProxy<?>) result).setParentProxy(configProxy.getParentProxy());
 		return result;
 	}
 
@@ -163,7 +163,7 @@ public class ConfigUnsetterImpl implements IConfigUnsetter {
 	@Override
 	public boolean isPropertySet(final Object config, final String property) {
 		if (canUnsetConfig(config)) {
-			final IConfigProxy<ComplexConfigDTO> proxy = (IConfigProxy<ComplexConfigDTO>) config;
+			final ConfigProxy<ComplexConfigDTO> proxy = (ConfigProxy<ComplexConfigDTO>) config;
 			final Set<String> propertiesWithDiff = proxy.getPropertiesWithDiff();
 			return propertiesWithDiff.contains(property);
 		} else {

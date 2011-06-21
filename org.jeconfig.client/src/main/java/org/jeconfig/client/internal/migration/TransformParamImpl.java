@@ -28,10 +28,10 @@
 package org.jeconfig.client.internal.migration;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.migration.IPropertyChanger;
-import org.jeconfig.api.migration.ITransformParam;
+import org.jeconfig.api.migration.PropertyChanger;
+import org.jeconfig.api.migration.TransformParam;
 
-public class TransformParamImpl implements ITransformParam {
+public class TransformParamImpl implements TransformParam {
 	private final ComplexConfigDTO configDto;
 	private final long sourceVersion;
 	private final long destinationVersion;
@@ -58,7 +58,7 @@ public class TransformParamImpl implements ITransformParam {
 	}
 
 	@Override
-	public IPropertyChanger getPropertyChanger() {
+	public PropertyChanger getPropertyChanger() {
 		return new PropertyChangerImpl(configDto);
 	}
 }

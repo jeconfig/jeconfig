@@ -33,23 +33,23 @@ import org.jeconfig.api.annotation.ConfigArrayProperty;
 import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
 import org.jeconfig.api.scope.UserScopeDescriptor;
-import org.jeconfig.client.testconfigs.IMyInterface;
+import org.jeconfig.client.testconfigs.MyInterface;
 
 @ConfigClass(scopePath = {GlobalScopeDescriptor.NAME, UserScopeDescriptor.NAME})
 public class ComplexTypeInArrayConfiguration {
 
-	private IMyInterface[] array;
+	private MyInterface[] array;
 
 	public ComplexTypeInArrayConfiguration() {
-		array = new IMyInterface[10];
+		array = new MyInterface[10];
 	}
 
 	@ConfigArrayProperty(polymorph = true)
-	public IMyInterface[] getArray() {
+	public MyInterface[] getArray() {
 		return array;
 	}
 
-	public void setArray(final IMyInterface[] array) {
+	public void setArray(final MyInterface[] array) {
 		this.array = array;
 	}
 

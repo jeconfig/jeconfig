@@ -28,14 +28,14 @@
 package org.jeconfig.client.migration;
 
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
-import org.jeconfig.api.migration.IConfigTransformer;
-import org.jeconfig.api.migration.ITransformParam;
+import org.jeconfig.api.migration.ConfigTransformerDelegate;
+import org.jeconfig.api.migration.TransformParam;
 
-public class MyConfigTransformerV5V7 implements IConfigTransformer {
+public class MyConfigTransformerV5V7 implements ConfigTransformerDelegate {
 	public static final int NEW_ID_VALUE = 10;
 
 	@Override
-	public void transform(final ITransformParam param) {
+	public void transform(final TransformParam param) {
 		final ConfigSimpleValueDTO idProperty = param.getConfigDto().getSimpleValueProperty("id"); //$NON-NLS-1$
 		idProperty.setValue(String.valueOf(NEW_ID_VALUE));
 	}

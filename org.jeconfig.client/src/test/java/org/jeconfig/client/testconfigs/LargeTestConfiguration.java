@@ -49,19 +49,19 @@ public class LargeTestConfiguration {
 	private int a;
 	private String b;
 	private ComplexSubtype c;
-	private IMyInterface d;
+	private MyInterface d;
 	private Set<Integer> e;
 	private Set<ComplexSubtype> f;
-	private Set<IMyInterface> g;
+	private Set<MyInterface> g;
 	private List<Integer> h;
 	private List<ComplexSubtype> i;
-	private List<IMyInterface> j;
+	private List<MyInterface> j;
 	private Map<String, Integer> k;
 	private Map<String, ComplexSubtype> l;
-	private Map<String, IMyInterface> m;
+	private Map<String, MyInterface> m;
 	private int[] n;
 	private ComplexSubtype[] o;
-	private IMyInterface[] p;
+	private MyInterface[] p;
 	private TestConfigEnum q;
 	private Date r;
 
@@ -93,11 +93,11 @@ public class LargeTestConfiguration {
 	}
 
 	@ConfigComplexProperty(polymorph = true)
-	public IMyInterface getD() {
+	public MyInterface getD() {
 		return d;
 	}
 
-	public void setD(final IMyInterface d) {
+	public void setD(final MyInterface d) {
 		this.d = d;
 	}
 
@@ -119,12 +119,12 @@ public class LargeTestConfiguration {
 		this.f = f;
 	}
 
-	@ConfigSetProperty(itemType = IMyInterface.class, polymorph = true)
-	public Set<IMyInterface> getG() {
+	@ConfigSetProperty(itemType = MyInterface.class, polymorph = true)
+	public Set<MyInterface> getG() {
 		return g;
 	}
 
-	public void setG(final Set<IMyInterface> g) {
+	public void setG(final Set<MyInterface> g) {
 		this.g = g;
 	}
 
@@ -146,12 +146,12 @@ public class LargeTestConfiguration {
 		this.i = i;
 	}
 
-	@ConfigListProperty(itemType = IMyInterface.class, polymorph = true)
-	public List<IMyInterface> getJ() {
+	@ConfigListProperty(itemType = MyInterface.class, polymorph = true)
+	public List<MyInterface> getJ() {
 		return j;
 	}
 
-	public void setJ(final List<IMyInterface> j) {
+	public void setJ(final List<MyInterface> j) {
 		this.j = j;
 	}
 
@@ -173,12 +173,12 @@ public class LargeTestConfiguration {
 		this.l = l;
 	}
 
-	@ConfigMapProperty(valueType = IMyInterface.class, polymorph = true)
-	public Map<String, IMyInterface> getM() {
+	@ConfigMapProperty(valueType = MyInterface.class, polymorph = true)
+	public Map<String, MyInterface> getM() {
 		return m;
 	}
 
-	public void setM(final Map<String, IMyInterface> m) {
+	public void setM(final Map<String, MyInterface> m) {
 		this.m = m;
 	}
 
@@ -201,11 +201,11 @@ public class LargeTestConfiguration {
 	}
 
 	@ConfigArrayProperty(polymorph = true)
-	public IMyInterface[] getP() {
+	public MyInterface[] getP() {
 		return p;
 	}
 
-	public void setP(final IMyInterface[] p) {
+	public void setP(final MyInterface[] p) {
 		this.p = p;
 	}
 

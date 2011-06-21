@@ -34,7 +34,7 @@ package org.jeconfig.api.scope;
  * The 'class' instances of the configurations are never persisted in the repositories. It is the
  * object which is created by the default constructor of the configuration class.
  */
-public final class ClassScopeDescriptor implements IScopeDescriptor {
+public final class ClassScopeDescriptor implements ScopeDescriptor {
 	public static final String NAME = "class"; //$NON-NLS-1$
 
 	/**

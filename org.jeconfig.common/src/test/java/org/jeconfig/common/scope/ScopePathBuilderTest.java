@@ -33,8 +33,8 @@ import junit.framework.Assert;
 
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilder;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilder;
 import org.junit.Test;
 
 public class ScopePathBuilderTest {
@@ -42,13 +42,13 @@ public class ScopePathBuilderTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testExceptionOnAppendNull() {
-		final IScopePathBuilder scopePathBuilder = factory.createBuilder();
+		final ScopePathBuilder scopePathBuilder = factory.createBuilder();
 		scopePathBuilder.append(null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testExceptionOnAppendNullProperties() {
-		final IScopePathBuilder scopePathBuilder = factory.createBuilder();
+		final ScopePathBuilder scopePathBuilder = factory.createBuilder();
 		scopePathBuilder.append("test", null); //$NON-NLS-1$
 	}
 
@@ -56,22 +56,22 @@ public class ScopePathBuilderTest {
 	public void testAppendSingleScope() {
 		final Map<String, String> props = new HashMap<String, String>();
 		props.put("test", "value"); //$NON-NLS-1$//$NON-NLS-2$
-		final IScopePathBuilder scopePathBuilder = factory.createBuilder();
+		final ScopePathBuilder scopePathBuilder = factory.createBuilder();
 		appendDefaultScopes(scopePathBuilder);
 
 		scopePathBuilder.append("test", props); //$NON-NLS-1$
-		final IScopePath scopePath = scopePathBuilder.create();
+		final ScopePath scopePath = scopePathBuilder.create();
 
 		Assert.assertEquals("value", scopePath.getLastScope().getProperty("test")); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
 	@Test
 	public void testAppendMultipleScopes() {
-		final IScopePathBuilder scopePathBuilder = factory.createBuilder();
+		final ScopePathBuilder scopePathBuilder = factory.createBuilder();
 		appendDefaultScopes(scopePathBuilder);
 		scopePathBuilder.appendAll(new String[] {"test1", "test2"}); //$NON-NLS-1$ //$NON-NLS-2$
 		scopePathBuilder.addPropertyToScope("test2", "test", "value"); //$NON-NLS-1$//$NON-NLS-2$//$NON-NLS-3$
-		final IScopePath scopePath = scopePathBuilder.create();
+		final ScopePath scopePath = scopePathBuilder.create();
 
 		Assert.assertEquals(4, scopePath.getScopes().size());
 		Assert.assertEquals("value", scopePath.getLastScope().getProperty("test")); //$NON-NLS-1$//$NON-NLS-2$
@@ -79,19 +79,19 @@ public class ScopePathBuilderTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testExceptionOnAddNullProperty() {
-		final IScopePathBuilder scopePathBuilder = factory.createBuilder();
+		final ScopePathBuilder scopePathBuilder = factory.createBuilder();
 		appendDefaultScopes(scopePathBuilder);
 		scopePathBuilder.addPropertyToScope(CodeDefaultScopeDescriptor.NAME, null, null);
 	}
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testExceptionOnAddPropertyToNonExistentScope() {
-		final IScopePathBuilder scopePathBuilder = factory.createBuilder();
+		final ScopePathBuilder scopePathBuilder = factory.createBuilder();
 		appendDefaultScopes(scopePathBuilder);
 		scopePathBuilder.addPropertyToScope("asdf", "blub", null); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	private void appendDefaultScopes(final IScopePathBuilder builder) {
+	private void appendDefaultScopes(final ScopePathBuilder builder) {
 		final Map<String, String> classProps = new HashMap<String, String>();
 		classProps.put(ClassScopeDescriptor.PROP_CLASS_NAME, "class.name"); //$NON-NLS-1$
 		builder.append(ClassScopeDescriptor.NAME, classProps);

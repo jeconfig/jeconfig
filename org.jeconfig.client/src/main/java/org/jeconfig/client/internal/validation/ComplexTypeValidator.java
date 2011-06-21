@@ -36,10 +36,10 @@ import java.util.Set;
 
 import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.annotation.ConfigComplexType;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.client.proxy.ConfigProxyFactory;
-import org.jeconfig.client.proxy.IConfigObjectFactory;
+import org.jeconfig.client.proxy.ConfigObjectFactory;
 import org.jeconfig.client.proxy.ProxyUtil;
 import org.jeconfig.common.reflection.ClassInstantiation;
 import org.jeconfig.common.reflection.PropertyAccessor;
@@ -48,17 +48,17 @@ import org.jeconfig.common.reflection.PropertyAccessor;
 public final class ComplexTypeValidator {
 	private final PropertyAccessor propertyAccessor = new PropertyAccessor();
 	private final ClassInstantiation classInstantiation = new ClassInstantiation();
-	private final IConfigObjectFactory configObjectFactory;
+	private final ConfigObjectFactory configObjectFactory;
 
-	public ComplexTypeValidator(final ISimpleTypeConverterRegistry converterRegistry) {
+	public ComplexTypeValidator(final SimpleTypeConverterRegistry converterRegistry) {
 		configObjectFactory = new ConfigProxyFactory(converterRegistry);
 	}
 
 	public void validate(
 		final Class<?> type,
 		final Object complexConfig,
-		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
-		final ISimpleTypeConverterRegistry converterRegistry,
+		final Map<Class<? extends Annotation>, PropertyValidator<Annotation>> validators,
+		final SimpleTypeConverterRegistry converterRegistry,
 		final Set<Class<?>> validatedComplexTypes) {
 		if (validatedComplexTypes.contains(type)) {
 			return;
@@ -85,7 +85,7 @@ public final class ComplexTypeValidator {
 		for (final PropertyDescriptor propertyDescriptor : propertyAccessor.getPropertyDescriptors(ProxyUtil.getConfigClass(type))) {
 			final Set<Annotation> propertyAnnotations = getConfigAnnotations(propertyDescriptor, validators);
 			for (final Annotation annotation : propertyAnnotations) {
-				final IPropertyValidator<Annotation> validator = validators.get(annotation.annotationType());
+				final PropertyValidator<Annotation> validator = validators.get(annotation.annotationType());
 				final Set<Annotation> otherAnnotations = new HashSet<Annotation>(propertyAnnotations);
 				otherAnnotations.remove(annotation);
 				validateCompatibleAnnotations(annotation, otherAnnotations, validator);
@@ -144,7 +144,7 @@ public final class ComplexTypeValidator {
 	private void validateCompatibleAnnotations(
 		final Annotation mainAnnotation,
 		final Set<Annotation> actualAnnotations,
-		final IPropertyValidator<Annotation> validator) {
+		final PropertyValidator<Annotation> validator) {
 		final Set<Class<? extends Annotation>> compatibleAnnotations = validator.getCompatibleAnnotations();
 		if (compatibleAnnotations != null) {
 			for (final Annotation annotation : actualAnnotations) {
@@ -162,7 +162,7 @@ public final class ComplexTypeValidator {
 
 	private Set<Annotation> getConfigAnnotations(
 		final PropertyDescriptor propertyDescriptor,
-		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators) {
+		final Map<Class<? extends Annotation>, PropertyValidator<Annotation>> validators) {
 		final Set<Annotation> result = new HashSet<Annotation>();
 
 		if (propertyDescriptor.getReadMethod() != null) {

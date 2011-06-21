@@ -33,7 +33,7 @@ import junit.framework.Assert;
 import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.client.AbstractConfigServiceTest;
 import org.jeconfig.client.annotation.map.SimpleTypeMapPropertyTestConfiguration;
 import org.jeconfig.client.annotation.map.UseParentMergingStrategyTestConfiguration;
@@ -95,7 +95,7 @@ public class ConfigClassTest extends AbstractConfigServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testSaveToScopePathWrongConfigClassInScopePath() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				SimpleTypeMapPropertyTestConfiguration.class);
 		final UseParentMergingStrategyTestConfiguration parentConfig = getConfigService().load(
 				UseParentMergingStrategyTestConfiguration.class);
@@ -106,7 +106,7 @@ public class ConfigClassTest extends AbstractConfigServiceTest {
 	public void testSaveToScopePathWrongConfigClassInScopePathWithProxy() {
 		UseParentMergingStrategyTestConfiguration parentConfig = getConfigService().load(
 				UseParentMergingStrategyTestConfiguration.class);
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				SimpleTypeMapPropertyTestConfiguration.class);
 		getConfigService().save(parentConfig);
 		parentConfig = getConfigService().load(UseParentMergingStrategyTestConfiguration.class);

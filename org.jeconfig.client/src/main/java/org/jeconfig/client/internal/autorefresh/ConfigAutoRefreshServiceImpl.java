@@ -34,36 +34,36 @@ import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.jeconfig.api.IConfigService;
-import org.jeconfig.api.autorefresh.IConfigAutoRefreshService;
-import org.jeconfig.api.autorefresh.IConfigRefreshNotifier;
+import org.jeconfig.api.ConfigService;
+import org.jeconfig.api.autorefresh.ConfigAutoRefreshService;
+import org.jeconfig.api.autorefresh.ConfigRefreshNotifier;
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.exception.IConfigExceptionHandler;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.exception.ConfigExceptionHandler;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.api.util.Assert;
-import org.jeconfig.client.proxy.IRootConfigProxy;
+import org.jeconfig.client.proxy.RootConfigProxy;
 
-public final class ConfigAutoRefreshServiceImpl implements IConfigAutoRefreshService {
+public final class ConfigAutoRefreshServiceImpl implements ConfigAutoRefreshService {
 	private static final long DEFAULT_AUTO_REFRESH_TIME = 1 * 60 * 1000; //1 min default refresh time
 
-	private final ConcurrentHashMap<IScopePath, ConfigRefreshJobContainer<?>> configs;
-	private final AtomicReference<IConfigService> configServiceReference;
+	private final ConcurrentHashMap<ScopePath, ConfigRefreshJobContainer<?>> configs;
+	private final AtomicReference<ConfigService> configServiceReference;
 	private Timer timer;
 	private volatile long autoRefreshTime = DEFAULT_AUTO_REFRESH_TIME;
 	private final AtomicReference<Boolean> closed;
 
 	public ConfigAutoRefreshServiceImpl() {
-		this.configs = new ConcurrentHashMap<IScopePath, ConfigRefreshJobContainer<?>>();
-		this.configServiceReference = new AtomicReference<IConfigService>();
+		this.configs = new ConcurrentHashMap<ScopePath, ConfigRefreshJobContainer<?>>();
+		this.configServiceReference = new AtomicReference<ConfigService>();
 		this.closed = new AtomicReference<Boolean>(Boolean.valueOf(false));
 	}
 
-	public void bindConfigService(final IConfigService configService) {
+	public void bindConfigService(final ConfigService configService) {
 		this.configServiceReference.set(configService);
 		startTimer();
 	}
 
-	public void unbindConfigService(final IConfigService configService) {
+	public void unbindConfigService(final ConfigService configService) {
 		this.configServiceReference.compareAndSet(configService, null);
 		if (this.configServiceReference.get() == null) {
 			stopTimer();
@@ -73,39 +73,39 @@ public final class ConfigAutoRefreshServiceImpl implements IConfigAutoRefreshSer
 	@Override
 	public synchronized <T> void manageConfig(
 		final T config,
-		final IConfigRefreshNotifier<T> notifier,
-		final IConfigExceptionHandler exceptionHandler) {
+		final ConfigRefreshNotifier<T> notifier,
+		final ConfigExceptionHandler exceptionHandler) {
 		Assert.paramNotNull(exceptionHandler, "exceptionHandler"); //$NON-NLS-1$
 		ensureNotClosed();
 
-		if (config instanceof IRootConfigProxy) {
-			final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		if (config instanceof RootConfigProxy) {
+			final RootConfigProxy proxy = (RootConfigProxy) config;
 			configs.put(proxy.getScopePath(), new ConfigRefreshJobContainer<T>(proxy, exceptionHandler, notifier));
 		} else {
-			throw new IllegalArgumentException("The given config must be an instance of IRootConfigProxy."); //$NON-NLS-1$
+			throw new IllegalArgumentException("The given config must be an instance of RootConfigProxy."); //$NON-NLS-1$
 		}
 	}
 
 	@SuppressWarnings("unchecked")
 	private void doRefresh() {
-		final IConfigService configService = configServiceReference.get();
+		final ConfigService configService = configServiceReference.get();
 		if (configService != null) {
-			for (final Entry<IScopePath, ConfigRefreshJobContainer<?>> entry : configs.entrySet()) {
-				final IRootConfigProxy proxy = entry.getValue().getConfig();
-				final IRootConfigProxy tmpProxy = configService.load(proxy.getClass(), proxy.getScopePath());
+			for (final Entry<ScopePath, ConfigRefreshJobContainer<?>> entry : configs.entrySet()) {
+				final RootConfigProxy proxy = entry.getValue().getConfig();
+				final RootConfigProxy tmpProxy = configService.load(proxy.getClass(), proxy.getScopePath());
 				configService.refresh(tmpProxy);
 				if (proxy.getConfigDTOs().size() == tmpProxy.getConfigDTOs().size()) {
 					if (refreshNeeded(proxy, tmpProxy)) {
-						((IConfigRefreshNotifier<Object>) entry.getValue().getNotifier()).refreshConfig(proxy, configService);
+						((ConfigRefreshNotifier<Object>) entry.getValue().getNotifier()).refreshConfig(proxy, configService);
 					}
 				} else {
-					((IConfigRefreshNotifier<Object>) entry.getValue().getNotifier()).refreshConfig(proxy, configService);
+					((ConfigRefreshNotifier<Object>) entry.getValue().getNotifier()).refreshConfig(proxy, configService);
 				}
 			}
 		}
 	}
 
-	private boolean refreshNeeded(final IRootConfigProxy proxy, final IRootConfigProxy tmpProxy) {
+	private boolean refreshNeeded(final RootConfigProxy proxy, final RootConfigProxy tmpProxy) {
 		final List<ComplexConfigDTO> configDTOs = proxy.getConfigDTOs();
 		final List<ComplexConfigDTO> tmpDTOs = tmpProxy.getConfigDTOs();
 		for (int i = 0; i < proxy.getConfigDTOs().size(); i++) {

@@ -28,8 +28,8 @@
 package org.jeconfig.client;
 
 import org.jeconfig.api.exception.DefaultConfigExceptionHandler;
-import org.jeconfig.api.persister.IConfigPersister;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.persister.ConfigPersister;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.client.internal.autosave.ConfigAutoSaveServiceImpl;
 import org.jeconfig.server.persister.InMemoryPersister;
 import org.junit.After;
@@ -42,7 +42,7 @@ public class ConfigAutoSaveServiceTest extends AbstractConfigServiceTest {
 	private ConfigAutoSaveServiceImpl autoSaveService;
 
 	@Override
-	protected IConfigPersister createPersister() {
+	protected ConfigPersister createPersister() {
 		return new InMemoryPersister();
 	}
 
@@ -76,7 +76,7 @@ public class ConfigAutoSaveServiceTest extends AbstractConfigServiceTest {
 	public void testDirtyConfigExists() {
 		final ConfigServiceAccessorTestConfiguration config = getConfigService().load(
 				ConfigServiceAccessorTestConfiguration.class);
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				ConfigServiceAccessorTestConfiguration.class);
 
 		config.setField2(Integer.valueOf(77));

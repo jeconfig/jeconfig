@@ -33,7 +33,7 @@ import java.util.TreeMap;
 
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
-import org.jeconfig.api.scope.IScopePathBuilder;
+import org.jeconfig.api.scope.ScopePathBuilder;
 import org.jeconfig.common.scope.InternalScopePathBuilderFactory;
 import org.jeconfig.server.persister.DefaultScopePathGenerator;
 import org.junit.Before;
@@ -51,7 +51,7 @@ public class DefaultScopePathGeneratorValidatorTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testScopeWithIllegalCharactersInName() {
 		final InternalScopePathBuilderFactory factory = new InternalScopePathBuilderFactory();
-		final IScopePathBuilder builder = factory.createBuilder();
+		final ScopePathBuilder builder = factory.createBuilder();
 		final Map<String, String> tmpProperties = new TreeMap<String, String>();
 		tmpProperties.put("className", "TestConfiguration"); //$NON-NLS-1$ //$NON-NLS-2$
 		builder.append(ClassScopeDescriptor.NAME, tmpProperties);
@@ -64,7 +64,7 @@ public class DefaultScopePathGeneratorValidatorTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testScopeWithIllegalPropertyValue() {
 		final InternalScopePathBuilderFactory factory = new InternalScopePathBuilderFactory();
-		final IScopePathBuilder builder = factory.createBuilder();
+		final ScopePathBuilder builder = factory.createBuilder();
 		final Map<String, String> tmpProperties = new TreeMap<String, String>();
 		tmpProperties.put("className", "TestConfiguration"); //$NON-NLS-1$ //$NON-NLS-2$
 		builder.append(ClassScopeDescriptor.NAME, tmpProperties);
@@ -80,7 +80,7 @@ public class DefaultScopePathGeneratorValidatorTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testScopeWithIllegalPropertyName() {
 		final InternalScopePathBuilderFactory factory = new InternalScopePathBuilderFactory();
-		final IScopePathBuilder builder = factory.createBuilder();
+		final ScopePathBuilder builder = factory.createBuilder();
 		final Map<String, String> tmpProperties = new TreeMap<String, String>();
 		tmpProperties.put("className", "TestConfiguration"); //$NON-NLS-1$ //$NON-NLS-2$
 		builder.append(ClassScopeDescriptor.NAME, tmpProperties);

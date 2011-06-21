@@ -27,20 +27,20 @@
 
 package org.jeconfig.client.internal.merging;
 
-import org.jeconfig.api.exception.IStalePropertiesMergingResult;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.exception.StalePropertiesMergingResult;
+import org.jeconfig.api.scope.ScopePath;
 
-public class StalePropertiesMergingResultImpl implements IStalePropertiesMergingResult {
-	private final IScopePath scopePath;
+public class StalePropertiesMergingResultImpl implements StalePropertiesMergingResult {
+	private final ScopePath scopePath;
 	private int numberOfMergedProperties;
 	private int numberOfDiscardedProperties;
 
-	public StalePropertiesMergingResultImpl(final IScopePath scopePath) {
+	public StalePropertiesMergingResultImpl(final ScopePath scopePath) {
 		this.scopePath = scopePath;
 	}
 
 	@Override
-	public IScopePath getScopePath() {
+	public ScopePath getScopePath() {
 		return scopePath;
 	}
 

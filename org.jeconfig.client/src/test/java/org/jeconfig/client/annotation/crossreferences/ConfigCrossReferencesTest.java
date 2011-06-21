@@ -35,8 +35,8 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.jeconfig.api.scope.DefaultScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.api.scope.InstanceScopeDescriptor;
 import org.jeconfig.client.AbstractConfigServiceTest;
 import org.junit.Test;
@@ -185,9 +185,9 @@ public class ConfigCrossReferencesTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testCrossReferenceWithAnnotationScope() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
 				CrossReferenceTestConfigReferenced.class);
-		final IScopePath scope = scopeFactory.stub().append(DefaultScopeDescriptor.NAME).create();
+		final ScopePath scope = scopeFactory.stub().append(DefaultScopeDescriptor.NAME).create();
 		final CrossReferenceTestConfigReferenced defaultReferencedConfig = getConfigService().load(
 				CrossReferenceTestConfigReferenced.class,
 				scope);
@@ -229,9 +229,9 @@ public class ConfigCrossReferencesTest extends AbstractConfigServiceTest {
 	public void testAnnotatedInstanceName() {
 		final Map<String, String> properties = new HashMap<String, String>();
 		properties.put(InstanceScopeDescriptor.PROP_INSTANCE_NAME, "FirstInstance"); //$NON-NLS-1$
-		final IScopePathBuilderFactory scopePathBuilderFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory scopePathBuilderFactory = getConfigService().getScopePathBuilderFactory(
 				CrossReferenceTestConfigReferenced.class);
-		final IScopePath instanceScopePath = scopePathBuilderFactory.annotatedPath().append(
+		final ScopePath instanceScopePath = scopePathBuilderFactory.annotatedPath().append(
 				InstanceScopeDescriptor.NAME,
 				properties).create();
 

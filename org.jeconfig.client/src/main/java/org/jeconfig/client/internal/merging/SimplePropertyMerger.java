@@ -32,11 +32,11 @@ import java.lang.annotation.Annotation;
 import java.util.Map;
 
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
-import org.jeconfig.api.annotation.merging.ISimpleValueMergingStrategy;
+import org.jeconfig.api.annotation.merging.SimpleValueMergingStrategy;
 import org.jeconfig.api.annotation.merging.MergingStrategies;
 import org.jeconfig.api.annotation.merging.PropertyMergingParameter;
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.conversion.NoCustomSimpleTypeConverter;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
@@ -44,9 +44,9 @@ import org.jeconfig.common.reflection.ClassInstantiation;
 
 public final class SimplePropertyMerger extends AbstractPropertyMerger {
 	private final ClassInstantiation classInstantiation = new ClassInstantiation();
-	private final ISimpleTypeConverterRegistry converterRegistry;
+	private final SimpleTypeConverterRegistry converterRegistry;
 
-	public SimplePropertyMerger(final ISimpleTypeConverterRegistry converterRegistry) {
+	public SimplePropertyMerger(final SimpleTypeConverterRegistry converterRegistry) {
 		this.converterRegistry = converterRegistry;
 	}
 
@@ -62,7 +62,7 @@ public final class SimplePropertyMerger extends AbstractPropertyMerger {
 		final ComplexConfigDTO parentDTO,
 		final ComplexConfigDTO childDTO,
 		final PropertyDescriptor propertyDescriptor,
-		final Map<Class<? extends Annotation>, IPropertyMerger> mergers,
+		final Map<Class<? extends Annotation>, PropertyMerger> mergers,
 		final ComplexTypeMerger complexTypeMerger,
 		final StalePropertiesMergingResultImpl mergingResult) {
 
@@ -103,7 +103,7 @@ public final class SimplePropertyMerger extends AbstractPropertyMerger {
 					propertyDescriptor.getPropertyType(),
 					propertyDescriptor.getName());
 
-				ISimpleValueMergingStrategy mergingStrategy = classInstantiation.newInstance(annotation.mergingStrategy());
+				SimpleValueMergingStrategy mergingStrategy = classInstantiation.newInstance(annotation.mergingStrategy());
 				if (isClassOrCodeDefaultDTO(parentValueDTO)) {
 					mergingStrategy = classInstantiation.newInstance(MergingStrategies.ChildOverwrites.class);
 				}
@@ -116,7 +116,7 @@ public final class SimplePropertyMerger extends AbstractPropertyMerger {
 		}
 	}
 
-	private ISimpleTypeConverter<?> getConverter(final PropertyDescriptor propertyDescriptor) {
+	private SimpleTypeConverter<?> getConverter(final PropertyDescriptor propertyDescriptor) {
 		final ConfigSimpleProperty annotation = propertyDescriptor.getReadMethod().getAnnotation(ConfigSimpleProperty.class);
 		final boolean customConverter = !NoCustomSimpleTypeConverter.class.equals(annotation.customConverter());
 		if (customConverter) {

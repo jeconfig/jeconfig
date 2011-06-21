@@ -35,10 +35,10 @@ import java.util.Set;
 
 import org.jeconfig.api.annotation.ConfigIdProperty;
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.conversion.NoCustomSimpleTypeConverter;
 
-public final class SimplePropertyValidator implements IPropertyValidator<ConfigSimpleProperty> {
+public final class SimplePropertyValidator implements PropertyValidator<ConfigSimpleProperty> {
 	private static Set<Class<? extends Annotation>> compatibleAnnotations = createCompatibleAnnotations();
 
 	private static Set<Class<? extends Annotation>> createCompatibleAnnotations() {
@@ -58,8 +58,8 @@ public final class SimplePropertyValidator implements IPropertyValidator<ConfigS
 		final PropertyDescriptor propertyDescriptor,
 		final ConfigSimpleProperty annotation,
 		final Set<Annotation> otherAnnotations,
-		final ISimpleTypeConverterRegistry converterRegistry,
-		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
+		final SimpleTypeConverterRegistry converterRegistry,
+		final Map<Class<? extends Annotation>, PropertyValidator<Annotation>> validators,
 		final ComplexTypeValidator complexTypeValidator,
 		final Set<Class<?>> validatedComplexTypes) {
 

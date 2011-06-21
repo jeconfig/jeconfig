@@ -46,7 +46,7 @@ import org.jeconfig.client.annotation.simple.SimplePropertyTestConfiguration;
 import org.jeconfig.client.proxy.ConfigListDecorator;
 import org.jeconfig.client.proxy.ConfigMapDecorator;
 import org.jeconfig.client.proxy.ConfigSetDecorator;
-import org.jeconfig.client.proxy.IConfigProxy;
+import org.jeconfig.client.proxy.ConfigProxy;
 import org.jeconfig.client.testconfigs.ComplexSubtype;
 import org.junit.Assert;
 import org.junit.Test;
@@ -61,7 +61,7 @@ public class ProxyUpdaterTest extends AbstractConfigServiceTest {
 		map.put("a", ComplexSubtype.create(getConfigService(), "b", "c"));
 		config.setProperty(map);
 		getConfigService().save(config);
-		final IConfigProxy<ComplexConfigDTO> proxy = (IConfigProxy<ComplexConfigDTO>) config;
+		final ConfigProxy<ComplexConfigDTO> proxy = (ConfigProxy<ComplexConfigDTO>) config;
 		final ComplexConfigDTO rootDto = proxy.getLeafConfigDTO();
 		final ConfigMapDTO mapDto = rootDto.getMapProperty("property");
 		final ComplexConfigDTO complexDto = (ComplexConfigDTO) mapDto.getMap().get("a");
@@ -79,7 +79,7 @@ public class ProxyUpdaterTest extends AbstractConfigServiceTest {
 		final MapPropertyTestConfiguration config = getConfigService().load(MapPropertyTestConfiguration.class);
 		config.getUserID().put("a", Integer.valueOf(1));
 		getConfigService().save(config);
-		final IConfigProxy<ComplexConfigDTO> proxy = (IConfigProxy<ComplexConfigDTO>) config;
+		final ConfigProxy<ComplexConfigDTO> proxy = (ConfigProxy<ComplexConfigDTO>) config;
 		final ComplexConfigDTO rootDto = proxy.getLeafConfigDTO();
 		final ConfigMapDTO mapDto = rootDto.getMapProperty("userID");
 		final ConfigSimpleValueDTO simpleDto = (ConfigSimpleValueDTO) mapDto.getMap().get("a");
@@ -96,7 +96,7 @@ public class ProxyUpdaterTest extends AbstractConfigServiceTest {
 		list.add(ComplexSubtype.create(getConfigService(), "a", "b"));
 		config.setComplex(list);
 		getConfigService().save(config);
-		final IConfigProxy<ComplexConfigDTO> proxy = (IConfigProxy<ComplexConfigDTO>) config;
+		final ConfigProxy<ComplexConfigDTO> proxy = (ConfigProxy<ComplexConfigDTO>) config;
 		final ComplexConfigDTO rootDto = proxy.getLeafConfigDTO();
 		final ConfigListDTO listDto = rootDto.getListProperty("complex");
 		final ComplexConfigDTO complexDto = (ComplexConfigDTO) listDto.getItems().get(0);
@@ -114,7 +114,7 @@ public class ProxyUpdaterTest extends AbstractConfigServiceTest {
 		final SimplePropertyTestConfiguration config = getConfigService().load(SimplePropertyTestConfiguration.class);
 		config.setIntValue(5);
 		getConfigService().save(config);
-		final IConfigProxy<ComplexConfigDTO> proxy = (IConfigProxy<ComplexConfigDTO>) config;
+		final ConfigProxy<ComplexConfigDTO> proxy = (ConfigProxy<ComplexConfigDTO>) config;
 		Assert.assertTrue(proxy.getLeafConfigDTO().getDeclaredProperties().contains("intValue"));
 	}
 
@@ -123,7 +123,7 @@ public class ProxyUpdaterTest extends AbstractConfigServiceTest {
 		final ComplexPropertyTestConfiguration config = getConfigService().load(ComplexPropertyTestConfiguration.class);
 		config.setProperty(ComplexSubtype.create(getConfigService(), "a", "b"));
 		getConfigService().save(config);
-		final IConfigProxy<ComplexConfigDTO> proxy = (IConfigProxy<ComplexConfigDTO>) config;
+		final ConfigProxy<ComplexConfigDTO> proxy = (ConfigProxy<ComplexConfigDTO>) config;
 		final ComplexConfigDTO rootDTO = proxy.getLeafConfigDTO();
 		final ComplexConfigDTO complexDto = rootDTO.getComplexProperty("property");
 		Assert.assertNotNull(complexDto);
@@ -131,9 +131,9 @@ public class ProxyUpdaterTest extends AbstractConfigServiceTest {
 		Assert.assertEquals("a", idSimpleValueProperty.getValue());
 		final ConfigSimpleValueDTO nameSimpleValueDTO = complexDto.getSimpleValueProperty("name");
 		Assert.assertEquals("b", nameSimpleValueDTO.getValue());
-		Assert.assertTrue(config.getProperty() instanceof IConfigProxy);
+		Assert.assertTrue(config.getProperty() instanceof ConfigProxy);
 		final ComplexSubtype subtype = config.getProperty();
-		final IConfigProxy<ComplexConfigDTO> subProxy = (IConfigProxy<ComplexConfigDTO>) subtype;
+		final ConfigProxy<ComplexConfigDTO> subProxy = (ConfigProxy<ComplexConfigDTO>) subtype;
 		final ComplexConfigDTO subDTO = subProxy.getLeafConfigDTO();
 		Assert.assertEquals(complexDto, subDTO);
 	}
@@ -143,7 +143,7 @@ public class ProxyUpdaterTest extends AbstractConfigServiceTest {
 		final SetPropertyTestConfiguration config = getConfigService().load(SetPropertyTestConfiguration.class);
 		config.getData().add("a");
 		getConfigService().save(config);
-		final IConfigProxy<ComplexConfigDTO> proxy = (IConfigProxy<ComplexConfigDTO>) config;
+		final ConfigProxy<ComplexConfigDTO> proxy = (ConfigProxy<ComplexConfigDTO>) config;
 		final ComplexConfigDTO rootDTO = proxy.getLeafConfigDTO();
 		final ConfigSetDTO setDto = rootDTO.getSetProperty("data");
 		Assert.assertNotNull(setDto);
@@ -158,7 +158,7 @@ public class ProxyUpdaterTest extends AbstractConfigServiceTest {
 		final ComplexSetPropertyTestConfiguration config = getConfigService().load(ComplexSetPropertyTestConfiguration.class);
 		config.getSubTypeSet().add(ComplexSubtype.create(getConfigService(), "a", "b"));
 		getConfigService().save(config);
-		final IConfigProxy<ComplexConfigDTO> proxy = (IConfigProxy<ComplexConfigDTO>) config;
+		final ConfigProxy<ComplexConfigDTO> proxy = (ConfigProxy<ComplexConfigDTO>) config;
 		final ComplexConfigDTO rootDTO = proxy.getLeafConfigDTO();
 		final ConfigSetDTO setDto = rootDTO.getSetProperty("subTypeSet");
 		Assert.assertNotNull(setDto);
@@ -172,7 +172,7 @@ public class ProxyUpdaterTest extends AbstractConfigServiceTest {
 		final ConfigSetDecorator<ComplexSubtype> setDecorator = (ConfigSetDecorator<ComplexSubtype>) config.getSubTypeSet();
 		Assert.assertEquals(setDto, setDecorator.getLeafConfigDTO());
 		final ComplexSubtype subconfig = config.getSubTypeSet().iterator().next();
-		final IConfigProxy<ComplexConfigDTO> subProxy = (IConfigProxy<ComplexConfigDTO>) subconfig;
+		final ConfigProxy<ComplexConfigDTO> subProxy = (ConfigProxy<ComplexConfigDTO>) subconfig;
 		Assert.assertEquals(complexDto, subProxy.getLeafConfigDTO());
 	}
 
@@ -181,7 +181,7 @@ public class ProxyUpdaterTest extends AbstractConfigServiceTest {
 		final ListTestConfiguration config = getConfigService().load(ListTestConfiguration.class);
 		config.getStringField().add("a");
 		getConfigService().save(config);
-		final IConfigProxy<ComplexConfigDTO> proxy = (IConfigProxy<ComplexConfigDTO>) config;
+		final ConfigProxy<ComplexConfigDTO> proxy = (ConfigProxy<ComplexConfigDTO>) config;
 		final ComplexConfigDTO rootDTO = proxy.getLeafConfigDTO();
 		final ConfigListDTO listDto = rootDTO.getListProperty("stringField");
 		Assert.assertNotNull(listDto);

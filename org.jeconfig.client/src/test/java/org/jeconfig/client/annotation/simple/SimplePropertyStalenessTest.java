@@ -29,8 +29,8 @@ package org.jeconfig.client.annotation.simple;
 
 import org.jeconfig.api.scope.DefaultScopeDescriptor;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.client.AbstractConfigServiceTest;
 import org.jeconfig.client.testconfigs.DummyStalenessNotifier;
 import org.junit.Assert;
@@ -46,10 +46,10 @@ public class SimplePropertyStalenessTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testUseParentOnStalenessBecauseOfDeletion() {
-		final IScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
 				SimplePropertyStalenessTestConfiguration.class);
-		final IScopePath globalPath = builderFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
-		final IScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
+		final ScopePath globalPath = builderFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
 
 		final SimplePropertyStalenessTestConfiguration globalConfig = getConfigService().load(
 				SimplePropertyStalenessTestConfiguration.class,
@@ -78,10 +78,10 @@ public class SimplePropertyStalenessTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeAndUseChildOnStalenessBecauseOfDeletion() {
-		final IScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
 				SimplePropertyStalenessTestConfiguration.class);
-		final IScopePath globalPath = builderFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
-		final IScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
+		final ScopePath globalPath = builderFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
 
 		final SimplePropertyStalenessTestConfiguration globalConfig = getConfigService().load(
 				SimplePropertyStalenessTestConfiguration.class,
@@ -110,9 +110,9 @@ public class SimplePropertyStalenessTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testUseParentOnStalenessBecauseOfParentUpdate() {
-		final IScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
 				SimplePropertyStalenessTestConfiguration.class);
-		final IScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
+		final ScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
 
 		final SimplePropertyStalenessTestConfiguration defaultConfig = getConfigService().load(
 				SimplePropertyStalenessTestConfiguration.class,
@@ -136,9 +136,9 @@ public class SimplePropertyStalenessTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeAndUseChildOnStalenessBecauseOfParentUpdate() {
-		final IScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
 				SimplePropertyStalenessTestConfiguration.class);
-		final IScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
+		final ScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
 
 		final SimplePropertyStalenessTestConfiguration defaultConfig = getConfigService().load(
 				SimplePropertyStalenessTestConfiguration.class,

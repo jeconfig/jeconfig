@@ -33,18 +33,18 @@ import org.jeconfig.api.annotation.ConfigArrayProperty;
 import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
 import org.jeconfig.api.scope.UserScopeDescriptor;
-import org.jeconfig.client.testconfigs.IMyInferfaceForNonPolymorphTest;
+import org.jeconfig.client.testconfigs.MyInferfaceForNonPolymorphTest;
 
 @ConfigClass(scopePath = {GlobalScopeDescriptor.NAME, UserScopeDescriptor.NAME})
 public class ArrayTestConfigurationNonPolymorph {
-	private IMyInferfaceForNonPolymorphTest[] implClass2;
+	private MyInferfaceForNonPolymorphTest[] implClass2;
 
 	@ConfigArrayProperty
-	public IMyInferfaceForNonPolymorphTest[] getImplClass2() {
+	public MyInferfaceForNonPolymorphTest[] getImplClass2() {
 		return implClass2;
 	}
 
-	public void setImplClass2(final IMyInferfaceForNonPolymorphTest[] imlClass2) {
+	public void setImplClass2(final MyInferfaceForNonPolymorphTest[] imlClass2) {
 		this.implClass2 = imlClass2;
 	}
 

@@ -42,16 +42,16 @@ import org.jeconfig.api.annotation.ConfigListProperty;
 import org.jeconfig.api.annotation.ConfigMapProperty;
 import org.jeconfig.api.annotation.ConfigSetProperty;
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.conversion.NoCustomSimpleTypeConverter;
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.dto.IConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.dto.ConfigDTO;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.client.internal.ConfigAnnotations;
 import org.jeconfig.client.internal.ConfigIdPropertyUtil;
-import org.jeconfig.client.proxy.IConfigProxy;
+import org.jeconfig.client.proxy.ConfigProxy;
 import org.jeconfig.client.proxy.ProxyUtil;
 import org.jeconfig.common.reflection.ClassInstantiation;
 import org.jeconfig.common.reflection.PropertyAccessor;
@@ -64,16 +64,16 @@ public class ComplexDTOSerializer extends AbstractDTOSerializer {
 	private final MapDTOSerializer mapDTOSerializer;
 	private final SimpleDTOSerializer simpleDTOSerializer;
 
-	public ComplexDTOSerializer(final ISimpleTypeConverterRegistry simpleTypeConverterRegistry) {
+	public ComplexDTOSerializer(final SimpleTypeConverterRegistry simpleTypeConverterRegistry) {
 		simpleDTOSerializer = new SimpleDTOSerializer(simpleTypeConverterRegistry);
 		mapDTOSerializer = new MapDTOSerializer(simpleTypeConverterRegistry);
 		setDTOSerializer = new SetDTOSerializer(simpleTypeConverterRegistry);
 	}
 
 	@SuppressWarnings("unchecked")
-	public ComplexConfigDTO createConfigDTO(final Object config, final IScopePath scopePath) {
-		if (config instanceof IConfigProxy) {
-			final IConfigProxy<ComplexConfigDTO> configProxy = (IConfigProxy<ComplexConfigDTO>) config;
+	public ComplexConfigDTO createConfigDTO(final Object config, final ScopePath scopePath) {
+		if (config instanceof ConfigProxy) {
+			final ConfigProxy<ComplexConfigDTO> configProxy = (ConfigProxy<ComplexConfigDTO>) config;
 			return createConfigDTO(
 					config,
 					configProxy.getConfigDTOs(),
@@ -94,7 +94,7 @@ public class ComplexDTOSerializer extends AbstractDTOSerializer {
 		final Class<?> configPropertyType,
 		final String configPropertyName,
 		final boolean polymorph,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final boolean shouldCreateWholeSubtree) {
 
 		if (config != null && configPropertyType == null) {
@@ -119,19 +119,19 @@ public class ComplexDTOSerializer extends AbstractDTOSerializer {
 					final Object propertyValue = propertyAccessor.read(config, propertyName);
 
 					if (shouldCreateWholeSubtree || shouldCreatePropertyDTO(config, propertyValue, propertyName, idPropertyName)) {
-						final List<IConfigDTO> propertyOriginalDTOs = getPropertyOriginalDTOs(originalDTOs, propertyName);
+						final List<ConfigDTO> propertyOriginalDTOs = getPropertyOriginalDTOs(originalDTOs, propertyName);
 
-						IConfigDTO propertyDTO;
+						ConfigDTO propertyDTO;
 						if (ConfigSimpleProperty.class.equals(annotation.annotationType())) {
 							final ConfigSimpleProperty anno = (ConfigSimpleProperty) annotation;
-							final ISimpleTypeConverter<?> customConverter = createCustomConverter(anno.customConverter());
+							final SimpleTypeConverter<?> customConverter = createCustomConverter(anno.customConverter());
 							propertyDTO = simpleDTOSerializer.createSimpleValueDTO(
 									propertyValue,
 									(List) propertyOriginalDTOs,
 									propertyType,
 									propertyName,
 									scopePath,
-									(ISimpleTypeConverter<Object>) customConverter);
+									(SimpleTypeConverter<Object>) customConverter);
 
 						} else if (ConfigComplexProperty.class.equals(annotation.annotationType())) {
 							final ConfigComplexProperty ccp = (ConfigComplexProperty) annotation;
@@ -154,7 +154,7 @@ public class ComplexDTOSerializer extends AbstractDTOSerializer {
 
 						} else if (ConfigListProperty.class.equals(annotation.annotationType())) {
 							final ConfigListProperty listAnno = (ConfigListProperty) annotation;
-							final ISimpleTypeConverter<?> customConverter = createCustomConverter(listAnno.customConverter());
+							final SimpleTypeConverter<?> customConverter = createCustomConverter(listAnno.customConverter());
 							final boolean complex = AnnotationUtil.getAnnotation(listAnno.itemType(), ConfigComplexType.class) != null;
 							propertyDTO = listDTOSerializer.createListDTO(
 									(List) propertyValue,
@@ -167,11 +167,11 @@ public class ComplexDTOSerializer extends AbstractDTOSerializer {
 									listAnno.itemType(),
 									this,
 									simpleDTOSerializer,
-									(ISimpleTypeConverter<Object>) customConverter);
+									(SimpleTypeConverter<Object>) customConverter);
 
 						} else if (ConfigArrayProperty.class.equals(annotation.annotationType())) {
 							final ConfigArrayProperty arrayAnno = (ConfigArrayProperty) annotation;
-							final ISimpleTypeConverter<?> customConverter = createCustomConverter(arrayAnno.customConverter());
+							final SimpleTypeConverter<?> customConverter = createCustomConverter(arrayAnno.customConverter());
 							final List<Object> list = createListFromArray(propertyValue);
 							final boolean complex = AnnotationUtil.getAnnotation(
 									propertyType.getComponentType(),
@@ -187,11 +187,11 @@ public class ComplexDTOSerializer extends AbstractDTOSerializer {
 									propertyType.getComponentType(),
 									this,
 									simpleDTOSerializer,
-									(ISimpleTypeConverter<Object>) customConverter);
+									(SimpleTypeConverter<Object>) customConverter);
 
 						} else if (ConfigSetProperty.class.equals(annotation.annotationType())) {
 							final ConfigSetProperty setAnno = (ConfigSetProperty) annotation;
-							final ISimpleTypeConverter<?> customConverter = createCustomConverter(setAnno.customConverter());
+							final SimpleTypeConverter<?> customConverter = createCustomConverter(setAnno.customConverter());
 							final boolean complex = AnnotationUtil.getAnnotation(setAnno.itemType(), ConfigComplexType.class) != null;
 							propertyDTO = setDTOSerializer.createSetDTO(
 									(Set) propertyValue,
@@ -205,13 +205,13 @@ public class ComplexDTOSerializer extends AbstractDTOSerializer {
 									shouldCreateWholeSubtree,
 									this,
 									simpleDTOSerializer,
-									(ISimpleTypeConverter<Object>) customConverter);
+									(SimpleTypeConverter<Object>) customConverter);
 
 						} else if (ConfigMapProperty.class.equals(annotation.annotationType())) {
 							final ConfigMapProperty mapAnno = (ConfigMapProperty) annotation;
 							final boolean complex = AnnotationUtil.getAnnotation(mapAnno.valueType(), ConfigComplexType.class) != null;
-							final ISimpleTypeConverter<?> customValueConverter = createCustomConverter(mapAnno.customValueConverter());
-							final ISimpleTypeConverter<?> customKeyConverter = createCustomConverter(mapAnno.customKeyConverter());
+							final SimpleTypeConverter<?> customValueConverter = createCustomConverter(mapAnno.customValueConverter());
+							final SimpleTypeConverter<?> customKeyConverter = createCustomConverter(mapAnno.customKeyConverter());
 							propertyDTO = mapDTOSerializer.createMapDTO(
 									(Map) propertyValue,
 									(List) propertyOriginalDTOs,
@@ -225,8 +225,8 @@ public class ComplexDTOSerializer extends AbstractDTOSerializer {
 									shouldCreateWholeSubtree,
 									this,
 									simpleDTOSerializer,
-									(ISimpleTypeConverter<Object>) customValueConverter,
-									(ISimpleTypeConverter<Object>) customKeyConverter);
+									(SimpleTypeConverter<Object>) customValueConverter,
+									(SimpleTypeConverter<Object>) customKeyConverter);
 
 						} else {
 							throw new IllegalStateException("Incomplete if-else block"); //$NON-NLS-1$
@@ -243,7 +243,7 @@ public class ComplexDTOSerializer extends AbstractDTOSerializer {
 		return configDTO;
 	}
 
-	private ISimpleTypeConverter<?> createCustomConverter(final Class<? extends ISimpleTypeConverter<?>> customConverter) {
+	private SimpleTypeConverter<?> createCustomConverter(final Class<? extends SimpleTypeConverter<?>> customConverter) {
 		if (NoCustomSimpleTypeConverter.class.equals(customConverter)) {
 			return null;
 		}
@@ -261,14 +261,14 @@ public class ComplexDTOSerializer extends AbstractDTOSerializer {
 		return null;
 	}
 
-	private List<IConfigDTO> getPropertyOriginalDTOs(final List<ComplexConfigDTO> originalDTOs, final String propertyName) {
+	private List<ConfigDTO> getPropertyOriginalDTOs(final List<ComplexConfigDTO> originalDTOs, final String propertyName) {
 		if (originalDTOs == null) {
 			return null;
 		}
 
-		final List<IConfigDTO> result = new ArrayList<IConfigDTO>();
+		final List<ConfigDTO> result = new ArrayList<ConfigDTO>();
 		for (final ComplexConfigDTO originalDTO : originalDTOs) {
-			final IConfigDTO propertyDTO = originalDTO.getProperty(propertyName);
+			final ConfigDTO propertyDTO = originalDTO.getProperty(propertyName);
 			if (propertyDTO != null) {
 				result.add(propertyDTO);
 			}
@@ -283,17 +283,17 @@ public class ComplexDTOSerializer extends AbstractDTOSerializer {
 		final String propertyName,
 		final String idPropertyName) {
 
-		if (!(config instanceof IConfigProxy)) {
+		if (!(config instanceof ConfigProxy)) {
 			return true;
 		}
 
-		final IConfigProxy<?> configProxy = (IConfigProxy<?>) config;
+		final ConfigProxy<?> configProxy = (ConfigProxy<?>) config;
 		if (configProxy.getPropertiesWithDiff().contains(propertyName)) {
 			return true;
 		}
 
-		if (propertyValue instanceof IConfigProxy) {
-			final IConfigProxy<?> valueConfigProxy = (IConfigProxy<?>) propertyValue;
+		if (propertyValue instanceof ConfigProxy) {
+			final ConfigProxy<?> valueConfigProxy = (ConfigProxy<?>) propertyValue;
 			if (valueConfigProxy.hasDiff()) {
 				return true;
 			}

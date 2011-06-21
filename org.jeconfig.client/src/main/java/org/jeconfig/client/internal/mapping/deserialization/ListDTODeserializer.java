@@ -34,12 +34,12 @@ import java.util.List;
 
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.annotation.ConfigListProperty;
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigListDTO;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
-import org.jeconfig.api.dto.IConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.dto.ConfigDTO;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.client.proxy.ConfigListDecorator;
 import org.jeconfig.common.reflection.PropertyAccessor;
@@ -60,12 +60,12 @@ public class ListDTODeserializer extends AbstractDTODeserializer {
 		final ComplexConfigDTO configDTO,
 		final Object config,
 		final List<ComplexConfigDTO> dtos,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final PropertyDescriptor propDesc,
 		final Annotation annotation,
 		final String propName) {
 		final ConfigListProperty listAnno = (ConfigListProperty) annotation;
-		final ISimpleTypeConverter<?> customConverter = createCustomConverter(listAnno.customConverter());
+		final SimpleTypeConverter<?> customConverter = createCustomConverter(listAnno.customConverter());
 		final boolean polymorph = listAnno.polymorph();
 		final boolean complex = AnnotationUtil.getAnnotation(listAnno.itemType(), ConfigComplexType.class) != null;
 		final ConfigListDTO listDTO = configDTO.getListProperty(propName);
@@ -88,8 +88,8 @@ public class ListDTODeserializer extends AbstractDTODeserializer {
 		final boolean complex,
 		final ConfigListDTO listDTO,
 		final List<ConfigListDTO> dtos,
-		final IScopePath scopePath,
-		final ISimpleTypeConverter<?> customConverter) {
+		final ScopePath scopePath,
+		final SimpleTypeConverter<?> customConverter) {
 
 		final ConfigListDecorator<Object> listToSet = getListToSet(config, propDesc, listDTO);
 		if (listToSet != null) {
@@ -100,14 +100,14 @@ public class ListDTODeserializer extends AbstractDTODeserializer {
 					listToSet.clear();
 					if (complex || polymorph) {
 						//complex items
-						for (final IConfigDTO temp : listDTO.getItems()) {
+						for (final ConfigDTO temp : listDTO.getItems()) {
 							final ComplexConfigDTO complexDTO = (ComplexConfigDTO) temp;
 							final Object cfg = complexDTODeserializer.createComplexConfigObject(complexDTO, null, scopePath);
 							listToSet.add(cfg);
 						}
 					} else {
 						//simple items
-						for (final IConfigDTO temp : listDTO.getItems()) {
+						for (final ConfigDTO temp : listDTO.getItems()) {
 							final ConfigSimpleValueDTO simpleDTO = (ConfigSimpleValueDTO) temp;
 							final Object value = simpleDTODeserializer.createSimpleValue(
 									simpleDTO,

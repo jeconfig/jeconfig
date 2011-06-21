@@ -33,8 +33,8 @@ import java.lang.annotation.Annotation;
 
 import org.jeconfig.api.annotation.ConfigIdProperty;
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.conversion.NoCustomSimpleTypeConverter;
 import org.jeconfig.client.proxy.ProxyUtil;
 import org.jeconfig.common.reflection.ClassInstantiation;
@@ -65,7 +65,7 @@ public class ConfigIdPropertyUtil {
 		throw new IllegalArgumentException("Didn't find ID property in type '" + configClass + "'!"); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
-	public String getIdPropertyValueAsString(final Object config, final ISimpleTypeConverterRegistry simpleTypeConverterRegistry) {
+	public String getIdPropertyValueAsString(final Object config, final SimpleTypeConverterRegistry simpleTypeConverterRegistry) {
 		final String idPropertyName = getIdPropertyName(config.getClass());
 		return getIdPropertyValueAsString(config, idPropertyName, simpleTypeConverterRegistry);
 	}
@@ -74,7 +74,7 @@ public class ConfigIdPropertyUtil {
 	public String getIdPropertyValueAsString(
 		final Object config,
 		final String idPropertyName,
-		final ISimpleTypeConverterRegistry simpleTypeConverterRegistry) {
+		final SimpleTypeConverterRegistry simpleTypeConverterRegistry) {
 
 		if (config != null) {
 			try {
@@ -82,7 +82,7 @@ public class ConfigIdPropertyUtil {
 					idPropertyName,
 					ProxyUtil.getConfigClass(config.getClass()));
 				final ConfigSimpleProperty annotation = desc.getReadMethod().getAnnotation(ConfigSimpleProperty.class);
-				final ISimpleTypeConverter<Object> customIdConverter = (ISimpleTypeConverter<Object>) createCustomConverter(annotation.customConverter());
+				final SimpleTypeConverter<Object> customIdConverter = (SimpleTypeConverter<Object>) createCustomConverter(annotation.customConverter());
 				final Object obj = propertyAccessor.read(config, idPropertyName);
 				if (obj == null) {
 					throw new IllegalArgumentException("Got config which has no ID set: " + config); //$NON-NLS-1$
@@ -102,7 +102,7 @@ public class ConfigIdPropertyUtil {
 		return null;
 	}
 
-	private ISimpleTypeConverter<?> createCustomConverter(final Class<? extends ISimpleTypeConverter<?>> customConverter) {
+	private SimpleTypeConverter<?> createCustomConverter(final Class<? extends SimpleTypeConverter<?>> customConverter) {
 		if (NoCustomSimpleTypeConverter.class.equals(customConverter)) {
 			return null;
 		}

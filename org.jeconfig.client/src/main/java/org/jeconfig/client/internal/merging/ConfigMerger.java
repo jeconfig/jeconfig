@@ -34,13 +34,13 @@ import java.util.List;
 import java.util.Map;
 
 import org.jeconfig.api.annotation.ConfigClass;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.exception.IStalenessNotifier;
+import org.jeconfig.api.exception.StalenessNotifier;
 import org.jeconfig.api.exception.NoStalenessNotifier;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.api.util.Assert;
 import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.common.reflection.ClassInstantiation;
@@ -52,12 +52,12 @@ import org.jeconfig.common.reflection.ClassInstantiation;
  * This class is thread-safe.
  */
 public final class ConfigMerger {
-	private final Map<Class<? extends Annotation>, IPropertyMerger> mergers;
+	private final Map<Class<? extends Annotation>, PropertyMerger> mergers;
 	private final ComplexTypeMerger complexTypeMerger;
 
-	public ConfigMerger(final ISimpleTypeConverterRegistry converterRegistry) {
+	public ConfigMerger(final SimpleTypeConverterRegistry converterRegistry) {
 		final ConfigMergerInitializer mergerInitializer = new ConfigMergerInitializer(converterRegistry);
-		mergers = new HashMap<Class<? extends Annotation>, IPropertyMerger>(mergerInitializer.getFieldMergers());
+		mergers = new HashMap<Class<? extends Annotation>, PropertyMerger>(mergerInitializer.getFieldMergers());
 		complexTypeMerger = new ComplexTypeMerger();
 	}
 
@@ -84,18 +84,18 @@ public final class ConfigMerger {
 	 * @return a merged new configuration object
 	 */
 	public ComplexConfigDTO merge(
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final List<ComplexConfigDTO> configs,
 		final Class<?> configClass,
-		final IStalenessNotifier globalStalenessNotifier) {
+		final StalenessNotifier globalStalenessNotifier) {
 		return merge(scopePath, configs, configClass, globalStalenessNotifier, true);
 	}
 
 	private ComplexConfigDTO merge(
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final List<ComplexConfigDTO> configs,
 		final Class<?> configClass,
-		final IStalenessNotifier globalStalenessNotifier,
+		final StalenessNotifier globalStalenessNotifier,
 		final boolean notifyStaleness) {
 		Assert.paramNotEmpty(configs, "configs"); //$NON-NLS-1$
 		Assert.paramNotNull(configClass, "configClass"); //$NON-NLS-1$
@@ -114,7 +114,7 @@ public final class ConfigMerger {
 		final ComplexConfigDTO result = mergeConfigs(getConfigsToMerge(configs), configClass, stalePropertiesMergingResult);
 
 		if (notifyStaleness && stalePropertiesMergingResult.hasProperties()) {
-			IStalenessNotifier stalenessNotifier = globalStalenessNotifier;
+			StalenessNotifier stalenessNotifier = globalStalenessNotifier;
 			if (annotation.stalenessNotfier() != NoStalenessNotifier.class) {
 				stalenessNotifier = new ClassInstantiation().newInstance(annotation.stalenessNotfier());
 			}

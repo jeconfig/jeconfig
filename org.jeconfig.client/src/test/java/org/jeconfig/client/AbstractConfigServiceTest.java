@@ -32,11 +32,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jeconfig.api.ConfigServiceAccessor;
-import org.jeconfig.api.IConfigSetupService;
-import org.jeconfig.api.persister.IConfigPersistenceService;
-import org.jeconfig.api.persister.IConfigPersister;
+import org.jeconfig.api.ConfigSetupService;
+import org.jeconfig.api.persister.ConfigPersistenceService;
+import org.jeconfig.api.persister.ConfigPersister;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
-import org.jeconfig.api.scope.IScopePropertyProvider;
+import org.jeconfig.api.scope.ScopePropertyProvider;
 import org.jeconfig.api.scope.InstanceScopeDescriptor;
 import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.jeconfig.client.internal.ConfigServiceImpl;
@@ -56,9 +56,9 @@ public abstract class AbstractConfigServiceTest {
 	private final XStreamXmlMarshaller marshaller = new XStreamXmlMarshaller();
 
 	private ConfigServiceAccessor configService;
-	private IConfigPersister persister;
-	private IConfigPersistenceService configPersistenceService;
-	private IConfigSetupService configSetupService;
+	private ConfigPersister persister;
+	private ConfigPersistenceService configPersistenceService;
+	private ConfigSetupService configSetupService;
 
 	public SimpleTypeConverterRegistryImpl getRegistry() {
 		return REGISTRY;
@@ -81,7 +81,7 @@ public abstract class AbstractConfigServiceTest {
 
 		configPersistenceService = new ConfigPersistenceServiceImpl();
 
-		configServiceImpl.getScopeRegistry().addScopePropertyProvider(new IScopePropertyProvider() {
+		configServiceImpl.getScopeRegistry().addScopePropertyProvider(new ScopePropertyProvider() {
 			@Override
 			public String getScopeName() {
 				return UserScopeDescriptor.NAME;
@@ -94,7 +94,7 @@ public abstract class AbstractConfigServiceTest {
 				return result;
 			}
 		});
-		configServiceImpl.getScopeRegistry().addScopePropertyProvider(new IScopePropertyProvider() {
+		configServiceImpl.getScopeRegistry().addScopePropertyProvider(new ScopePropertyProvider() {
 
 			@Override
 			public String getScopeName() {
@@ -119,7 +119,7 @@ public abstract class AbstractConfigServiceTest {
 		configPersistenceService.removeConfigPersister(persister);
 	}
 
-	protected IConfigPersister createPersister() {
+	protected ConfigPersister createPersister() {
 		return new CountingDummyPersister();
 	}
 
@@ -127,7 +127,7 @@ public abstract class AbstractConfigServiceTest {
 		return configService;
 	}
 
-	public IConfigPersistenceService getConfigPersistenceService() {
+	public ConfigPersistenceService getConfigPersistenceService() {
 		return configPersistenceService;
 	}
 
@@ -138,11 +138,11 @@ public abstract class AbstractConfigServiceTest {
 		return null;
 	}
 
-	public IConfigPersister getPersister() {
+	public ConfigPersister getPersister() {
 		return persister;
 	}
 
-	public IConfigSetupService getConfigSetupService() {
+	public ConfigSetupService getConfigSetupService() {
 		return configSetupService;
 	}
 }

@@ -34,7 +34,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jeconfig.api.IConfigService;
+import org.jeconfig.api.ConfigService;
 import org.jeconfig.api.annotation.ConfigArrayProperty;
 import org.jeconfig.api.annotation.ConfigComplexProperty;
 import org.jeconfig.api.annotation.ConfigComplexType;
@@ -42,30 +42,30 @@ import org.jeconfig.api.annotation.ConfigCrossReference;
 import org.jeconfig.api.annotation.ConfigListProperty;
 import org.jeconfig.api.annotation.ConfigMapProperty;
 import org.jeconfig.api.annotation.ConfigSetProperty;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilder;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilder;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.api.scope.InstanceScopeDescriptor;
 import org.jeconfig.client.internal.AnnotationUtil;
-import org.jeconfig.client.proxy.IConfigProxy;
-import org.jeconfig.client.proxy.IRootConfigProxy;
+import org.jeconfig.client.proxy.ConfigProxy;
+import org.jeconfig.client.proxy.RootConfigProxy;
 import org.jeconfig.client.proxy.ProxyUtil;
 import org.jeconfig.common.reflection.PropertyAccessor;
 
 import javassist.util.proxy.ProxyObject;
 
 public final class CrossReferencesResolver {
-	private final IConfigService configService;
+	private final ConfigService configService;
 	private final PropertyAccessor propertyAccessor;
 
-	public CrossReferencesResolver(final IConfigService configService) {
+	public CrossReferencesResolver(final ConfigService configService) {
 		this.configService = configService;
 		propertyAccessor = new PropertyAccessor();
 	}
 
 	public void resolveCrossReferences(final Object config) {
-		if (config instanceof IRootConfigProxy && config instanceof ProxyObject) {
-			final IRootConfigProxy rp = (IRootConfigProxy) config;
+		if (config instanceof RootConfigProxy && config instanceof ProxyObject) {
+			final RootConfigProxy rp = (RootConfigProxy) config;
 			rp.setReadOnlyCrossReferences(false);
 			handleComplexType(config);
 			rp.setReadOnlyCrossReferences(true);
@@ -78,7 +78,7 @@ public final class CrossReferencesResolver {
 	private void handleComplexType(final Object config) {
 		if (config != null) {
 			final Class<?> configClass = ProxyUtil.getConfigClass(config.getClass());
-			final IConfigProxy<?> proxy = (IConfigProxy<?>) config;
+			final ConfigProxy<?> proxy = (ConfigProxy<?>) config;
 			proxy.setReadOnlyCrossReferences(false);
 
 			for (final PropertyDescriptor propertyDescriptor : propertyAccessor.getPropertyDescriptors(configClass)) {
@@ -110,7 +110,7 @@ public final class CrossReferencesResolver {
 		final ConfigCrossReference crossReferenceAnnotation) {
 
 		final Class<?> referenceClass = propDesc.getPropertyType();
-		final IScopePath referenceScope = getScope(propDesc.getPropertyType(), crossReferenceAnnotation);
+		final ScopePath referenceScope = getScope(propDesc.getPropertyType(), crossReferenceAnnotation);
 
 		final Object referenceConfig = configService.load(referenceClass, referenceScope);
 		propertyAccessor.write(config, propDesc.getName(), referenceConfig);
@@ -120,7 +120,7 @@ public final class CrossReferencesResolver {
 
 	private void handleReadOnlyComplexType(final Object referenceConfig) {
 		final Class<?> configClass = ProxyUtil.getConfigClass(referenceConfig.getClass());
-		final IConfigProxy<?> proxy = (IConfigProxy<?>) referenceConfig;
+		final ConfigProxy<?> proxy = (ConfigProxy<?>) referenceConfig;
 		proxy.setReadOnly(false);
 		proxy.setReadOnlyCrossReferences(false);
 
@@ -153,7 +153,7 @@ public final class CrossReferencesResolver {
 
 		final Map<Object, Object> map = (Map<Object, Object>) propertyAccessor.read(referenceConfig, propertyDescriptor.getName());
 		if (map != null) {
-			final IConfigProxy<?> proxy = (IConfigProxy<?>) map;
+			final ConfigProxy<?> proxy = (ConfigProxy<?>) map;
 			proxy.setReadOnly(true);
 			if (isComplexType(annotation.valueType()) || annotation.polymorph()) {
 				for (final Object value : map.values()) {
@@ -171,7 +171,7 @@ public final class CrossReferencesResolver {
 
 		final Set<Object> set = (Set<Object>) propertyAccessor.read(referenceConfig, propertyDescriptor.getName());
 		if (set != null) {
-			final IConfigProxy<?> proxy = (IConfigProxy<?>) set;
+			final ConfigProxy<?> proxy = (ConfigProxy<?>) set;
 			proxy.setReadOnly(true);
 			if (isComplexType(annotation.itemType()) || annotation.polymorph()) {
 				for (final Object item : set) {
@@ -189,7 +189,7 @@ public final class CrossReferencesResolver {
 
 		final List<Object> list = (List<Object>) propertyAccessor.read(referenceConfig, propertyDescriptor.getName());
 		if (list != null) {
-			final IConfigProxy<?> proxy = (IConfigProxy<?>) list;
+			final ConfigProxy<?> proxy = (ConfigProxy<?>) list;
 			proxy.setReadOnly(true);
 			if (isComplexType(annotation.itemType()) || annotation.polymorph()) {
 				for (final Object item : list) {
@@ -284,9 +284,9 @@ public final class CrossReferencesResolver {
 		return AnnotationUtil.getAnnotation(type, ConfigComplexType.class) != null;
 	}
 
-	private IScopePath getScope(final Class<?> configClass, final ConfigCrossReference crossReferenceAnnotation) {
-		final IScopePathBuilderFactory scopeFactory = configService.getScopePathBuilderFactory(configClass);
-		IScopePathBuilder builder;
+	private ScopePath getScope(final Class<?> configClass, final ConfigCrossReference crossReferenceAnnotation) {
+		final ScopePathBuilderFactory scopeFactory = configService.getScopePathBuilderFactory(configClass);
+		ScopePathBuilder builder;
 		if (crossReferenceAnnotation.scopePath().length > 0) {
 			builder = scopeFactory.stub().appendAll(crossReferenceAnnotation.scopePath());
 		} else {

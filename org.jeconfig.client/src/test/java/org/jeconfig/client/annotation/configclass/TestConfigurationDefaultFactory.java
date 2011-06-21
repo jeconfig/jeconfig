@@ -29,13 +29,13 @@ package org.jeconfig.client.annotation.configclass;
 
 import java.util.ArrayList;
 
-import org.jeconfig.api.annotation.IDefaultConfigFactory;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.annotation.DefaultConfigFactory;
+import org.jeconfig.api.scope.ScopePath;
 
-public class TestConfigurationDefaultFactory implements IDefaultConfigFactory<TestConfiguration> {
+public class TestConfigurationDefaultFactory implements DefaultConfigFactory<TestConfiguration> {
 
 	@Override
-	public TestConfiguration createDefaultConfig(final IScopePath scopePath) {
+	public TestConfiguration createDefaultConfig(final ScopePath scopePath) {
 		final TestConfiguration config = new TestConfiguration();
 		config.setField1("f1"); //$NON-NLS-1$
 		config.setField2(Integer.valueOf(2));

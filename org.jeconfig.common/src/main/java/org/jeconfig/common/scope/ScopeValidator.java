@@ -31,31 +31,31 @@ import java.util.List;
 
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
-import org.jeconfig.api.scope.IScope;
-import org.jeconfig.api.scope.IScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopeRegistry;
+import org.jeconfig.api.scope.Scope;
+import org.jeconfig.api.scope.ScopeDescriptor;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopeRegistry;
 import org.jeconfig.api.util.Assert;
 
 public final class ScopeValidator {
-	private final IScopeRegistry scopeRegistry;
+	private final ScopeRegistry scopeRegistry;
 
 	public ScopeValidator() {
 		this(null);
 	}
 
-	public ScopeValidator(final IScopeRegistry scopeRegistry) {
+	public ScopeValidator(final ScopeRegistry scopeRegistry) {
 		this.scopeRegistry = scopeRegistry;
 	}
 
-	public void validateScopeDescriptor(final IScopeDescriptor scopeDescriptor) {
+	public void validateScopeDescriptor(final ScopeDescriptor scopeDescriptor) {
 		Assert.paramNotNull(scopeDescriptor.getMandatoryProperties(), "scopeDescriptor#mandatoryProperties"); //$NON-NLS-1$
 
 		validateScopePropertyNames(scopeDescriptor.getMandatoryProperties());
 	}
 
-	public void validateScopePath(final IScopePath scopePath) {
-		final List<IScope> scopes = scopePath.getScopes();
+	public void validateScopePath(final ScopePath scopePath) {
+		final List<Scope> scopes = scopePath.getScopes();
 		if (scopes.size() < 2) {
 			throw new IllegalArgumentException("A scope path needs at least a 'class' and a 'codeDefault' scope."); //$NON-NLS-1$
 		}
@@ -72,7 +72,7 @@ public final class ScopeValidator {
 		}
 		validateDuplicateScopes(scopes, scopePath);
 
-		for (final IScope scope : scopes) {
+		for (final Scope scope : scopes) {
 			validateMandatoryProperties(scope);
 
 			for (final String propertyKey : scope.getProperties().keySet()) {
@@ -81,7 +81,7 @@ public final class ScopeValidator {
 		}
 	}
 
-	private void validateDuplicateScopes(final List<IScope> scopes, final IScopePath scopePath) {
+	private void validateDuplicateScopes(final List<Scope> scopes, final ScopePath scopePath) {
 		for (int i = 0; i < scopes.size(); i++) {
 			final String scopeName = scopes.get(i).getName();
 			for (int j = 0; j < scopes.size(); j++) {
@@ -95,9 +95,9 @@ public final class ScopeValidator {
 		}
 	}
 
-	private void validateMandatoryProperties(final IScope scope) {
+	private void validateMandatoryProperties(final Scope scope) {
 		if (scopeRegistry != null) {
-			final IScopeDescriptor scopeDescriptor = getScopeDescriptor(scope.getName());
+			final ScopeDescriptor scopeDescriptor = getScopeDescriptor(scope.getName());
 			for (final String mandatoryProperty : scopeDescriptor.getMandatoryProperties()) {
 				final String value = scope.getProperty(mandatoryProperty);
 				if (value == null || value.trim().isEmpty()) {
@@ -111,8 +111,8 @@ public final class ScopeValidator {
 		}
 	}
 
-	private IScopeDescriptor getScopeDescriptor(final String scopeName) {
-		final IScopeDescriptor scopeDescriptor = scopeRegistry.getScopeDescriptor(scopeName);
+	private ScopeDescriptor getScopeDescriptor(final String scopeName) {
+		final ScopeDescriptor scopeDescriptor = scopeRegistry.getScopeDescriptor(scopeName);
 		if (scopeDescriptor == null) {
 			throw new IllegalArgumentException("The scope '" + scopeName + "' is not registered at the scope registry!"); //$NON-NLS-1$//$NON-NLS-2$
 		}

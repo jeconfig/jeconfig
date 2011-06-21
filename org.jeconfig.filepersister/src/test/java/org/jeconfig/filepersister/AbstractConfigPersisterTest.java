@@ -30,10 +30,10 @@ package org.jeconfig.filepersister;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jeconfig.api.IConfigService;
-import org.jeconfig.api.IConfigSetupService;
-import org.jeconfig.api.persister.IConfigPersistenceService;
-import org.jeconfig.api.scope.IScopePropertyProvider;
+import org.jeconfig.api.ConfigService;
+import org.jeconfig.api.ConfigSetupService;
+import org.jeconfig.api.persister.ConfigPersistenceService;
+import org.jeconfig.api.scope.ScopePropertyProvider;
 import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.jeconfig.client.internal.ConfigServiceImpl;
 import org.jeconfig.server.ConfigPersistenceServiceImpl;
@@ -41,13 +41,13 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 public abstract class AbstractConfigPersisterTest {
-	private static IConfigService configService;
-	private static IConfigPersistenceService configPersistenceService;
-	private static IScopePropertyProvider userScopeProvider;
-	private static IScopePropertyProvider testScopeProvider;
+	private static ConfigService configService;
+	private static ConfigPersistenceService configPersistenceService;
+	private static ScopePropertyProvider userScopeProvider;
+	private static ScopePropertyProvider testScopeProvider;
 	private static Map<String, String> userScopeProperties;
 	private static Map<String, String> testScopeProperties;
-	private static IConfigSetupService configSetupService;
+	private static ConfigSetupService configSetupService;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -60,7 +60,7 @@ public abstract class AbstractConfigPersisterTest {
 
 		configSetupService = configServiceImpl;
 
-		userScopeProvider = new IScopePropertyProvider() {
+		userScopeProvider = new ScopePropertyProvider() {
 			@Override
 			public String getScopeName() {
 				return UserScopeDescriptor.NAME;
@@ -74,7 +74,7 @@ public abstract class AbstractConfigPersisterTest {
 			}
 		};
 
-		testScopeProvider = new IScopePropertyProvider() {
+		testScopeProvider = new ScopePropertyProvider() {
 
 			@Override
 			public String getScopeName() {
@@ -110,11 +110,11 @@ public abstract class AbstractConfigPersisterTest {
 		}
 	}
 
-	public IConfigService getConfigService() {
+	public ConfigService getConfigService() {
 		return configService;
 	}
 
-	public IConfigPersistenceService getConfigPersistenceService() {
+	public ConfigPersistenceService getConfigPersistenceService() {
 		return configPersistenceService;
 	}
 

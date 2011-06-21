@@ -37,14 +37,14 @@ import java.util.Set;
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.annotation.ConfigIdProperty;
 import org.jeconfig.api.annotation.ConfigSetProperty;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.conversion.NoCustomSimpleTypeConverter;
 import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.client.proxy.ProxyUtil;
 import org.jeconfig.common.reflection.PropertyAccessor;
 
 @SuppressWarnings("nls")
-public final class SetPropertyValidator implements IPropertyValidator<ConfigSetProperty> {
+public final class SetPropertyValidator implements PropertyValidator<ConfigSetProperty> {
 	private final PropertyAccessor propertyAccessor = new PropertyAccessor();
 	private final CollectionElementValidator collectionElementValidator = new CollectionElementValidator();
 
@@ -59,8 +59,8 @@ public final class SetPropertyValidator implements IPropertyValidator<ConfigSetP
 		final PropertyDescriptor propertyDescriptor,
 		final ConfigSetProperty annotation,
 		final Set<Annotation> otherAnnotations,
-		final ISimpleTypeConverterRegistry converterRegistry,
-		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
+		final SimpleTypeConverterRegistry converterRegistry,
+		final Map<Class<? extends Annotation>, PropertyValidator<Annotation>> validators,
 		final ComplexTypeValidator complexTypeValidator,
 		final Set<Class<?>> validatedComplexTypes) {
 

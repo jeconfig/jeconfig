@@ -32,8 +32,8 @@ import java.util.Map;
 import junit.framework.Assert;
 
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.client.AbstractConfigServiceTest;
 import org.junit.Test;
 
@@ -42,8 +42,8 @@ public class ConfigMapPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testStaleMap() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(MapPropertyTestConfiguration.class);
-		final IScopePath globalScopePath = factory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(MapPropertyTestConfiguration.class);
+		final ScopePath globalScopePath = factory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
 		final MapPropertyTestConfiguration parentConfig = getConfigService().load(
 				MapPropertyTestConfiguration.class,
 				globalScopePath);
@@ -106,7 +106,7 @@ public class ConfigMapPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testUseChildMergeWithSimpleTypes() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				SimpleTypeMapPropertyTestConfiguration.class);
 
 		final SimpleTypeMapPropertyTestConfiguration parentConfig = getConfigService().load(
@@ -131,7 +131,7 @@ public class ConfigMapPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeDefaultEntryAddedStrategyWithSimpleTypes() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
 				MapPropertyTestConfiguration.class);
 		final MapPropertyTestConfiguration parentConfig = getConfigService().load(
 				MapPropertyTestConfiguration.class,
@@ -152,7 +152,7 @@ public class ConfigMapPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeDefaultEntryRemovedStrategyWithSimpleTypes() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
 				MapPropertyTestConfiguration.class);
 		final MapPropertyTestConfiguration parentConfig = getConfigService().load(
 				MapPropertyTestConfiguration.class,
@@ -173,7 +173,7 @@ public class ConfigMapPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testUseParentMergingStrategySimpleTypes() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				UseParentMergingStrategyTestConfiguration.class);
 		final UseParentMergingStrategyTestConfiguration parentConfig = getConfigService().load(
 				UseParentMergingStrategyTestConfiguration.class,
@@ -214,7 +214,7 @@ public class ConfigMapPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testUseChildMergeWithComplexTypes() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				ComplexTypeMapPropertyTestConfiguration.class);
 		final ComplexTypeMapPropertyTestConfiguration parentConfig = getConfigService().load(
 				ComplexTypeMapPropertyTestConfiguration.class,
@@ -242,7 +242,7 @@ public class ConfigMapPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeDefaultEntryAddedStrategyWithComplexTypes() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				ComplexTypeMapPropertyTestConfiguration.class);
 
 		final ComplexTypeMapPropertyTestConfiguration parentConfig = getConfigService().load(
@@ -268,7 +268,7 @@ public class ConfigMapPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeDefaultEntryRemovedStrategyWithComplexTypes() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				ComplexTypeMapPropertyTestConfiguration.class);
 		final ComplexTypeMapPropertyTestConfiguration parentConfig = getConfigService().load(
 				ComplexTypeMapPropertyTestConfiguration.class,

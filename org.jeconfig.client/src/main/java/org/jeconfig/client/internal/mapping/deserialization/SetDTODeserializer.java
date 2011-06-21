@@ -38,12 +38,12 @@ import java.util.Set;
 
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.annotation.ConfigSetProperty;
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigSetDTO;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
-import org.jeconfig.api.dto.IConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.dto.ConfigDTO;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.client.proxy.ConfigSetDecorator;
 import org.jeconfig.client.proxy.ProxyUpdater;
@@ -68,12 +68,12 @@ public class SetDTODeserializer extends AbstractDTODeserializer {
 		final ComplexConfigDTO configDTO,
 		final Object config,
 		final List<ComplexConfigDTO> dtos,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final PropertyDescriptor propDesc,
 		final Annotation annotation,
 		final String propName) {
 		final ConfigSetProperty setAnno = (ConfigSetProperty) annotation;
-		final ISimpleTypeConverter<?> customConverter = createCustomConverter(setAnno.customConverter());
+		final SimpleTypeConverter<?> customConverter = createCustomConverter(setAnno.customConverter());
 		final boolean polymorph = setAnno.polymorph();
 		final boolean complex = AnnotationUtil.getAnnotation(setAnno.itemType(), ConfigComplexType.class) != null;
 		final ConfigSetDTO setDTO = configDTO.getSetProperty(propName);
@@ -111,8 +111,8 @@ public class SetDTODeserializer extends AbstractDTODeserializer {
 		final boolean complex,
 		final ConfigSetDTO setDTO,
 		final List<ConfigSetDTO> dtos,
-		final IScopePath scopePath,
-		final ISimpleTypeConverter<?> customConverter) {
+		final ScopePath scopePath,
+		final SimpleTypeConverter<?> customConverter) {
 		final ConfigSetDecorator<Object> setToSet = getSetToSet(config, propDesc, setDTO);
 
 		if (setToSet != null) {
@@ -124,7 +124,7 @@ public class SetDTODeserializer extends AbstractDTODeserializer {
 					if (complex || polymorph) {
 						//complex items
 						final List<Map<String, ComplexConfigDTO>> dtoMap = calculateDTOMap(dtos);
-						for (final IConfigDTO temp : setDTO.getItems()) {
+						for (final ConfigDTO temp : setDTO.getItems()) {
 							final ComplexConfigDTO complexDTO = (ComplexConfigDTO) temp;
 							final Object cfg = complexDTODeserializer.createComplexConfigObject(
 									complexDTO,
@@ -134,7 +134,7 @@ public class SetDTODeserializer extends AbstractDTODeserializer {
 						}
 					} else {
 						//simple items
-						for (final IConfigDTO temp : setDTO.getItems()) {
+						for (final ConfigDTO temp : setDTO.getItems()) {
 							final ConfigSimpleValueDTO simpleDTO = (ConfigSimpleValueDTO) temp;
 							final Object value = simpleDTODeserializer.createSimpleValue(
 									simpleDTO,
@@ -197,7 +197,7 @@ public class SetDTODeserializer extends AbstractDTODeserializer {
 		for (final ConfigSetDTO dto : dtos) {
 			final Map<String, ComplexConfigDTO> map = new HashMap<String, ComplexConfigDTO>();
 			if (dto.getItems() != null) {
-				for (final IConfigDTO item : dto.getItems()) {
+				for (final ConfigDTO item : dto.getItems()) {
 					final ComplexConfigDTO complexItem = (ComplexConfigDTO) item;
 					final String idPropertyName = complexItem.getIdPropertyName();
 					final ConfigSimpleValueDTO idSimpleValueProperty = complexItem.getSimpleValueProperty(idPropertyName);

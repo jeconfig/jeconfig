@@ -27,13 +27,13 @@
 
 package org.jeconfig.client.internal;
 
-import org.jeconfig.api.exception.IStalePropertiesMergingResult;
-import org.jeconfig.api.exception.IStalenessNotifier;
+import org.jeconfig.api.exception.StalePropertiesMergingResult;
+import org.jeconfig.api.exception.StalenessNotifier;
 
-public class NoOpStalenessNotifier implements IStalenessNotifier {
+public class NoOpStalenessNotifier implements StalenessNotifier {
 
 	@Override
-	public void loadedStaleConfig(final IStalePropertiesMergingResult mergingResult) {
+	public void loadedStaleConfig(final StalePropertiesMergingResult mergingResult) {
 
 	}
 

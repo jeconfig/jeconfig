@@ -34,7 +34,7 @@ import java.lang.annotation.Target;
 
 import org.jeconfig.api.annotation.merging.ListItemMergingStrategy;
 import org.jeconfig.api.annotation.merging.StalenessSolutionStrategy;
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
 import org.jeconfig.api.conversion.NoCustomSimpleTypeConverter;
 
 /**
@@ -85,5 +85,5 @@ public @interface ConfigListProperty {
 	 * 
 	 * <b> Only supported for Simple List items types!!!</b>
 	 */
-	Class<? extends ISimpleTypeConverter<?>> customConverter() default NoCustomSimpleTypeConverter.class;
+	Class<? extends SimpleTypeConverter<?>> customConverter() default NoCustomSimpleTypeConverter.class;
 }

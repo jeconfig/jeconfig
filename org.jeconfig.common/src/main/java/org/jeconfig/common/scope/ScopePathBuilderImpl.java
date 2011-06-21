@@ -34,20 +34,20 @@ import java.util.List;
 import java.util.ListIterator;
 import java.util.Map;
 
-import org.jeconfig.api.scope.IScope;
-import org.jeconfig.api.scope.IScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilder;
-import org.jeconfig.api.scope.IScopePropertyProvider;
-import org.jeconfig.api.scope.IScopeRegistry;
+import org.jeconfig.api.scope.Scope;
+import org.jeconfig.api.scope.ScopeDescriptor;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilder;
+import org.jeconfig.api.scope.ScopePropertyProvider;
+import org.jeconfig.api.scope.ScopeRegistry;
 import org.jeconfig.api.util.Assert;
 
-public final class ScopePathBuilderImpl implements IScopePathBuilder {
-	private final IScopeRegistry scopeRegistry;
+public final class ScopePathBuilderImpl implements ScopePathBuilder {
+	private final ScopeRegistry scopeRegistry;
 
 	private final Class<?> configClass;
 
-	private final List<IScope> scopes;
+	private final List<Scope> scopes;
 
 	private final ScopeValidator scopeValidator;
 
@@ -55,26 +55,26 @@ public final class ScopePathBuilderImpl implements IScopePathBuilder {
 		this(null, null);
 	}
 
-	public ScopePathBuilderImpl(final IScopeRegistry scopeRegistry, final Class<?> configClass) {
+	public ScopePathBuilderImpl(final ScopeRegistry scopeRegistry, final Class<?> configClass) {
 		this.scopeRegistry = scopeRegistry;
 		this.configClass = configClass;
-		scopes = new ArrayList<IScope>();
+		scopes = new ArrayList<Scope>();
 		scopeValidator = new ScopeValidator(scopeRegistry);
 	}
 
 	@Override
-	public IScopePathBuilder append(final String scopeName) {
+	public ScopePathBuilder append(final String scopeName) {
 		return append(scopeName, Collections.<String, String> emptyMap());
 	}
 
 	@Override
-	public IScopePathBuilder append(final String scopeName, final Map<String, String> properties) {
+	public ScopePathBuilder append(final String scopeName, final Map<String, String> properties) {
 		Assert.paramNotNull(scopeName, "scopeName"); //$NON-NLS-1$
 		Assert.paramNotNull(properties, "properties"); //$NON-NLS-1$
 
 		Map<String, String> scopeProperties;
 		if (scopeRegistry != null && configClass != null) {
-			final IScopeDescriptor scopeDescriptor = getScopeDescriptor(scopeName);
+			final ScopeDescriptor scopeDescriptor = getScopeDescriptor(scopeName);
 			scopeProperties = getScopePropertiesFromProvider(scopeDescriptor);
 		} else {
 			scopeProperties = new HashMap<String, String>();
@@ -87,7 +87,7 @@ public final class ScopePathBuilderImpl implements IScopePathBuilder {
 	}
 
 	@Override
-	public IScopePathBuilder appendAll(final String[] scopeNames) {
+	public ScopePathBuilder appendAll(final String[] scopeNames) {
 		Assert.paramNotNull(scopeNames, "scopeNames"); //$NON-NLS-1$
 
 		for (final String scopeName : scopeNames) {
@@ -96,16 +96,16 @@ public final class ScopePathBuilderImpl implements IScopePathBuilder {
 		return this;
 	}
 
-	private IScopeDescriptor getScopeDescriptor(final String scopeName) {
-		final IScopeDescriptor scopeDescriptor = scopeRegistry.getScopeDescriptor(scopeName);
+	private ScopeDescriptor getScopeDescriptor(final String scopeName) {
+		final ScopeDescriptor scopeDescriptor = scopeRegistry.getScopeDescriptor(scopeName);
 		if (scopeDescriptor == null) {
 			throw new IllegalArgumentException("The scope '" + scopeName + "' is not registered at the scope registry!"); //$NON-NLS-1$//$NON-NLS-2$
 		}
 		return scopeDescriptor;
 	}
 
-	private Map<String, String> getScopePropertiesFromProvider(final IScopeDescriptor scopeDescriptor) {
-		final IScopePropertyProvider propertyProvider = scopeRegistry.getScopePropertyProvider(scopeDescriptor.getScopeName());
+	private Map<String, String> getScopePropertiesFromProvider(final ScopeDescriptor scopeDescriptor) {
+		final ScopePropertyProvider propertyProvider = scopeRegistry.getScopePropertyProvider(scopeDescriptor.getScopeName());
 		if (propertyProvider != null) {
 			return new HashMap<String, String>(propertyProvider.getProperties(configClass));
 		}
@@ -114,16 +114,16 @@ public final class ScopePathBuilderImpl implements IScopePathBuilder {
 	}
 
 	@Override
-	public IScopePathBuilder addPropertyToScope(final String scopeName, final String propertyName, final String propertyValue) {
+	public ScopePathBuilder addPropertyToScope(final String scopeName, final String propertyName, final String propertyValue) {
 		Assert.paramNotNull(scopeName, "scopeName"); //$NON-NLS-1$
 		Assert.paramNotNull(propertyName, "propertyName"); //$NON-NLS-1$
 
-		for (final ListIterator<IScope> it = scopes.listIterator(); it.hasNext();) {
-			final IScope scope = it.next();
+		for (final ListIterator<Scope> it = scopes.listIterator(); it.hasNext();) {
+			final Scope scope = it.next();
 			if (scope.getName().equals(scopeName)) {
 				final Map<String, String> properties = scope.getProperties();
 				properties.put(propertyName, propertyValue);
-				final IScope newScope = new ScopeImpl(scopeName, properties);
+				final Scope newScope = new ScopeImpl(scopeName, properties);
 				it.remove();
 				it.add(newScope);
 				return this;
@@ -134,8 +134,8 @@ public final class ScopePathBuilderImpl implements IScopePathBuilder {
 	}
 
 	@Override
-	public IScopePath create() {
-		final IScopePath result = new ScopePathImpl(scopes);
+	public ScopePath create() {
+		final ScopePath result = new ScopePathImpl(scopes);
 
 		scopeValidator.validateScopePath(result);
 

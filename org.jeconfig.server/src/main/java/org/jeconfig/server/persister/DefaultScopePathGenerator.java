@@ -33,15 +33,15 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.TreeMap;
 
-import org.jeconfig.api.persister.IScopePathGenerator;
+import org.jeconfig.api.persister.ScopePathGenerator;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
-import org.jeconfig.api.scope.IScope;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilder;
+import org.jeconfig.api.scope.Scope;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilder;
 import org.jeconfig.common.scope.InternalScopePathBuilderFactory;
 
-public final class DefaultScopePathGenerator implements IScopePathGenerator {
+public final class DefaultScopePathGenerator implements ScopePathGenerator {
 
 	public static final String PATH_PROPERTY_SEPARATOR = "-"; //$NON-NLS-1$
 	private final String scopeSeparator;
@@ -51,23 +51,23 @@ public final class DefaultScopePathGenerator implements IScopePathGenerator {
 	}
 
 	@Override
-	public String createName(final IScopePath scopePath) {
+	public String createName(final ScopePath scopePath) {
 		DefaultScopePathGeneratorValidator.validateScopePath(scopePath);
 
 		final StringBuffer sb = new StringBuffer();
-		final IScope classScope = scopePath.findScopeByName(ClassScopeDescriptor.NAME);
+		final Scope classScope = scopePath.findScopeByName(ClassScopeDescriptor.NAME);
 		final String className = classScope.getProperty(ClassScopeDescriptor.PROP_CLASS_NAME);
 		sb.append(className);
 		return sb.toString();
 	}
 
 	@Override
-	public String getPathFromScopePath(final IScopePath scopePath) {
+	public String getPathFromScopePath(final ScopePath scopePath) {
 		DefaultScopePathGeneratorValidator.validateScopePath(scopePath);
 
 		final StringBuilder sb = new StringBuilder();
 		boolean firstScope = true;
-		for (final IScope currentScope : scopePath.getScopes()) {
+		for (final Scope currentScope : scopePath.getScopes()) {
 			if (!CodeDefaultScopeDescriptor.NAME.equals(currentScope.getName())
 				&& !ClassScopeDescriptor.NAME.equals(currentScope.getName())) {
 				if (!firstScope) {
@@ -97,15 +97,15 @@ public final class DefaultScopePathGenerator implements IScopePathGenerator {
 	}
 
 	@Override
-	public Collection<IScopePath> createScopePaths(
+	public Collection<ScopePath> createScopePaths(
 		final Collection<String> paths,
 		final String scopeName,
 		final Map<String, String> properties) {
 		final InternalScopePathBuilderFactory factory = new InternalScopePathBuilderFactory();
-		IScopePathBuilder builder = factory.createBuilder();
+		ScopePathBuilder builder = factory.createBuilder();
 		final String searchedPathPart = buildScopeWithProperty(scopeName, properties);
 		final Collection<String> matches = new LinkedList<String>();
-		final Collection<IScopePath> results = new LinkedList<IScopePath>();
+		final Collection<ScopePath> results = new LinkedList<ScopePath>();
 
 		for (final Object path : paths) {
 			if (((String) path).contains(searchedPathPart)) {
@@ -141,7 +141,7 @@ public final class DefaultScopePathGenerator implements IScopePathGenerator {
 		return results;
 	}
 
-	private void createClassAndCodeDefaultScope(final IScopePathBuilder builder, final String path) {
+	private void createClassAndCodeDefaultScope(final ScopePathBuilder builder, final String path) {
 		final String className = path.substring(path.lastIndexOf(scopeSeparator) + 1, path.lastIndexOf(".")); //$NON-NLS-1$
 		final Map<String, String> tmpProperties = new TreeMap<String, String>();
 		tmpProperties.put("className", className); //$NON-NLS-1$
@@ -149,7 +149,7 @@ public final class DefaultScopePathGenerator implements IScopePathGenerator {
 		builder.append(CodeDefaultScopeDescriptor.NAME);
 	}
 
-	private Map<String, String> getProperties(final String[] paths, final IScopePathBuilder builder, final int scopeIndex) {
+	private Map<String, String> getProperties(final String[] paths, final ScopePathBuilder builder, final int scopeIndex) {
 		final Map<String, String> tmpProperties = new TreeMap<String, String>();
 		// start with the element after scope, do nothing with last element, because its the fileName.
 		for (int j = scopeIndex + 1; j < paths.length - 1; j++) {

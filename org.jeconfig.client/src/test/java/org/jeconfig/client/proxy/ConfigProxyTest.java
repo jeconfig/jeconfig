@@ -45,9 +45,9 @@ import org.jeconfig.client.annotation.map.MapPropertyTestConfiguration;
 import org.jeconfig.client.annotation.set.ConstructorInitializedSetTestConfiguration;
 import org.jeconfig.client.annotation.set.SetPropertyTestConfiguration;
 import org.jeconfig.client.annotation.simple.SimplePropertyTestConfiguration;
-import org.jeconfig.client.proxy.IConfigDirtyStateListener;
-import org.jeconfig.client.proxy.IConfigProxy;
-import org.jeconfig.client.proxy.IRootConfigProxy;
+import org.jeconfig.client.proxy.ConfigDirtyStateListener;
+import org.jeconfig.client.proxy.ConfigProxy;
+import org.jeconfig.client.proxy.RootConfigProxy;
 import org.jeconfig.client.testconfigs.ComplexSubtype;
 import org.junit.Assert;
 import org.junit.Before;
@@ -57,9 +57,9 @@ import org.junit.Test;
 public class ConfigProxyTest extends AbstractConfigServiceTest {
 
 	private boolean dirtyStateListenerInformed = false;
-	private final IConfigDirtyStateListener dirtyStateListener = new IConfigDirtyStateListener() {
+	private final ConfigDirtyStateListener dirtyStateListener = new ConfigDirtyStateListener() {
 		@Override
-		public void dirtyStateChanged(final IRootConfigProxy configProxy) {
+		public void dirtyStateChanged(final RootConfigProxy configProxy) {
 			dirtyStateListenerInformed = true;
 		}
 	};
@@ -74,7 +74,7 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	/* internal utility method */
 	private <T> void testConstructorInitialization(final Class<T> configClass) {
 		final T config = getConfigService().load(configClass);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
 
 		Assert.assertFalse(proxy.isDirty());
@@ -86,7 +86,7 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testSimplePropertyModification() {
 		final SimplePropertyTestConfiguration config = getConfigService().load(SimplePropertyTestConfiguration.class);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
 
 		config.setStringValue("leet");
@@ -100,7 +100,7 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testComplexPropertyModification() {
 		final ComplexPropertyTestConfiguration config = getConfigService().load(ComplexPropertyTestConfiguration.class);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
 
 		config.setProperty(ComplexSubtype.create(getConfigService(), "id", "name"));
@@ -119,7 +119,7 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testSetExchange() {
 		final SetPropertyTestConfiguration config = getConfigService().load(SetPropertyTestConfiguration.class);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
 		final Set<String> set = getConfigService().createSet();
 		config.setData(set);
@@ -134,9 +134,9 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testSetAddition() {
 		final SetPropertyTestConfiguration config = getConfigService().load(SetPropertyTestConfiguration.class);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
-		final IConfigProxy<ConfigSetDTO> setProxy = (IConfigProxy<ConfigSetDTO>) config.getData();
+		final ConfigProxy<ConfigSetDTO> setProxy = (ConfigProxy<ConfigSetDTO>) config.getData();
 
 		config.getData().add("test");
 		Assert.assertTrue(proxy.isDirty());
@@ -151,9 +151,9 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	public void testSetRemoval() {
 		final ConstructorInitializedSetTestConfiguration config = getConfigService().load(
 				ConstructorInitializedSetTestConfiguration.class);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
-		final IConfigProxy<ConfigSetDTO> setProxy = (IConfigProxy<ConfigSetDTO>) config.getData();
+		final ConfigProxy<ConfigSetDTO> setProxy = (ConfigProxy<ConfigSetDTO>) config.getData();
 
 		Assert.assertFalse(proxy.isDirty());
 		Assert.assertFalse(proxy.hasDiff());
@@ -175,7 +175,7 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testArrayExchange() {
 		final ArrayTestConfiguration config = getConfigService().load(ArrayTestConfiguration.class);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
 
 		config.setIntField(new int[] {1, 2, 3});
@@ -190,7 +190,7 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	public void testArrayModification() {
 		final ConstructorInitializedArrayTestConfiguration config = getConfigService().load(
 				ConstructorInitializedArrayTestConfiguration.class);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
 
 		config.getIntField()[0] = 2;
@@ -210,7 +210,7 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testListExchange() {
 		final ListTestConfiguration config = getConfigService().load(ListTestConfiguration.class);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
 		final List<String> list = getConfigService().createList();
 		config.setStringField(list);
@@ -225,9 +225,9 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testListAddition() {
 		final ListTestConfiguration config = getConfigService().load(ListTestConfiguration.class);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
-		final IConfigProxy<ConfigListDTO> listProxy = (IConfigProxy<ConfigListDTO>) config.getStringField();
+		final ConfigProxy<ConfigListDTO> listProxy = (ConfigProxy<ConfigListDTO>) config.getStringField();
 
 		config.getStringField().add("test");
 		Assert.assertTrue(proxy.isDirty());
@@ -242,9 +242,9 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	public void testListRemoval() {
 		final ConstructorInitializedListTestConfiguration config = getConfigService().load(
 				ConstructorInitializedListTestConfiguration.class);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
-		final IConfigProxy<ConfigListDTO> listProxy = (IConfigProxy<ConfigListDTO>) config.getStringList();
+		final ConfigProxy<ConfigListDTO> listProxy = (ConfigProxy<ConfigListDTO>) config.getStringList();
 
 		Assert.assertFalse(proxy.isDirty());
 		Assert.assertFalse(proxy.hasDiff());
@@ -266,7 +266,7 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testMapExchange() {
 		final MapPropertyTestConfiguration config = getConfigService().load(MapPropertyTestConfiguration.class);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
 		final Map<String, Integer> map = getConfigService().createMap();
 		config.setUserID(map);
@@ -281,9 +281,9 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testMapAddition() {
 		final MapPropertyTestConfiguration config = getConfigService().load(MapPropertyTestConfiguration.class);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
-		final IConfigProxy<ConfigMapDTO> mapProxy = (IConfigProxy<ConfigMapDTO>) config.getUserID();
+		final ConfigProxy<ConfigMapDTO> mapProxy = (ConfigProxy<ConfigMapDTO>) config.getUserID();
 
 		config.getUserID().put("key", Integer.valueOf(1));
 		Assert.assertTrue(proxy.isDirty());
@@ -298,9 +298,9 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	public void testMapRemoval() {
 		final ConstructorInitializedMapTestConfiguration config = getConfigService().load(
 				ConstructorInitializedMapTestConfiguration.class);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
-		final IConfigProxy<ConfigMapDTO> mapProxy = (IConfigProxy<ConfigMapDTO>) config.getMapProperty();
+		final ConfigProxy<ConfigMapDTO> mapProxy = (ConfigProxy<ConfigMapDTO>) config.getMapProperty();
 
 		Assert.assertFalse(proxy.isDirty());
 		Assert.assertFalse(proxy.hasDiff());
@@ -319,9 +319,9 @@ public class ConfigProxyTest extends AbstractConfigServiceTest {
 	public void testMapValueExchange() {
 		final ConstructorInitializedMapTestConfiguration config = getConfigService().load(
 				ConstructorInitializedMapTestConfiguration.class);
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.addDirtyStateListener(dirtyStateListener);
-		final IConfigProxy<ConfigMapDTO> mapProxy = (IConfigProxy<ConfigMapDTO>) config.getMapProperty();
+		final ConfigProxy<ConfigMapDTO> mapProxy = (ConfigProxy<ConfigMapDTO>) config.getMapProperty();
 
 		Assert.assertFalse(proxy.isDirty());
 		Assert.assertFalse(proxy.hasDiff());

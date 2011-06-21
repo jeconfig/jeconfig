@@ -27,13 +27,13 @@
 
 package org.jeconfig.client;
 
-import org.jeconfig.api.exception.IConfigExceptionHandler;
+import org.jeconfig.api.exception.ConfigExceptionHandler;
 import org.jeconfig.api.exception.LoadFailureSolutionStrategy;
 import org.jeconfig.api.exception.RefreshFailureSolutionStrategy;
 import org.jeconfig.api.exception.SaveFailureSolutionStrategy;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 
-public class ConfigServiceAccessorTestExceptionHandler implements IConfigExceptionHandler {
+public class ConfigServiceAccessorTestExceptionHandler implements ConfigExceptionHandler {
 
 	private LoadFailureSolutionStrategy loadStrategy = LoadFailureSolutionStrategy.FAIL;
 	private SaveFailureSolutionStrategy saveStrategy = SaveFailureSolutionStrategy.FAIL;
@@ -41,7 +41,7 @@ public class ConfigServiceAccessorTestExceptionHandler implements IConfigExcepti
 
 	@Override
 	public LoadFailureSolutionStrategy loadFailed(
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final Class<?> configClass,
 		final Exception e,
 		final int retryCount) {
@@ -62,7 +62,7 @@ public class ConfigServiceAccessorTestExceptionHandler implements IConfigExcepti
 
 	@Override
 	public SaveFailureSolutionStrategy saveFailed(
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final Object config,
 		final Exception e,
 		final int retryCount) {
@@ -85,7 +85,7 @@ public class ConfigServiceAccessorTestExceptionHandler implements IConfigExcepti
 
 	@Override
 	public RefreshFailureSolutionStrategy refreshFailed(
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final Object config,
 		final Exception e,
 		final int retryCount) {

@@ -31,9 +31,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
 
-public class SimpleDateConverter implements ISimpleTypeConverter<Date> {
+public class SimpleDateConverter implements SimpleTypeConverter<Date> {
 
 	private boolean hasConvertedToObject = false;
 	private boolean hasConvertedToSerializedForm = false;

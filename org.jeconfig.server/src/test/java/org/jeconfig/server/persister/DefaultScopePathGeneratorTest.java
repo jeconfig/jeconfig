@@ -35,8 +35,8 @@ import java.util.TreeMap;
 
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilder;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilder;
 import org.jeconfig.common.scope.InternalScopePathBuilderFactory;
 import org.jeconfig.server.persister.DefaultScopePathGenerator;
 import org.junit.Assert;
@@ -55,7 +55,7 @@ public class DefaultScopePathGeneratorTest {
 	@Test
 	public void testCreateName() {
 		final InternalScopePathBuilderFactory factory = new InternalScopePathBuilderFactory();
-		final IScopePathBuilder builder = factory.createBuilder();
+		final ScopePathBuilder builder = factory.createBuilder();
 		final Map<String, String> tmpProperties = new TreeMap<String, String>();
 		tmpProperties.put("className", "TestConfiguration"); //$NON-NLS-1$ //$NON-NLS-2$
 		builder.append(ClassScopeDescriptor.NAME, tmpProperties);
@@ -68,7 +68,7 @@ public class DefaultScopePathGeneratorTest {
 	@Test
 	public void testGetPathFromScopePath() {
 		final InternalScopePathBuilderFactory factory = new InternalScopePathBuilderFactory();
-		final IScopePathBuilder builder = factory.createBuilder();
+		final ScopePathBuilder builder = factory.createBuilder();
 		final Map<String, String> tmpProperties = new TreeMap<String, String>();
 		tmpProperties.put("className", "TestConfiguration"); //$NON-NLS-1$ //$NON-NLS-2$
 		builder.append(ClassScopeDescriptor.NAME, tmpProperties);
@@ -109,8 +109,8 @@ public class DefaultScopePathGeneratorTest {
 		final Map<String, String> map = new TreeMap<String, String>();
 		map.put("userName", "hugo"); //$NON-NLS-1$ //$NON-NLS-2$
 
-		final Collection<IScopePath> scopePaths = gen.createScopePaths(paths, "test", map); //$NON-NLS-1$
-		for (final IScopePath scopePath : scopePaths) {
+		final Collection<ScopePath> scopePaths = gen.createScopePaths(paths, "test", map); //$NON-NLS-1$
+		for (final ScopePath scopePath : scopePaths) {
 			Assert.assertTrue((scopePath.findScopeByName(ClassScopeDescriptor.NAME) != null)
 				&& (scopePath.findScopeByName(CodeDefaultScopeDescriptor.NAME) != null)
 				&& (scopePath.findScopeByName("test") != null)); //$NON-NLS-1$

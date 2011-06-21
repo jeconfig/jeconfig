@@ -28,9 +28,9 @@
 package org.jeconfig.api.dto;
 
 /**
- * Adapter which may be used if a visitor doesn't want to implement all methods of {@link IConfigDtoVisitor}.
+ * Adapter which may be used if a visitor doesn't want to implement all methods of {@link ConfigDtoVisitor}.
  */
-public class ConfigDtoVisitorAdapter implements IConfigDtoVisitor {
+public class ConfigDtoVisitorAdapter implements ConfigDtoVisitor {
 
 	@Override
 	public void visitComplexDto(final ComplexConfigDTO configDto) {

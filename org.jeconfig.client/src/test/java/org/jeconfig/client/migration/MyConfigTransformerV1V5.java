@@ -28,14 +28,14 @@
 package org.jeconfig.client.migration;
 
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
-import org.jeconfig.api.migration.IConfigTransformer;
-import org.jeconfig.api.migration.ITransformParam;
+import org.jeconfig.api.migration.ConfigTransformerDelegate;
+import org.jeconfig.api.migration.TransformParam;
 
-public class MyConfigTransformerV1V5 implements IConfigTransformer {
+public class MyConfigTransformerV1V5 implements ConfigTransformerDelegate {
 	public static final String NEW_NAME_VALUE = "newName!"; //$NON-NLS-1$
 
 	@Override
-	public void transform(final ITransformParam param) {
+	public void transform(final TransformParam param) {
 		final ConfigSimpleValueDTO nameProperty = param.getConfigDto().getSimpleValueProperty("name"); //$NON-NLS-1$
 		nameProperty.setValue(String.valueOf(NEW_NAME_VALUE));
 	}

@@ -33,7 +33,7 @@ import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Set;
 
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.api.util.Assert;
 
 /**
@@ -282,7 +282,7 @@ public class ComplexConfigDTO extends AbstractConfigDTO {
 	 * 
 	 * @param property
 	 */
-	public void addProperty(final IConfigDTO property) {
+	public void addProperty(final ConfigDTO property) {
 		Assert.paramNotNull(property, "property"); //$NON-NLS-1$
 		if (property instanceof ComplexConfigDTO) {
 			addComplexProperty((ComplexConfigDTO) property);
@@ -313,8 +313,8 @@ public class ComplexConfigDTO extends AbstractConfigDTO {
 	 * @param propertyName
 	 * @return the child DTO with the given name or <code>null</code> if not declared
 	 */
-	public IConfigDTO getProperty(final String propertyName) {
-		IConfigDTO result = null;
+	public ConfigDTO getProperty(final String propertyName) {
+		ConfigDTO result = null;
 		result = getSimpleValueProperty(propertyName);
 		if (result != null) {
 			return result;
@@ -387,7 +387,7 @@ public class ComplexConfigDTO extends AbstractConfigDTO {
 	}
 
 	@Override
-	public ComplexConfigDTO deepCopyToScopePath(final IScopePath scopePath) {
+	public ComplexConfigDTO deepCopyToScopePath(final ScopePath scopePath) {
 		final ComplexConfigDTO result = flatCopy();
 		result.setDefiningScopePath(scopePath);
 
@@ -411,7 +411,7 @@ public class ComplexConfigDTO extends AbstractConfigDTO {
 	}
 
 	@Override
-	public void visit(final IConfigDtoVisitor visitor) {
+	public void visit(final ConfigDtoVisitor visitor) {
 		visitor.visitComplexDto(this);
 
 		for (final ConfigSimpleValueDTO simpleDto : simpleProperties.values()) {

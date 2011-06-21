@@ -27,20 +27,20 @@
 
 package org.jeconfig.aspect.test;
 
-import org.jeconfig.api.exception.IConfigExceptionHandler;
+import org.jeconfig.api.exception.ConfigExceptionHandler;
 import org.jeconfig.api.exception.LoadFailureSolutionStrategy;
 import org.jeconfig.api.exception.RefreshFailureSolutionStrategy;
 import org.jeconfig.api.exception.SaveFailureSolutionStrategy;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 
-public class TestConfigExceptionHandler implements IConfigExceptionHandler {
+public class TestConfigExceptionHandler implements ConfigExceptionHandler {
 	private static boolean loadFailed = false;
 	private static boolean saveFailed = false;
 	private static boolean refreshFailed = false;
 
 	@Override
 	public LoadFailureSolutionStrategy loadFailed(
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final Class<?> configClass,
 		final Exception e,
 		final int retryCount) {
@@ -51,7 +51,7 @@ public class TestConfigExceptionHandler implements IConfigExceptionHandler {
 
 	@Override
 	public SaveFailureSolutionStrategy saveFailed(
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final Object config,
 		final Exception e,
 		final int retryCount) {
@@ -62,7 +62,7 @@ public class TestConfigExceptionHandler implements IConfigExceptionHandler {
 
 	@Override
 	public RefreshFailureSolutionStrategy refreshFailed(
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final Object config,
 		final Exception e,
 		final int retryCount) {

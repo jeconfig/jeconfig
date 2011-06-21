@@ -38,8 +38,8 @@ import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.exception.StaleConfigException;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilder;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilder;
 import org.jeconfig.common.scope.InternalScopePathBuilderFactory;
 import org.junit.Before;
 import org.junit.Rule;
@@ -115,7 +115,7 @@ public class InMemoryPersisterTest {
 
 	@Test
 	public void testListScopes() {
-		Collection<IScopePath> scopes = persister.listScopes("a", EMPTY_MAP);
+		Collection<ScopePath> scopes = persister.listScopes("a", EMPTY_MAP);
 		assertEquals(0, scopes.size());
 
 		persister.saveConfiguration(testConfig);
@@ -130,7 +130,7 @@ public class InMemoryPersisterTest {
 		final ComplexConfigDTO dto = createTestConfigDTO(createDummyScope("b"));
 		persister.saveConfiguration(dto);
 		persister.deleteAllOccurences("a", EMPTY_MAP);
-		final Collection<IScopePath> scopes = persister.listScopes("b", EMPTY_MAP);
+		final Collection<ScopePath> scopes = persister.listScopes("b", EMPTY_MAP);
 		assertEquals(dto.getDefiningScopePath(), scopes.iterator().next());
 		assertEquals(0, persister.listScopes("a", EMPTY_MAP).size());
 	}
@@ -153,7 +153,7 @@ public class InMemoryPersisterTest {
 		assertTrue(persister.listScopes("a", EMPTY_MAP).isEmpty());
 	}
 
-	private ComplexConfigDTO createTestConfigDTO(final IScopePath path) {
+	private ComplexConfigDTO createTestConfigDTO(final ScopePath path) {
 		final ComplexConfigDTO configuration = new ComplexConfigDTO();
 		configuration.setPolymorph(false);
 		configuration.setDefiningScopePath(path);
@@ -163,22 +163,22 @@ public class InMemoryPersisterTest {
 		return configuration;
 	}
 
-	private IScopePath createDoubleDummyScope(final String userScope, final String userScope2) {
-		final IScopePathBuilder scopePathBuilder = new InternalScopePathBuilderFactory().createBuilder();
+	private ScopePath createDoubleDummyScope(final String userScope, final String userScope2) {
+		final ScopePathBuilder scopePathBuilder = new InternalScopePathBuilderFactory().createBuilder();
 		appendDefaultScopes(scopePathBuilder);
 		scopePathBuilder.append(userScope);
 		scopePathBuilder.append(userScope2);
 		return scopePathBuilder.create();
 	}
 
-	private IScopePath createDummyScope(final String userScope) {
-		final IScopePathBuilder scopePathBuilder = new InternalScopePathBuilderFactory().createBuilder();
+	private ScopePath createDummyScope(final String userScope) {
+		final ScopePathBuilder scopePathBuilder = new InternalScopePathBuilderFactory().createBuilder();
 		appendDefaultScopes(scopePathBuilder);
 		scopePathBuilder.append(userScope);
 		return scopePathBuilder.create();
 	}
 
-	private void appendDefaultScopes(final IScopePathBuilder builder) {
+	private void appendDefaultScopes(final ScopePathBuilder builder) {
 		final Map<String, String> classProps = new HashMap<String, String>();
 		classProps.put(ClassScopeDescriptor.PROP_CLASS_NAME, "class.name");
 		builder.append(ClassScopeDescriptor.NAME, classProps);

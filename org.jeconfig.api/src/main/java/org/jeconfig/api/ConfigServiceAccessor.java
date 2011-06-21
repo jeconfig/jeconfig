@@ -36,34 +36,34 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jeconfig.api.exception.IConfigExceptionHandler;
+import org.jeconfig.api.exception.ConfigExceptionHandler;
 import org.jeconfig.api.exception.LoadFailureSolutionStrategy;
 import org.jeconfig.api.exception.RefreshFailureSolutionStrategy;
 import org.jeconfig.api.exception.SaveFailureSolutionStrategy;
 import org.jeconfig.api.exception.StaleConfigException;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
-import org.jeconfig.api.scope.IScope;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilder;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.Scope;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilder;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.api.scope.InstanceScopeDescriptor;
 import org.jeconfig.api.util.Assert;
 
 /**
- * Comfort facade for {@link IConfigService}.<br>
+ * Comfort facade for {@link ConfigService}.<br>
  * <br>
  * Offers convenience methods and the ability to handle exceptions automatically when an exception handler is given.
  */
-public class ConfigServiceAccessor implements IConfigService {
-	private final IConfigService configService;
-	private IConfigExceptionHandler exceptionHandler = null;
+public class ConfigServiceAccessor implements ConfigService {
+	private final ConfigService configService;
+	private ConfigExceptionHandler exceptionHandler = null;
 
 	/**
 	 * Creates a new accessor without automatic exception handling.
 	 * 
 	 * @param configService
 	 */
-	public ConfigServiceAccessor(final IConfigService configService) {
+	public ConfigServiceAccessor(final ConfigService configService) {
 		this(configService, null);
 	}
 
@@ -73,7 +73,7 @@ public class ConfigServiceAccessor implements IConfigService {
 	 * @param configService
 	 * @param exceptionHandler
 	 */
-	public ConfigServiceAccessor(final IConfigService configService, final IConfigExceptionHandler exceptionHandler) {
+	public ConfigServiceAccessor(final ConfigService configService, final ConfigExceptionHandler exceptionHandler) {
 		if (configService == null) {
 			throw new IllegalArgumentException("configService must not be null"); //$NON-NLS-1$
 		}
@@ -151,14 +151,14 @@ public class ConfigServiceAccessor implements IConfigService {
 	 * @param configClass
 	 */
 	public void deleteAllOccurences(final Class<?> configClass) {
-		final IScopePath scopePath = getScopePathBuilderFactory(configClass).stub().create();
-		final IScope classScope = scopePath.getRootScope();
+		final ScopePath scopePath = getScopePathBuilderFactory(configClass).stub().create();
+		final Scope classScope = scopePath.getRootScope();
 
 		configService.deleteAllOccurences(classScope.getName(), classScope.getProperties());
 	}
 
 	@Override
-	public void delete(final IScopePath scopePath, final boolean deleteChildren) {
+	public void delete(final ScopePath scopePath, final boolean deleteChildren) {
 		configService.delete(scopePath, deleteChildren);
 	}
 
@@ -168,12 +168,12 @@ public class ConfigServiceAccessor implements IConfigService {
 	}
 
 	@Override
-	public IScopePathBuilderFactory getScopePathBuilderFactory(final Class<?> configClass) {
+	public ScopePathBuilderFactory getScopePathBuilderFactory(final Class<?> configClass) {
 		return configService.getScopePathBuilderFactory(configClass);
 	}
 
 	@Override
-	public <T> T load(final Class<T> configClass, final IScopePath scopePath) {
+	public <T> T load(final Class<T> configClass, final ScopePath scopePath) {
 		if (exceptionHandler != null) {
 			return loadConfigUsingExceptionHandler(configClass, scopePath, null);
 		}
@@ -183,7 +183,7 @@ public class ConfigServiceAccessor implements IConfigService {
 
 	private <T> T loadConfigUsingExceptionHandler(
 		final Class<T> configClass,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final LoadFailureSolutionStrategy solutionStrategy) {
 
 		LoadFailureSolutionStrategy strategy = solutionStrategy;
@@ -250,7 +250,7 @@ public class ConfigServiceAccessor implements IConfigService {
 		Assert.paramNotNull(configClass, "configClass"); //$NON-NLS-1$
 		Assert.paramNotNull(instanceName, "instanceName"); //$NON-NLS-1$
 
-		final IScopePathBuilder scopePathBuilder = configService.getScopePathBuilderFactory(configClass).annotatedPath();
+		final ScopePathBuilder scopePathBuilder = configService.getScopePathBuilderFactory(configClass).annotatedPath();
 		scopePathBuilder.addPropertyToScope(
 				InstanceScopeDescriptor.NAME,
 				InstanceScopeDescriptor.PROP_INSTANCE_NAME,
@@ -298,7 +298,7 @@ public class ConfigServiceAccessor implements IConfigService {
 	}
 
 	@Override
-	public <T> void copyToScopePath(final T config, final IScopePath destinationScopePath) {
+	public <T> void copyToScopePath(final T config, final ScopePath destinationScopePath) {
 		configService.copyToScopePath(config, destinationScopePath);
 	}
 
@@ -338,7 +338,7 @@ public class ConfigServiceAccessor implements IConfigService {
 	}
 
 	@Override
-	public Collection<IScopePath> listScopes(final String scopeName, final Map<String, String> properties) {
+	public Collection<ScopePath> listScopes(final String scopeName, final Map<String, String> properties) {
 		return configService.listScopes(scopeName, properties);
 	}
 
@@ -347,27 +347,27 @@ public class ConfigServiceAccessor implements IConfigService {
 	 * 
 	 * @return the scope paths of all persisted configurations
 	 */
-	public Collection<IScopePath> listAllScopes() {
+	public Collection<ScopePath> listAllScopes() {
 		return listScopes(ClassScopeDescriptor.NAME, Collections.<String, String> emptyMap());
 	}
 
 	@Override
-	public IConfigUnsetter getConfigUnsetter() {
+	public ConfigUnsetter getConfigUnsetter() {
 		return configService.getConfigUnsetter();
 	}
 
 	@Override
-	public IScopePath getScopePath(final Object config) {
+	public ScopePath getScopePath(final Object config) {
 		return configService.getScopePath(config);
 	}
 
 	@Override
-	public void addScopePathListener(final IScopePath forScopePath, final IScopePathListener listener) {
+	public void addScopePathListener(final ScopePath forScopePath, final ScopePathListener listener) {
 		configService.addScopePathListener(forScopePath, listener);
 	}
 
 	@Override
-	public void removeScopePathListener(final IScopePath forScopePath, final IScopePathListener listener) {
+	public void removeScopePathListener(final ScopePath forScopePath, final ScopePathListener listener) {
 		configService.removeScopePathListener(forScopePath, listener);
 	}
 }

@@ -31,10 +31,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jeconfig.api.scope.ClassScopeDescriptor;
-import org.jeconfig.api.scope.IScopePropertyProvider;
+import org.jeconfig.api.scope.ScopePropertyProvider;
 import org.jeconfig.client.proxy.ProxyUtil;
 
-public final class ClassScopePropertyProvider implements IScopePropertyProvider {
+public final class ClassScopePropertyProvider implements ScopePropertyProvider {
 
 	@Override
 	public Map<String, String> getProperties(final Class<?> configClass) {

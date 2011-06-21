@@ -30,10 +30,10 @@ package org.jeconfig.client.internal.mapping.serialization;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
 import org.jeconfig.api.dto.ConfigListDTO;
-import org.jeconfig.api.dto.IConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.dto.ConfigDTO;
+import org.jeconfig.api.scope.ScopePath;
 
 public class ListDTOSerializer extends AbstractDTOSerializer {
 
@@ -44,11 +44,11 @@ public class ListDTOSerializer extends AbstractDTOSerializer {
 		final String propertyName,
 		final boolean complex,
 		final boolean polymorph,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final Class<?> itemType,
 		final ComplexDTOSerializer complexDTOSerializer,
 		final SimpleDTOSerializer simpleDTOSerializer,
-		final ISimpleTypeConverter<Object> customConverter) {
+		final SimpleTypeConverter<Object> customConverter) {
 
 		final ConfigListDTO result = new ConfigListDTO();
 		result.setPropertyType(propertyType.getName());
@@ -57,7 +57,7 @@ public class ListDTOSerializer extends AbstractDTOSerializer {
 		result.setDefiningScopePath(scopePath);
 
 		if (list != null) {
-			final List<IConfigDTO> items = new ArrayList<IConfigDTO>();
+			final List<ConfigDTO> items = new ArrayList<ConfigDTO>();
 			for (final Object item : list) {
 				if (complex || polymorph) {
 					items.add(complexDTOSerializer.createConfigDTO(

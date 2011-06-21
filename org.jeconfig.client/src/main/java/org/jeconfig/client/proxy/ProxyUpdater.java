@@ -48,15 +48,15 @@ import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.annotation.ConfigListProperty;
 import org.jeconfig.api.annotation.ConfigMapProperty;
 import org.jeconfig.api.annotation.ConfigSetProperty;
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.conversion.NoCustomSimpleTypeConverter;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigListDTO;
 import org.jeconfig.api.dto.ConfigMapDTO;
 import org.jeconfig.api.dto.ConfigSetDTO;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
-import org.jeconfig.api.dto.IConfigDTO;
+import org.jeconfig.api.dto.ConfigDTO;
 import org.jeconfig.api.util.Assert;
 import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.client.internal.ConfigIdPropertyUtil;
@@ -69,23 +69,23 @@ import org.jeconfig.common.reflection.PropertyAccessor;
 public final class ProxyUpdater {
 	private final ClassInstantiation classInstantiation = new ClassInstantiation();
 	private final PropertyAccessor propertyAccessor = new PropertyAccessor();
-	private final IConfigObjectFactory objectFactory;
+	private final ConfigObjectFactory objectFactory;
 	private final ConfigObjectCopyUtil copyUtil;
-	private final ISimpleTypeConverterRegistry simpleTypeConverterRegistry;
+	private final SimpleTypeConverterRegistry simpleTypeConverterRegistry;
 	private final ConfigIdPropertyUtil configIdPropertyUtil = new ConfigIdPropertyUtil();
 
-	public ProxyUpdater(final IConfigObjectFactory proxyFactory, final ISimpleTypeConverterRegistry simpleTypeConverterRegistry) {
+	public ProxyUpdater(final ConfigObjectFactory proxyFactory, final SimpleTypeConverterRegistry simpleTypeConverterRegistry) {
 		this.objectFactory = proxyFactory;
 		this.simpleTypeConverterRegistry = simpleTypeConverterRegistry;
 		copyUtil = new ConfigObjectCopyUtil();
 	}
 
-	public ISimpleTypeConverterRegistry getSimpleTypeConverterRegistry() {
+	public SimpleTypeConverterRegistry getSimpleTypeConverterRegistry() {
 		return simpleTypeConverterRegistry;
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	public void updateConfigProxy(final IConfigProxy proxy, final List<IConfigDTO> dtos, final Annotation configPropertyAnnotation) {
+	public void updateConfigProxy(final ConfigProxy proxy, final List<ConfigDTO> dtos, final Annotation configPropertyAnnotation) {
 		Assert.paramNotNull(proxy, "proxy"); //$NON-NLS-1$
 		Assert.paramNotNull(dtos, "dtos"); //$NON-NLS-1$
 		Assert.paramNotNull(configPropertyAnnotation, "configPropertyAnnotation"); //$NON-NLS-1$
@@ -201,8 +201,8 @@ public final class ProxyUpdater {
 
 	@SuppressWarnings("unchecked")
 	private <T> void updateComplexDTO(final T config, final List<ComplexConfigDTO> complexDtos) {
-		if (config instanceof IConfigProxy) {
-			final IConfigProxy<ComplexConfigDTO> proxy = (IConfigProxy<ComplexConfigDTO>) config;
+		if (config instanceof ConfigProxy) {
+			final ConfigProxy<ComplexConfigDTO> proxy = (ConfigProxy<ComplexConfigDTO>) config;
 			proxy.setConfigDTOs(complexDtos);
 		}
 	}
@@ -221,7 +221,7 @@ public final class ProxyUpdater {
 				for (int i = 0; i < Array.getLength(originalArray); i++) {
 					final Object obj = Array.get(originalArray, i);
 					Object item = null;
-					if (obj instanceof IConfigProxy) {
+					if (obj instanceof ConfigProxy) {
 						item = obj;
 					} else if (obj != null) {
 						if (annotation.polymorph()) {
@@ -278,7 +278,7 @@ public final class ProxyUpdater {
 					for (final Object obj : originalList) {
 
 						Object complexProperty = null;
-						if (obj instanceof IConfigProxy) {
+						if (obj instanceof ConfigProxy) {
 							complexProperty = obj;
 						} else if (obj != null) {
 							if (listAnnotation.polymorph()) {
@@ -340,12 +340,12 @@ public final class ProxyUpdater {
 				final ConfigComplexType valueTypeAnnotation = AnnotationUtil.getAnnotation(
 						mapAnnotation.valueType(),
 						ConfigComplexType.class);
-				final ISimpleTypeConverter<?> customConverter = createCustomConverter(mapAnnotation.customValueConverter());
+				final SimpleTypeConverter<?> customConverter = createCustomConverter(mapAnnotation.customValueConverter());
 				if (valueTypeAnnotation != null || mapAnnotation.polymorph()) {
 					final Map<Object, Object> tempMap = new HashMap<Object, Object>();
 					for (final Entry<Object, Object> entry : originalMap.entrySet()) {
 						Object complexValue = null;
-						if (entry.getValue() instanceof IConfigProxy) {
+						if (entry.getValue() instanceof ConfigProxy) {
 							complexValue = entry.getValue();
 						} else if (entry.getValue() != null) {
 							if (mapAnnotation.polymorph()) {
@@ -358,7 +358,7 @@ public final class ProxyUpdater {
 						tempMap.put(entry.getKey(), complexValue);
 						if (complexValue != null) {
 							final String stringKey = getObjectValue(
-									(ISimpleTypeConverter<Object>) customConverter,
+									(SimpleTypeConverter<Object>) customConverter,
 									entry.getKey());
 							final List<ComplexConfigDTO> complexConfigDTOs = getDtosForKey(mapDtos, stringKey);
 							updateConfig(complexValue, complexConfigDTOs);
@@ -380,7 +380,7 @@ public final class ProxyUpdater {
 		final List<ComplexConfigDTO> complexConfigDTOs = new ArrayList<ComplexConfigDTO>();
 		if (mapDtos != null) {
 			for (final ConfigMapDTO md : mapDtos) {
-				final Map<String, IConfigDTO> dtoMap = md.getMap();
+				final Map<String, ConfigDTO> dtoMap = md.getMap();
 				if (dtoMap != null) {
 					final ComplexConfigDTO configDTO = (ComplexConfigDTO) dtoMap.get(stringKey);
 					if (configDTO != null) {
@@ -429,7 +429,7 @@ public final class ProxyUpdater {
 					final Set<Object> tempSet = new HashSet<Object>();
 					for (final Object obj : originalSet) {
 						Object complexProperty = null;
-						if (obj instanceof IConfigProxy) {
+						if (obj instanceof ConfigProxy) {
 							complexProperty = obj;
 						} else if (obj != null) {
 							if (setAnnotation.polymorph()) {
@@ -466,9 +466,9 @@ public final class ProxyUpdater {
 		final List<ComplexConfigDTO> complexDtos = new ArrayList<ComplexConfigDTO>();
 
 		for (final ConfigSetDTO setDto : setDtos) {
-			final Set<IConfigDTO> items = setDto.getItems();
+			final Set<ConfigDTO> items = setDto.getItems();
 			if (items != null) {
-				for (final IConfigDTO dto : items) {
+				for (final ConfigDTO dto : items) {
 					final ComplexConfigDTO complexDto = (ComplexConfigDTO) dto;
 					final ConfigSimpleValueDTO idValueDto = complexDto.getSimpleValueProperty(idPropertyName);
 					final String idStringValue = configIdPropertyUtil.getIdPropertyValueAsString(
@@ -484,7 +484,7 @@ public final class ProxyUpdater {
 		return complexDtos;
 	}
 
-	private String getObjectValue(final ISimpleTypeConverter<Object> customConverter, final Object objectValue) {
+	private String getObjectValue(final SimpleTypeConverter<Object> customConverter, final Object objectValue) {
 		if (customConverter != null) {
 			return customConverter.convertToSerializedForm(objectValue);
 		} else {
@@ -530,7 +530,7 @@ public final class ProxyUpdater {
 		}
 	}
 
-	private ISimpleTypeConverter<?> createCustomConverter(final Class<? extends ISimpleTypeConverter<?>> customConverter) {
+	private SimpleTypeConverter<?> createCustomConverter(final Class<? extends SimpleTypeConverter<?>> customConverter) {
 		if (NoCustomSimpleTypeConverter.class.equals(customConverter)) {
 			return null;
 		}

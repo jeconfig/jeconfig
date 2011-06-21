@@ -29,8 +29,8 @@ package org.jeconfig.server.persister;
 
 import java.util.List;
 
-import org.jeconfig.api.scope.IScope;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.Scope;
+import org.jeconfig.api.scope.ScopePath;
 
 public final class DefaultScopePathGeneratorValidator {
 	private static final String SCOPE_NAME_PATTERN = "[a-zA-Z0-9]+"; //$NON-NLS-1$
@@ -39,9 +39,9 @@ public final class DefaultScopePathGeneratorValidator {
 
 	private DefaultScopePathGeneratorValidator() {}
 
-	public static void validateScopePath(final IScopePath scopePath) {
-		final List<IScope> scopes = scopePath.getScopes();
-		for (final IScope scope : scopes) {
+	public static void validateScopePath(final ScopePath scopePath) {
+		final List<Scope> scopes = scopePath.getScopes();
+		for (final Scope scope : scopes) {
 			if (!scope.getName().matches(SCOPE_NAME_PATTERN)) {
 				throw new IllegalArgumentException("The scope name '" //$NON-NLS-1$
 					+ scope.getName()

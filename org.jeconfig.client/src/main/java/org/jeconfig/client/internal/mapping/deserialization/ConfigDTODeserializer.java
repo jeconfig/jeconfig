@@ -29,20 +29,20 @@ package org.jeconfig.client.internal.mapping.deserialization;
 
 import java.util.List;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.client.proxy.IConfigObjectFactory;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.client.proxy.ConfigObjectFactory;
 import org.jeconfig.client.proxy.ProxyUpdater;
 import org.jeconfig.client.proxy.ProxyUtil;
 
 public final class ConfigDTODeserializer {
-	private final IConfigObjectFactory proxyFactory;
+	private final ConfigObjectFactory proxyFactory;
 	private final ComplexDTODeserializer complexDTODeserializer;
 
 	public ConfigDTODeserializer(
-		final ISimpleTypeConverterRegistry simpleTypeConverterRegistry,
-		final IConfigObjectFactory proxyFactory,
+		final SimpleTypeConverterRegistry simpleTypeConverterRegistry,
+		final ConfigObjectFactory proxyFactory,
 		final ProxyUpdater proxyUpdater) {
 		complexDTODeserializer = new ComplexDTODeserializer(proxyFactory, simpleTypeConverterRegistry, proxyUpdater);
 		this.proxyFactory = proxyFactory;
@@ -51,7 +51,7 @@ public final class ConfigDTODeserializer {
 	public <T> T derserializeRootConfig(
 		final Class<T> configClass,
 		final ComplexConfigDTO mergedConfigDTO,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final List<ComplexConfigDTO> dtos) {
 
 		final T config = proxyFactory.createRootConfigProxy(ProxyUtil.getConfigClass(configClass), scopePath);
@@ -63,7 +63,7 @@ public final class ConfigDTODeserializer {
 	public <T> T deserializeComplexConfig(
 		final Class<T> configClass,
 		final ComplexConfigDTO mergedConfigDTO,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final List<ComplexConfigDTO> dtos) {
 
 		final T config = proxyFactory.createComplexProperty(ProxyUtil.getConfigClass(configClass));

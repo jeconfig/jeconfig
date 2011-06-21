@@ -33,8 +33,8 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-import org.jeconfig.api.IConfigService;
-import org.jeconfig.api.IConfigSetupService;
+import org.jeconfig.api.ConfigService;
+import org.jeconfig.api.ConfigSetupService;
 import org.jeconfig.api.annotation.ConfigArrayProperty;
 import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.annotation.ConfigComplexProperty;
@@ -44,27 +44,27 @@ import org.jeconfig.api.annotation.ConfigListProperty;
 import org.jeconfig.api.annotation.ConfigMapProperty;
 import org.jeconfig.api.annotation.ConfigSetProperty;
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
-import org.jeconfig.api.scope.IScope;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopeRegistry;
+import org.jeconfig.api.scope.Scope;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopeRegistry;
 import org.jeconfig.api.util.Assert;
 import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.client.proxy.ProxyUtil;
 
 @SuppressWarnings("nls")
 public final class ConfigValidator {
-	private final Map<Class<? extends Annotation>, IPropertyValidator<?>> validators;
+	private final Map<Class<? extends Annotation>, PropertyValidator<?>> validators;
 
-	private final IScopeRegistry scopeRegistry;
-	private final ISimpleTypeConverterRegistry converterRegistry;
+	private final ScopeRegistry scopeRegistry;
+	private final SimpleTypeConverterRegistry converterRegistry;
 	private final ComplexTypeValidator complexTypeValidator;
 	private final CrossReferencesCycleDetector cycleDetector;
 	private final MigrationValidator migrationValidator;
 
-	public ConfigValidator(final IConfigService configService, final IConfigSetupService configSetupService) {
+	public ConfigValidator(final ConfigService configService, final ConfigSetupService configSetupService) {
 
 		this.scopeRegistry = configSetupService.getScopeRegistry();
 		this.converterRegistry = configSetupService.getSimpleTypeConverterRegistry();
@@ -72,7 +72,7 @@ public final class ConfigValidator {
 		cycleDetector = new CrossReferencesCycleDetector(configService);
 		migrationValidator = new MigrationValidator();
 
-		validators = new HashMap<Class<? extends Annotation>, IPropertyValidator<?>>();
+		validators = new HashMap<Class<? extends Annotation>, PropertyValidator<?>>();
 		validators.put(ConfigArrayProperty.class, new ArrayPropertyValidator());
 		validators.put(ConfigComplexProperty.class, new ComplexPropertyValidator());
 		validators.put(ConfigIdProperty.class, new IdPropertyValidator());
@@ -83,18 +83,18 @@ public final class ConfigValidator {
 		validators.put(ConfigCrossReference.class, new CrossReferencePropertyValidator());
 	}
 
-	public void validate(final Object config, final IScopePath scopePath) {
+	public void validate(final Object config, final ScopePath scopePath) {
 		Assert.paramNotNull(config, "config"); //$NON-NLS-1$
 		validate(config.getClass(), config, scopePath);
 	}
 
-	public void validate(final Class<?> configClass, final IScopePath scopePath) {
+	public void validate(final Class<?> configClass, final ScopePath scopePath) {
 		Assert.paramNotNull(configClass, "configClass"); //$NON-NLS-1$
 		validate(configClass, null, scopePath);
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	private void validate(final Class<?> configClass, final Object config, final IScopePath scopePath) {
+	private void validate(final Class<?> configClass, final Object config, final ScopePath scopePath) {
 		final ConfigClass configClassAnnotation = AnnotationUtil.getAnnotation(configClass, ConfigClass.class);
 		if (configClassAnnotation == null) {
 			throw new IllegalArgumentException("A configuration class must be annotated with the @"
@@ -119,8 +119,8 @@ public final class ConfigValidator {
 		cycleDetector.detectCycles(configClass, scopePath);
 	}
 
-	private String getClassNameFromScope(final IScopePath scopePath) {
-		final IScope classScope = scopePath.findScopeByName(ClassScopeDescriptor.NAME);
+	private String getClassNameFromScope(final ScopePath scopePath) {
+		final Scope classScope = scopePath.findScopeByName(ClassScopeDescriptor.NAME);
 		if (classScope != null) {
 			return classScope.getProperty(ClassScopeDescriptor.PROP_CLASS_NAME);
 		}

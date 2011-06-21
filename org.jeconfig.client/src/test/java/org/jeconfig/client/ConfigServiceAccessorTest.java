@@ -33,9 +33,9 @@ import org.jeconfig.api.exception.LoadFailureSolutionStrategy;
 import org.jeconfig.api.exception.RefreshFailureSolutionStrategy;
 import org.jeconfig.api.exception.SaveFailureSolutionStrategy;
 import org.jeconfig.api.exception.StaleConfigException;
-import org.jeconfig.api.persister.IConfigPersister;
+import org.jeconfig.api.persister.ConfigPersister;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.client.internal.autosave.ConfigAutoSaveServiceImpl;
 import org.junit.Assert;
 import org.junit.Before;
@@ -49,7 +49,7 @@ public class ConfigServiceAccessorTest extends AbstractConfigServiceTest {
 	private ConfigServiceAccessorTestPersister persister;
 
 	@Override
-	protected IConfigPersister createPersister() {
+	protected ConfigPersister createPersister() {
 		return new ConfigServiceAccessorTestPersister();
 	}
 
@@ -92,7 +92,7 @@ public class ConfigServiceAccessorTest extends AbstractConfigServiceTest {
 	@Test
 	public void testLoadFailedOverwriteWithParent() {
 		exceptionHandler.setLoadStrategy(LoadFailureSolutionStrategy.OVERWRITE_STALE_CONFIG_WITH_PARENT);
-		final IScopePathBuilderFactory factory = configServiceAccessor.getScopePathBuilderFactory(ConfigServiceAccessorTestConfiguration.class);
+		final ScopePathBuilderFactory factory = configServiceAccessor.getScopePathBuilderFactory(ConfigServiceAccessorTestConfiguration.class);
 
 		final ConfigServiceAccessorTestConfiguration parentConfig = configServiceAccessor.load(
 				ConfigServiceAccessorTestConfiguration.class,
@@ -234,7 +234,7 @@ public class ConfigServiceAccessorTest extends AbstractConfigServiceTest {
 	@Test
 	public void testConvenienceDelete() {
 		final ConfigServiceAccessorTestConfiguration config = configServiceAccessor.load(ConfigServiceAccessorTestConfiguration.class);
-		final IScopePathBuilderFactory factory = configServiceAccessor.getScopePathBuilderFactory(ConfigServiceAccessorTestConfiguration.class);
+		final ScopePathBuilderFactory factory = configServiceAccessor.getScopePathBuilderFactory(ConfigServiceAccessorTestConfiguration.class);
 		config.setField1("ttttt"); //$NON-NLS-1$
 		getConfigService().save(config);
 

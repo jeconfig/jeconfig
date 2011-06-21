@@ -31,7 +31,7 @@ package org.jeconfig.api.conversion;
  * Converter which is used at the various Config*Property-annotations to indicate
  * that no simple type converter is configured.
  */
-public final class NoCustomSimpleTypeConverter implements ISimpleTypeConverter<Object> {
+public final class NoCustomSimpleTypeConverter implements SimpleTypeConverter<Object> {
 
 	@Override
 	public Object convertToObject(final Class<Object> simpleType, final String serializedForm) {

@@ -27,8 +27,8 @@
 
 package org.jeconfig.aspect.creation;
 
-import org.jeconfig.api.IConfigService;
-import org.jeconfig.client.IInternalConfigService;
+import org.jeconfig.api.ConfigService;
+import org.jeconfig.client.InternalConfigService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
@@ -38,26 +38,26 @@ public class Activator implements BundleActivator {
 
 	private BundleContext bundleContext;
 	private ServiceTracker configServiceTracker = null;
-	private IInternalConfigService configService = null;
+	private InternalConfigService configService = null;
 
-	public void setConfigService(final IInternalConfigService configService) {
+	public void setConfigService(final InternalConfigService configService) {
 		this.configService = configService;
 	}
 
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		bundleContext = context;
-		configServiceTracker = new ServiceTracker(bundleContext, IInternalConfigService.class.getName(), null);
+		configServiceTracker = new ServiceTracker(bundleContext, InternalConfigService.class.getName(), null);
 		configServiceTracker.open();
 
 		instance = this;
 	}
 
-	public IInternalConfigService getConfigService() {
+	public InternalConfigService getConfigService() {
 		if (configServiceTracker != null) {
-			final IInternalConfigService cfgService = (IInternalConfigService) configServiceTracker.getService();
+			final InternalConfigService cfgService = (InternalConfigService) configServiceTracker.getService();
 			if (cfgService == null) {
-				throw new RuntimeException("Didn't find " + IConfigService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
+				throw new RuntimeException("Didn't find " + ConfigService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
 			}
 			configService = cfgService;
 			return cfgService;
@@ -65,7 +65,7 @@ public class Activator implements BundleActivator {
 			if (configService != null) {
 				return configService;
 			}
-			throw new RuntimeException("Didn't find " + IConfigService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
+			throw new RuntimeException("Didn't find " + ConfigService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
 		}
 	}
 

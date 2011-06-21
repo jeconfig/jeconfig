@@ -27,13 +27,13 @@
 
 package org.jeconfig.client;
 
-import org.jeconfig.api.IConfigService;
-import org.jeconfig.api.autorefresh.IConfigRefreshNotifier;
+import org.jeconfig.api.ConfigService;
+import org.jeconfig.api.autorefresh.ConfigRefreshNotifier;
 
-public class ConfigRefreshTestNotifier<T> implements IConfigRefreshNotifier<T> {
+public class ConfigRefreshTestNotifier<T> implements ConfigRefreshNotifier<T> {
 
 	@Override
-	public void refreshConfig(final T config, final IConfigService configService) {
+	public void refreshConfig(final T config, final ConfigService configService) {
 		configService.refresh(config);
 	}
 

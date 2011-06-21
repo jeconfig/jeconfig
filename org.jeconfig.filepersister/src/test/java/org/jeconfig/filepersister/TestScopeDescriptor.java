@@ -27,9 +27,9 @@
 
 package org.jeconfig.filepersister;
 
-import org.jeconfig.api.scope.IScopeDescriptor;
+import org.jeconfig.api.scope.ScopeDescriptor;
 
-public class TestScopeDescriptor implements IScopeDescriptor {
+public class TestScopeDescriptor implements ScopeDescriptor {
 
 	public static final String NAME = "test"; //$NON-NLS-1$
 

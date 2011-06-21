@@ -33,7 +33,7 @@ package org.jeconfig.api.scope;
  * The 'global' instances of configurations are persisted in the repositories. This scope
  * should be used if global settings are desired for a configuration.
  */
-public final class GlobalScopeDescriptor implements IScopeDescriptor {
+public final class GlobalScopeDescriptor implements ScopeDescriptor {
 	public static final String NAME = "global"; //$NON-NLS-1$
 
 	@Override

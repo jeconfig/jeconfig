@@ -29,8 +29,8 @@ package org.jeconfig.client.internal.mapping.serialization;
 
 import java.util.List;
 
-import org.jeconfig.api.dto.IConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.dto.ConfigDTO;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.client.proxy.ProxyUtil;
 
 public abstract class AbstractDTOSerializer {
@@ -43,7 +43,7 @@ public abstract class AbstractDTOSerializer {
 		return null;
 	}
 
-	private <T extends IConfigDTO> long getNewVersion(final T configDTO, final List<T> originalDTOs, final IScopePath scopePath) {
+	private <T extends ConfigDTO> long getNewVersion(final T configDTO, final List<T> originalDTOs, final ScopePath scopePath) {
 		final T lastOriginalDTO = getLastOriginalDTO(originalDTOs);
 		if (lastOriginalDTO != null && lastOriginalDTO.getDefiningScopePath().equals(scopePath)) {
 			if (configDTO.equals(lastOriginalDTO)) {
@@ -68,7 +68,7 @@ public abstract class AbstractDTOSerializer {
 		return null;
 	}
 
-	private <T extends IConfigDTO> T getParentDTO(final List<T> originalDTOs, final IScopePath scopePath) {
+	private <T extends ConfigDTO> T getParentDTO(final List<T> originalDTOs, final ScopePath scopePath) {
 		final T lastOriginalDTO = getLastOriginalDTO(originalDTOs);
 		if (lastOriginalDTO != null) {
 			if (lastOriginalDTO.getDefiningScopePath().equals(scopePath)) {
@@ -80,10 +80,10 @@ public abstract class AbstractDTOSerializer {
 		return null;
 	}
 
-	protected <T extends IConfigDTO> void updateVersionsAndParent(
+	protected <T extends ConfigDTO> void updateVersionsAndParent(
 		final T configDTO,
 		final List<T> originalDTOs,
-		final IScopePath scopePath) {
+		final ScopePath scopePath) {
 
 		final T parentDTO = getParentDTO(originalDTOs, scopePath);
 		final long parentVersion = parentDTO != null ? parentDTO.getVersion() : 0;

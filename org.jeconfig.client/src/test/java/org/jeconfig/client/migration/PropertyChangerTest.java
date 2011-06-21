@@ -31,7 +31,7 @@ import junit.framework.Assert;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
-import org.jeconfig.api.migration.IPropertyChanger;
+import org.jeconfig.api.migration.PropertyChanger;
 import org.jeconfig.client.internal.migration.PropertyChangerImpl;
 import org.junit.Before;
 import org.junit.Test;
@@ -51,7 +51,7 @@ public class PropertyChangerTest {
 	private static final String TYPE2 = "type2";
 	private static final String NEW_TYPE = "newType";
 
-	private IPropertyChanger propertyChanger;
+	private PropertyChanger propertyChanger;
 	private ComplexConfigDTO rootDto;
 	private ComplexConfigDTO complexDto1;
 	private ComplexConfigDTO complexDto2;

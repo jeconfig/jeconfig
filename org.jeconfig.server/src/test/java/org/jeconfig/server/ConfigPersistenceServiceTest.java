@@ -44,12 +44,12 @@ import junit.framework.Assert;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.exception.StaleConfigException;
-import org.jeconfig.api.persister.IConfigPersister;
-import org.jeconfig.api.persister.IPersisterSelector;
+import org.jeconfig.api.persister.ConfigPersister;
+import org.jeconfig.api.persister.PersisterSelector;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilder;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilder;
 import org.jeconfig.common.scope.InternalScopePathBuilderFactory;
 import org.junit.Before;
 import org.junit.Rule;
@@ -65,9 +65,9 @@ public class ConfigPersistenceServiceTest {
 	//CHECKSTYLE:ON
 
 	private ConfigPersistenceServiceImpl persistenceService;
-	private IConfigPersister persister;
-	private IConfigPersister persister2;
-	private IPersisterSelector persisterSelector;
+	private ConfigPersister persister;
+	private ConfigPersister persister2;
+	private PersisterSelector persisterSelector;
 	private ComplexConfigDTO dto1;
 	private ComplexConfigDTO dto2;
 	private ComplexConfigDTO dto3;
@@ -75,9 +75,9 @@ public class ConfigPersistenceServiceTest {
 	@Before
 	public void setUp() {
 		persistenceService = new ConfigPersistenceServiceImpl();
-		persister = createMock(IConfigPersister.class);
-		persister2 = createMock(IConfigPersister.class);
-		persisterSelector = createMock(IPersisterSelector.class);
+		persister = createMock(ConfigPersister.class);
+		persister2 = createMock(ConfigPersister.class);
+		persisterSelector = createMock(PersisterSelector.class);
 
 		dto1 = new ComplexConfigDTO();
 		dto1.setDefiningScopePath(createDummyScope("a"));
@@ -219,7 +219,7 @@ public class ConfigPersistenceServiceTest {
 
 		replay(persister);
 		persistenceService.setConfigPersister(persister);
-		final Collection<IScopePath> scopes = persistenceService.listScopes("a", Collections.<String, String> emptyMap());
+		final Collection<ScopePath> scopes = persistenceService.listScopes("a", Collections.<String, String> emptyMap());
 		Assert.assertEquals(createDummyScope("a"), scopes.iterator().next());
 	}
 
@@ -304,16 +304,16 @@ public class ConfigPersistenceServiceTest {
 	@SuppressWarnings("unchecked")
 	@Test
 	public void testSetPersisterSelector() {
-		final IScopePath dummyScope = createDummyScope("blub");
+		final ScopePath dummyScope = createDummyScope("blub");
 
 		expect(persister.getId()).andReturn("1").times(2);
 		expect(persister2.getId()).andReturn("2").times(2);
-		expect(persisterSelector.getPersisterId((IScopePath) anyObject(), (Collection<String>) anyObject())).andReturn("1");
+		expect(persisterSelector.getPersisterId((ScopePath) anyObject(), (Collection<String>) anyObject())).andReturn("1");
 		expect(persister.loadConfiguration(dummyScope)).andReturn(null);
 		replay(persister, persister2, persisterSelector);
 
 		persistenceService.setPersisterSelector(persisterSelector);
-		persistenceService.setConfigPersisters(new IConfigPersister[] {persister, persister2});
+		persistenceService.setConfigPersisters(new ConfigPersister[] {persister, persister2});
 
 		persistenceService.loadConfiguration(dummyScope);
 		verify(persister, persister2, persisterSelector);
@@ -324,30 +324,30 @@ public class ConfigPersistenceServiceTest {
 	public void testUnsetPersisterSelector() {
 		expectedException.expect(IllegalStateException.class);
 		expectedException.expectMessage("DefaultPersisterSelector needs exactly one configuration persister! got: 2");
-		final IScopePath dummyScope = createDummyScope("blub");
+		final ScopePath dummyScope = createDummyScope("blub");
 
 		expect(persister.getId()).andReturn("1").times(2);
 		expect(persister2.getId()).andReturn("2").times(2);
-		expect(persisterSelector.getPersisterId((IScopePath) anyObject(), (Collection<String>) anyObject())).andReturn("1");
+		expect(persisterSelector.getPersisterId((ScopePath) anyObject(), (Collection<String>) anyObject())).andReturn("1");
 		expect(persister.loadConfiguration(dummyScope)).andReturn(null);
 		replay(persister, persister2, persisterSelector);
 
 		persistenceService.setPersisterSelector(persisterSelector);
-		persistenceService.setConfigPersisters(new IConfigPersister[] {persister, persister2});
+		persistenceService.setConfigPersisters(new ConfigPersister[] {persister, persister2});
 		persistenceService.unsetPersisterSelector(persisterSelector);
 
 		persistenceService.loadConfiguration(dummyScope);
 		verify(persister, persister2, persisterSelector);
 	}
 
-	private IScopePath createDummyScope(final String userScope) {
-		final IScopePathBuilder scopePathBuilder = new InternalScopePathBuilderFactory().createBuilder();
+	private ScopePath createDummyScope(final String userScope) {
+		final ScopePathBuilder scopePathBuilder = new InternalScopePathBuilderFactory().createBuilder();
 		appendDefaultScopes(scopePathBuilder);
 		scopePathBuilder.append(userScope);
 		return scopePathBuilder.create();
 	}
 
-	private void appendDefaultScopes(final IScopePathBuilder builder) {
+	private void appendDefaultScopes(final ScopePathBuilder builder) {
 		final Map<String, String> classProps = new HashMap<String, String>();
 		classProps.put(ClassScopeDescriptor.PROP_CLASS_NAME, "class.name");
 		builder.append(ClassScopeDescriptor.NAME, classProps);

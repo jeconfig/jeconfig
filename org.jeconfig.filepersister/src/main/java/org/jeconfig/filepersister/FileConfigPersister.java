@@ -42,11 +42,11 @@ import org.apache.commons.io.filefilter.TrueFileFilter;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.exception.StaleConfigException;
 import org.jeconfig.api.exception.StoreConfigException;
-import org.jeconfig.api.persister.IConfigPersister;
-import org.jeconfig.api.persister.IScopePathGenerator;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.persister.ConfigPersister;
+import org.jeconfig.api.persister.ScopePathGenerator;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.api.util.Assert;
-import org.jeconfig.server.marshalling.IConfigMarshaller;
+import org.jeconfig.server.marshalling.ConfigMarshaller;
 import org.jeconfig.server.persister.DefaultScopePathGenerator;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,11 +54,11 @@ import org.slf4j.LoggerFactory;
 /**
  * A Persister implementation that stores configs in files
  */
-public final class FileConfigPersister implements IConfigPersister {
+public final class FileConfigPersister implements ConfigPersister {
 	public static final String ID = FileConfigPersister.class.getName();
 	private static final Logger LOG = LoggerFactory.getLogger(FileConfigPersister.class);
-	private final IConfigMarshaller marshaller;
-	private final IScopePathGenerator gen;
+	private final ConfigMarshaller marshaller;
+	private final ScopePathGenerator gen;
 	private final String rootDirectory;
 	private final String fileExtension;
 
@@ -69,7 +69,7 @@ public final class FileConfigPersister implements IConfigPersister {
 	 * @param rootDirectory the root directory for config storage
 	 * @param fileExtension the file extension to be used for the saved files including the "." e.g. ".xml"
 	 */
-	public FileConfigPersister(final IConfigMarshaller marshaller, final String rootDirectory, final String fileExtension) {
+	public FileConfigPersister(final ConfigMarshaller marshaller, final String rootDirectory, final String fileExtension) {
 		Assert.paramNotNull(rootDirectory, "rootDirectory"); //$NON-NLS-1$
 		Assert.paramNotNull(marshaller, "marshaller"); //$NON-NLS-1$
 		Assert.paramNotNull(fileExtension, "fileExtension"); //$NON-NLS-1$
@@ -85,7 +85,7 @@ public final class FileConfigPersister implements IConfigPersister {
 	}
 
 	@Override
-	public ComplexConfigDTO loadConfiguration(final IScopePath scopePath) {
+	public ComplexConfigDTO loadConfiguration(final ScopePath scopePath) {
 		Assert.paramNotNull(scopePath, "scopePath"); //$NON-NLS-1$
 
 		final File configFile = new File(rootDirectory
@@ -221,7 +221,7 @@ public final class FileConfigPersister implements IConfigPersister {
 	}
 
 	@Override
-	public void delete(final IScopePath scopePath, final boolean deleteChildren) {
+	public void delete(final ScopePath scopePath, final boolean deleteChildren) {
 		Assert.paramNotNull(scopePath, "scopePath"); //$NON-NLS-1$
 
 		final File configFile = new File(rootDirectory, gen.getPathFromScopePath(scopePath)
@@ -262,7 +262,7 @@ public final class FileConfigPersister implements IConfigPersister {
 	}
 
 	@Override
-	public Collection<IScopePath> listScopes(final String scopeName, final Map<String, String> properties) {
+	public Collection<ScopePath> listScopes(final String scopeName, final Map<String, String> properties) {
 		Assert.paramNotNull(scopeName, "scopeName"); //$NON-NLS-1$
 		Assert.paramNotNull(properties, "properties"); //$NON-NLS-1$
 

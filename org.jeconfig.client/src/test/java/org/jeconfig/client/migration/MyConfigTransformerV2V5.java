@@ -27,12 +27,12 @@
 
 package org.jeconfig.client.migration;
 
-import org.jeconfig.api.migration.IConfigTransformer;
-import org.jeconfig.api.migration.ITransformParam;
+import org.jeconfig.api.migration.ConfigTransformerDelegate;
+import org.jeconfig.api.migration.TransformParam;
 
-public class MyConfigTransformerV2V5 implements IConfigTransformer {
+public class MyConfigTransformerV2V5 implements ConfigTransformerDelegate {
 
 	@Override
-	public void transform(final ITransformParam param) {}
+	public void transform(final TransformParam param) {}
 
 }

@@ -32,7 +32,7 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.client.AbstractConfigServiceTest;
 import org.junit.Test;
 
@@ -52,7 +52,7 @@ public class ConfigIdPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testChildOverwrites() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(ConfigIdTestConfiguration.class);
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(ConfigIdTestConfiguration.class);
 		final ConfigIdTestConfiguration parentConfig = getConfigService().load(
 				ConfigIdTestConfiguration.class,
 				factory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create());
@@ -73,7 +73,7 @@ public class ConfigIdPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testParentOverwrites() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(ConfigIdTestConfiguration2.class);
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(ConfigIdTestConfiguration2.class);
 		final ConfigIdTestConfiguration2 parentConfig = getConfigService().load(
 				ConfigIdTestConfiguration2.class,
 				factory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create());
@@ -101,7 +101,7 @@ public class ConfigIdPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testChildOverwritesItemRemovedStrategyAdd() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(ConfigIdTestConfiguration3.class);
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(ConfigIdTestConfiguration3.class);
 		final ConfigIdTestConfiguration3 parentConfig = getConfigService().load(
 				ConfigIdTestConfiguration3.class,
 				factory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create());
@@ -124,7 +124,7 @@ public class ConfigIdPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testChildOverwritesItemAddedStrategyRemove() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(ConfigIdTestConfiguration4.class);
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(ConfigIdTestConfiguration4.class);
 		final ConfigIdTestConfiguration4 parentConfig = getConfigService().load(
 				ConfigIdTestConfiguration4.class,
 				factory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create());

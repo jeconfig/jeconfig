@@ -35,7 +35,7 @@ import junit.framework.Assert;
 
 import org.jeconfig.client.AbstractConfigServiceTest;
 import org.jeconfig.client.testconfigs.ComplexSubtype;
-import org.jeconfig.client.testconfigs.IMyInterface;
+import org.jeconfig.client.testconfigs.MyInterface;
 import org.jeconfig.client.testconfigs.LargeTestConfiguration;
 import org.jeconfig.client.testconfigs.SubClass1;
 import org.jeconfig.client.testconfigs.SubClass2;
@@ -66,7 +66,7 @@ public class ConfigComplexPropertyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testComplexTypeInArray() {
 		final ComplexTypeInArrayConfiguration config = getConfigService().load(ComplexTypeInArrayConfiguration.class);
-		final IMyInterface[] array = {SubClass1.create(getConfigService(), "fsdf", 6, "1"), SubClass2.create( //$NON-NLS-1$ //$NON-NLS-2$
+		final MyInterface[] array = {SubClass1.create(getConfigService(), "fsdf", 6, "1"), SubClass2.create( //$NON-NLS-1$ //$NON-NLS-2$
 				getConfigService(),
 				"sdf", //$NON-NLS-1$
 				0,
@@ -86,7 +86,7 @@ public class ConfigComplexPropertyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testComplexTypeInMapAsValue() {
 		final ComplexTypeInMapAsValueConfig config = getConfigService().load(ComplexTypeInMapAsValueConfig.class);
-		final Map<String, IMyInterface> map = getConfigService().createMap();
+		final Map<String, MyInterface> map = getConfigService().createMap();
 		map.put("sdfsdf", SubClass2.create(getConfigService(), "xsc", 1, "1")); //$NON-NLS-1$//$NON-NLS-2$ //$NON-NLS-3$
 		config.setMap(map);
 		getConfigService().save(config);
@@ -98,7 +98,7 @@ public class ConfigComplexPropertyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testComplexTypeInSet() {
 		final ComplexTypeInSetConfiguration config = getConfigService().load(ComplexTypeInSetConfiguration.class);
-		final Set<IMyInterface> set = getConfigService().createSet();
+		final Set<MyInterface> set = getConfigService().createSet();
 		set.add(SubClass1.create(getConfigService(), "sdfsdf", 9, "1")); //$NON-NLS-1$ //$NON-NLS-2$#
 		config.setSet(set);
 		getConfigService().save(config);
@@ -110,7 +110,7 @@ public class ConfigComplexPropertyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testComplexTypeInList() {
 		final ComplexTypeInListConfig config = getConfigService().load(ComplexTypeInListConfig.class);
-		final List<IMyInterface> list = getConfigService().createList();
+		final List<MyInterface> list = getConfigService().createList();
 		list.add(SubClass1.create(getConfigService(), "sdfsdf", 99, "1")); //$NON-NLS-1$ //$NON-NLS-2$
 		config.setList(list);
 		getConfigService().save(config);
@@ -144,7 +144,7 @@ public class ConfigComplexPropertyTest extends AbstractConfigServiceTest {
 		final Set<ComplexSubtype> set2 = getConfigService().createSet();
 		set2.add(ComplexSubtype.create(getConfigService(), "12", "sdfcvbbb")); //$NON-NLS-1$//$NON-NLS-2$
 		config.setF(set2);
-		final Set<IMyInterface> set3 = getConfigService().createSet();
+		final Set<MyInterface> set3 = getConfigService().createSet();
 		set3.add(SubClass1.create(getConfigService(), "sdfsdf", 12, "2")); //$NON-NLS-1$//$NON-NLS-2$
 		config.setG(set3);
 		final List<Integer> list = getConfigService().createList();
@@ -153,7 +153,7 @@ public class ConfigComplexPropertyTest extends AbstractConfigServiceTest {
 		final List<ComplexSubtype> list2 = getConfigService().createList();
 		list2.add(ComplexSubtype.create(getConfigService(), "12", "sdfsdf")); //$NON-NLS-1$//$NON-NLS-2$
 		config.setI(list2);
-		final List<IMyInterface> list3 = getConfigService().createList();
+		final List<MyInterface> list3 = getConfigService().createList();
 		list3.add(SubClass2.create(getConfigService(), "sdf", 12)); //$NON-NLS-1$
 		config.setJ(list3);
 
@@ -166,7 +166,7 @@ public class ConfigComplexPropertyTest extends AbstractConfigServiceTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testComplexTypeMapMissingValueType() {
 		final ComplexTypeMapMissingValueTypeConfig config = getConfigService().load(ComplexTypeMapMissingValueTypeConfig.class);
-		final Map<String, IMyInterface> map = getConfigService().createMap();
+		final Map<String, MyInterface> map = getConfigService().createMap();
 		map.put("sdf", SubClass2.create(getConfigService(), "aaaa", 0)); //$NON-NLS-1$//$NON-NLS-2$
 		config.setMap(map);
 		getConfigService().save(config);

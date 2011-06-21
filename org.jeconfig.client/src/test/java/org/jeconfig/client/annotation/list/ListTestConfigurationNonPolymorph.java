@@ -33,19 +33,19 @@ import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.annotation.ConfigListProperty;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
 import org.jeconfig.api.scope.UserScopeDescriptor;
-import org.jeconfig.client.testconfigs.IMyInferfaceForNonPolymorphTest;
+import org.jeconfig.client.testconfigs.MyInferfaceForNonPolymorphTest;
 
 @ConfigClass(scopePath = {GlobalScopeDescriptor.NAME, UserScopeDescriptor.NAME})
 public class ListTestConfigurationNonPolymorph {
 
-	private List<IMyInferfaceForNonPolymorphTest> implClass2;
+	private List<MyInferfaceForNonPolymorphTest> implClass2;
 
-	@ConfigListProperty(itemType = IMyInferfaceForNonPolymorphTest.class)
-	public List<IMyInferfaceForNonPolymorphTest> getImplClass2() {
+	@ConfigListProperty(itemType = MyInferfaceForNonPolymorphTest.class)
+	public List<MyInferfaceForNonPolymorphTest> getImplClass2() {
 		return implClass2;
 	}
 
-	public void setImplClass2(final List<IMyInferfaceForNonPolymorphTest> implClass2) {
+	public void setImplClass2(final List<MyInferfaceForNonPolymorphTest> implClass2) {
 		this.implClass2 = implClass2;
 	}
 

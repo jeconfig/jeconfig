@@ -37,13 +37,13 @@ import junit.framework.Assert;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.exception.StaleConfigException;
 import org.jeconfig.api.exception.StoreConfigException;
-import org.jeconfig.api.persister.IScopePathGenerator;
+import org.jeconfig.api.persister.ScopePathGenerator;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
 import org.jeconfig.api.scope.DefaultScopeDescriptor;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.jeconfig.server.marshalling.XStreamXmlMarshaller;
 import org.jeconfig.server.persister.DefaultScopePathGenerator;
@@ -60,7 +60,7 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 	// CHECKSTYLE:ON
 
 	private String rootDirectory;
-	private IScopePathGenerator gen;
+	private ScopePathGenerator gen;
 	private final XStreamXmlMarshaller serializer = new XStreamXmlMarshaller();
 	private FileConfigPersister persister;
 	private String fileExtension;
@@ -76,7 +76,7 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 
 	@Test
 	public void testSaveConfiguration() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
 		final ComplexConfigDTO configuration = createTestConfigDTO(factory.annotatedPath().create());
 		persister.saveConfiguration(configuration);
 		final File file = new File(rootDirectory + File.separator + "default" //$NON-NLS-1$
@@ -95,7 +95,7 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 
 	@Test(expected = StaleConfigException.class)
 	public void testSaveConfigurationAlreadyExists() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
 		final ComplexConfigDTO configuration = createTestConfigDTO(factory.annotatedPath().create());
 		persister.saveConfiguration(configuration);
 		persister.saveConfiguration(configuration);
@@ -103,7 +103,7 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 
 	@Test(expected = StoreConfigException.class)
 	public void testSaveConfigurationWithIllegalVersion() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
 		final ComplexConfigDTO configuration = new ComplexConfigDTO();
 		configuration.setPolymorph(false);
 		configuration.setDefiningScopePath(factory.annotatedPath().create());
@@ -114,8 +114,8 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 
 	@Test
 	public void testLoadConfiguration() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
-		final IScopePath path = factory.annotatedPath().create();
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePath path = factory.annotatedPath().create();
 		final ComplexConfigDTO configuration = createTestConfigDTO(path);
 		persister.saveConfiguration(configuration);
 		final ComplexConfigDTO result = persister.loadConfiguration(path);
@@ -125,8 +125,8 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 
 	@Test
 	public void testUpdateConfiguration() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
-		final IScopePath path = factory.annotatedPath().create();
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePath path = factory.annotatedPath().create();
 		final ComplexConfigDTO configuration = createTestConfigDTO(path);
 
 		persister.saveConfiguration(configuration);
@@ -142,14 +142,14 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 
 	@Test(expected = StaleConfigException.class)
 	public void testUpdateConfigurationDoesntExists() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
 		final ComplexConfigDTO configuration = createTestConfigDTO(factory.annotatedPath().create());
 		persister.updateConfiguration(configuration);
 	}
 
 	@Test(expected = StaleConfigException.class)
 	public void testUpdateConfigurationWithOlderVersion() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
 		final ComplexConfigDTO configuration = new ComplexConfigDTO();
 		configuration.setPolymorph(false);
 		configuration.setDefiningScopePath(factory.annotatedPath().create());
@@ -165,8 +165,8 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 
 	@Test
 	public void testDeleteConfigurationDeleteChildrenFalse() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
-		final IScopePath path = factory.annotatedPath().create();
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePath path = factory.annotatedPath().create();
 		final ComplexConfigDTO configuration = createTestConfigDTO(path);
 		persister.saveConfiguration(configuration);
 		persister.delete(path, false);
@@ -182,10 +182,10 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 
 	@Test
 	public void testDeleteConfigurationDeleteChildrenTrue() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
-		final IScopePath parentPath = factory.annotatedPath().create();
-		final IScopePath childPath = factory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
-		final IScopePath child2Path = factory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePath parentPath = factory.annotatedPath().create();
+		final ScopePath childPath = factory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePath child2Path = factory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
 		final ComplexConfigDTO parentConfig = createTestConfigDTO(parentPath);
 		final ComplexConfigDTO childConfig = createTestConfigDTO(childPath);
 		final ComplexConfigDTO child2Config = createTestConfigDTO(child2Path);
@@ -211,10 +211,10 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 
 	@Test
 	public void testDeleteAllOccurences() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
-		final IScopePath parentPath = factory.annotatedPath().create();
-		final IScopePath childPath = factory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
-		final IScopePath child2Path = factory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePath parentPath = factory.annotatedPath().create();
+		final ScopePath childPath = factory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePath child2Path = factory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
 		final ComplexConfigDTO parentConfig = createTestConfigDTO(parentPath);
 		final ComplexConfigDTO childConfig = createTestConfigDTO(childPath);
 		final ComplexConfigDTO child2Config = createTestConfigDTO(child2Path);
@@ -235,14 +235,14 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 
 	@Test
 	public void testListScopesLastScopeWithProperty() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
 		persister.saveConfiguration(createTestConfigDTO(factory.annotatedPath().create()));
 		persister.saveConfiguration(createTestConfigDTO(factory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create()));
 		persister.saveConfiguration(createTestConfigDTO(factory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create()));
 
-		final Collection<IScopePath> scopePaths = persister.listScopes(UserScopeDescriptor.NAME, getUserScopeProperties());
+		final Collection<ScopePath> scopePaths = persister.listScopes(UserScopeDescriptor.NAME, getUserScopeProperties());
 
-		for (final IScopePath scopePath : scopePaths) {
+		for (final ScopePath scopePath : scopePaths) {
 			final Map<String, String> properties = new HashMap<String, String>();
 			properties.put("className", TestConfiguration.class.getName()); //$NON-NLS-1$
 			Assert.assertTrue((scopePath.findScopeByName(ClassScopeDescriptor.NAME) != null)
@@ -257,16 +257,16 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 
 	@Test
 	public void testListScopesLastScopeWithoutProperty() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
 
 		final ComplexConfigDTO configuration = createTestConfigDTO(factory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create());
 		final ComplexConfigDTO configuration2 = createTestConfigDTO(factory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create());
 		persister.saveConfiguration(configuration);
 		persister.saveConfiguration(configuration2);
 
-		final Collection<IScopePath> scopePaths = persister.listScopes(DefaultScopeDescriptor.NAME, new HashMap<String, String>());
+		final Collection<ScopePath> scopePaths = persister.listScopes(DefaultScopeDescriptor.NAME, new HashMap<String, String>());
 
-		for (final IScopePath scopePath : scopePaths) {
+		for (final ScopePath scopePath : scopePaths) {
 			final Map<String, String> properties = new HashMap<String, String>();
 			properties.put("className", TestConfiguration.class.getName()); //$NON-NLS-1$
 			Assert.assertTrue((scopePath.findScopeByName(ClassScopeDescriptor.NAME) != null)
@@ -278,13 +278,13 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 
 	@Test
 	public void testListScopesScopeWithManyProperties() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				TestConfigurationScopeWithManyProperties.class);
 		final ComplexConfigDTO configuration = createTestConfigDTO(factory.annotatedPath().create());
 		persister.saveConfiguration(configuration);
 
-		final Collection<IScopePath> scopePaths = persister.listScopes("test", getTestScopeProperties()); //$NON-NLS-1$
-		for (final IScopePath scopePath : scopePaths) {
+		final Collection<ScopePath> scopePaths = persister.listScopes("test", getTestScopeProperties()); //$NON-NLS-1$
+		for (final ScopePath scopePath : scopePaths) {
 			final Map<String, String> properties = new HashMap<String, String>();
 			properties.put("className", TestConfigurationScopeWithManyProperties.class.getName()); //$NON-NLS-1$
 			Assert.assertTrue((scopePath.findScopeByName(ClassScopeDescriptor.NAME) != null)
@@ -298,7 +298,7 @@ public class FileConfigPersisterTest extends AbstractConfigPersisterTest {
 		}
 	}
 
-	private ComplexConfigDTO createTestConfigDTO(final IScopePath path) {
+	private ComplexConfigDTO createTestConfigDTO(final ScopePath path) {
 		final ComplexConfigDTO configuration = new ComplexConfigDTO();
 		configuration.setPolymorph(false);
 		configuration.setDefiningScopePath(path);

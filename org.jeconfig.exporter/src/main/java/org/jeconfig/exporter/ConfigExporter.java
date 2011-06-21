@@ -31,10 +31,10 @@ import java.util.Collection;
 import java.util.Iterator;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.persister.IConfigPersister;
+import org.jeconfig.api.persister.ConfigPersister;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
-import org.jeconfig.api.scope.IScope;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.Scope;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.api.util.Assert;
 import org.jeconfig.exporter.internal.ExportScopeDescriptor;
 import org.jeconfig.exporter.internal.ExportScopePathGenerator;
@@ -43,9 +43,9 @@ import org.jeconfig.exporter.internal.ExportScopePathGenerator;
  * Exports/Imports configurations for certain scopes
  */
 public final class ConfigExporter {
-	private final IConfigPersister configPersister;
+	private final ConfigPersister configPersister;
 
-	public ConfigExporter(final IConfigPersister configPersister) {
+	public ConfigExporter(final ConfigPersister configPersister) {
 		Assert.paramNotNull(configPersister, "configPersister"); //$NON-NLS-1$
 		this.configPersister = configPersister;
 	}
@@ -53,12 +53,12 @@ public final class ConfigExporter {
 	/**
 	 * exports a collection of scopePathes
 	 * 
-	 * @param scopePathes the collection of IScopePath to export
+	 * @param scopePathes the collection of ScopePath to export
 	 */
-	public void exportConfig(final Collection<IScopePath> scopePathes) {
-		for (final Iterator<IScopePath> i = scopePathes.iterator(); i.hasNext();) {
-			final IScopePath tmpScopePath = i.next();
-			final IScope classScope = tmpScopePath.findScopeByName(ClassScopeDescriptor.NAME);
+	public void exportConfig(final Collection<ScopePath> scopePathes) {
+		for (final Iterator<ScopePath> i = scopePathes.iterator(); i.hasNext();) {
+			final ScopePath tmpScopePath = i.next();
+			final Scope classScope = tmpScopePath.findScopeByName(ClassScopeDescriptor.NAME);
 			if (classScope != null) {
 				try {
 					final Class<?> configClass = Class.forName(classScope.getProperty(ClassScopeDescriptor.PROP_CLASS_NAME));
@@ -79,7 +79,7 @@ public final class ConfigExporter {
 	 * @param <T> the type of the configuration to export
 	 * 
 	 */
-	public <T> void exportConfig(final Class<T> configClass, final IScopePath scopePath) {
+	public <T> void exportConfig(final Class<T> configClass, final ScopePath scopePath) {
 		exportConfig(configClass, scopePath, true);
 	}
 
@@ -91,15 +91,15 @@ public final class ConfigExporter {
 	 * @param scopePath scope the scope describing the export source
 	 * @param overwrites delete existing configuration before export
 	 */
-	public <T> void exportConfig(final Class<T> configClass, final IScopePath scopePath, final boolean overwrites) {
+	public <T> void exportConfig(final Class<T> configClass, final ScopePath scopePath, final boolean overwrites) {
 		Assert.paramNotNull(configClass, "configClass"); //$NON-NLS-1$
 		Assert.paramNotNull(scopePath, "scope"); //$NON-NLS-1$
 		if (!(scopePath.findScopeByName(ExportScopeDescriptor.NAME) == null)) {
 			throw new IllegalArgumentException(
 				"Can't export configClass with scopePath containing 'export'. Remove ExportScope from scopePath."); //$NON-NLS-1$
 		}
-		IScopePath targetScope = new ExportScopePathGenerator().buildExportScopePath(scopePath, configClass);
-		IScopePath sourceScope = scopePath;
+		ScopePath targetScope = new ExportScopePathGenerator().buildExportScopePath(scopePath, configClass);
+		ScopePath sourceScope = scopePath;
 		while (targetScope.getLastScope().getName() != ExportScopeDescriptor.NAME) {
 			final ComplexConfigDTO sourceConfig = configPersister.loadConfiguration(sourceScope);
 			if (overwrites) {
@@ -122,7 +122,7 @@ public final class ConfigExporter {
 	 * @param configClass the type of the configuration to import
 	 * @param scopePath the scope describing the import destination
 	 */
-	public <T> void importConfig(final Class<T> configClass, final IScopePath scopePath) {
+	public <T> void importConfig(final Class<T> configClass, final ScopePath scopePath) {
 		importConfig(configClass, scopePath, true);
 	}
 
@@ -134,15 +134,15 @@ public final class ConfigExporter {
 	 * @param scopePath the scope describing the import destination
 	 * @param overwrites delete existing configuration before import
 	 */
-	public <T> void importConfig(final Class<T> configClass, final IScopePath scopePath, final boolean overwrites) {
+	public <T> void importConfig(final Class<T> configClass, final ScopePath scopePath, final boolean overwrites) {
 		Assert.paramNotNull(configClass, "configClass"); //$NON-NLS-1$
 		Assert.paramNotNull(scopePath, "scope"); //$NON-NLS-1$
 		if (!(scopePath.findScopeByName(ExportScopeDescriptor.NAME) == null)) {
 			throw new IllegalArgumentException(
 				"Can't import configClass with scopePath containing 'export'. Remove ExportScope from scopePath."); //$NON-NLS-1$
 		}
-		IScopePath sourceScope = new ExportScopePathGenerator().buildExportScopePath(scopePath, configClass);
-		IScopePath targetScope = scopePath;
+		ScopePath sourceScope = new ExportScopePathGenerator().buildExportScopePath(scopePath, configClass);
+		ScopePath targetScope = scopePath;
 		while (sourceScope.getLastScope().getName() != ExportScopeDescriptor.NAME) {
 			final ComplexConfigDTO sourceConfig = configPersister.loadConfiguration(sourceScope);
 			if (overwrites) {

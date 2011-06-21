@@ -31,13 +31,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.jeconfig.api.scope.IScope;
+import org.jeconfig.api.scope.Scope;
 import org.jeconfig.api.util.Assert;
 
 /**
  * internal API do not use!!
  */
-public final class ScopeImpl implements IScope {
+public final class ScopeImpl implements Scope {
 	private static final long serialVersionUID = 1L;
 
 	private final String scopeName;

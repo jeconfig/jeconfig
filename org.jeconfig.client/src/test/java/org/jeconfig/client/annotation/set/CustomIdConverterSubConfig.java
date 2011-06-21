@@ -27,7 +27,7 @@
 
 package org.jeconfig.client.annotation.set;
 
-import org.jeconfig.api.IConfigService;
+import org.jeconfig.api.ConfigService;
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.annotation.ConfigIdProperty;
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
@@ -64,7 +64,7 @@ public class CustomIdConverterSubConfig {
 		this.value = value;
 	}
 
-	public static CustomIdConverterSubConfig create(final IConfigService cs, final String id, final String value) {
+	public static CustomIdConverterSubConfig create(final ConfigService cs, final String id, final String value) {
 		final CustomIdConverterSubConfig cfg = cs.createComplexObject(CustomIdConverterSubConfig.class);
 		cfg.setId(id);
 		cfg.setValue(value);

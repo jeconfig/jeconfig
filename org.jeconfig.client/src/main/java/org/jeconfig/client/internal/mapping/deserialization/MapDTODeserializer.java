@@ -37,13 +37,13 @@ import java.util.Map.Entry;
 
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.annotation.ConfigMapProperty;
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigMapDTO;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
-import org.jeconfig.api.dto.IConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.dto.ConfigDTO;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.client.proxy.ConfigMapDecorator;
 import org.jeconfig.client.proxy.ProxyUpdater;
@@ -51,13 +51,13 @@ import org.jeconfig.common.reflection.PropertyAccessor;
 
 public class MapDTODeserializer extends AbstractDTODeserializer {
 	private final PropertyAccessor propertyAccessor = new PropertyAccessor();
-	private final ISimpleTypeConverterRegistry simpleTypeConverterRegistry;
+	private final SimpleTypeConverterRegistry simpleTypeConverterRegistry;
 	private final SimpleDTODeserializer simpleDTODeserializer;
 	private final ComplexDTODeserializer complexDTODeserializer;
 	private final ProxyUpdater proxyUpdater;
 
 	public MapDTODeserializer(
-		final ISimpleTypeConverterRegistry simpleTypeConverterRegistry,
+		final SimpleTypeConverterRegistry simpleTypeConverterRegistry,
 		final SimpleDTODeserializer simpleDTODeserializer,
 		final ComplexDTODeserializer complexDTODeserializer,
 		final ProxyUpdater proxyUpdater) {
@@ -72,13 +72,13 @@ public class MapDTODeserializer extends AbstractDTODeserializer {
 		final ComplexConfigDTO configDTO,
 		final Object config,
 		final List<ComplexConfigDTO> dtos,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final PropertyDescriptor propDesc,
 		final Annotation annotation,
 		final String propName) {
 		final ConfigMapProperty mapAnno = (ConfigMapProperty) annotation;
-		final ISimpleTypeConverter<?> customValueConverter = createCustomConverter(mapAnno.customValueConverter());
-		final ISimpleTypeConverter<?> customKeyConverter = createCustomConverter(mapAnno.customKeyConverter());
+		final SimpleTypeConverter<?> customValueConverter = createCustomConverter(mapAnno.customValueConverter());
+		final SimpleTypeConverter<?> customKeyConverter = createCustomConverter(mapAnno.customKeyConverter());
 		final boolean polymorph = mapAnno.polymorph();
 		final boolean complex = AnnotationUtil.getAnnotation(mapAnno.valueType(), ConfigComplexType.class) != null;
 		final ConfigMapDTO mapDTO = configDTO.getMapProperty(propName);
@@ -93,7 +93,7 @@ public class MapDTODeserializer extends AbstractDTODeserializer {
 				getMapPropertyDtos(dtos, propName),
 				scopePath,
 				customValueConverter,
-				(ISimpleTypeConverter<Object>) customKeyConverter);
+				(SimpleTypeConverter<Object>) customKeyConverter);
 		propertyAccessor.write(config, propName, mapToSet);
 	}
 
@@ -119,9 +119,9 @@ public class MapDTODeserializer extends AbstractDTODeserializer {
 		final boolean complex,
 		final ConfigMapDTO mapDTO,
 		final List<ConfigMapDTO> dtos,
-		final IScopePath scopePath,
-		final ISimpleTypeConverter<?> customConverter,
-		final ISimpleTypeConverter<Object> customKeyConverter) {
+		final ScopePath scopePath,
+		final SimpleTypeConverter<?> customConverter,
+		final SimpleTypeConverter<Object> customKeyConverter) {
 		final ConfigMapDecorator<Object, Object> mapToSet = getMapToSet(config, propDesc, mapDTO);
 
 		if (mapToSet != null) {
@@ -130,7 +130,7 @@ public class MapDTODeserializer extends AbstractDTODeserializer {
 				public void run() {
 					mapToSet.setConfigDTOs(dtos);
 					mapToSet.clear();
-					for (final Entry<String, IConfigDTO> entry : mapDTO.getMap().entrySet()) {
+					for (final Entry<String, ConfigDTO> entry : mapDTO.getMap().entrySet()) {
 						final String keyString = entry.getKey();
 						Object key = null;
 						if (keyString != null) {

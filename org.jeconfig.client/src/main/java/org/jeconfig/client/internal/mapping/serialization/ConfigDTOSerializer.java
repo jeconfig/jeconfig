@@ -28,19 +28,19 @@
 package org.jeconfig.client.internal.mapping.serialization;
 
 import org.jeconfig.api.annotation.ConfigClass;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.client.internal.AnnotationUtil;
 
 public final class ConfigDTOSerializer {
 	private final ComplexDTOSerializer complexDTOSerializer;
 
-	public ConfigDTOSerializer(final ISimpleTypeConverterRegistry simpleTypeConverterRegistry) {
+	public ConfigDTOSerializer(final SimpleTypeConverterRegistry simpleTypeConverterRegistry) {
 		complexDTOSerializer = new ComplexDTOSerializer(simpleTypeConverterRegistry);
 	}
 
-	public ComplexConfigDTO createConfigDTO(final Object config, final IScopePath scopePath) {
+	public ComplexConfigDTO createConfigDTO(final Object config, final ScopePath scopePath) {
 
 		final long classVersion = AnnotationUtil.getAnnotation(config.getClass(), ConfigClass.class).classVersion();
 		final ComplexConfigDTO result = complexDTOSerializer.createConfigDTO(config, scopePath);

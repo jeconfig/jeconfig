@@ -30,10 +30,10 @@ package org.jeconfig.api.exception;
 /**
  * Notifier which is used at the @ConfigClass annotation to indicate that no staleness notifier is configured.
  */
-public class NoStalenessNotifier implements IStalenessNotifier {
+public class NoStalenessNotifier implements StalenessNotifier {
 
 	@Override
-	public void loadedStaleConfig(final IStalePropertiesMergingResult mergingResult) {
+	public void loadedStaleConfig(final StalePropertiesMergingResult mergingResult) {
 		throw new UnsupportedOperationException("NoStalenessNotifier cannot be used for real coolness"); //$NON-NLS-1$
 	}
 }

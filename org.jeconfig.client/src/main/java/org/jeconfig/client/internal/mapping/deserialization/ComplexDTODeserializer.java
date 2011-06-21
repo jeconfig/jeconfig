@@ -40,18 +40,18 @@ import org.jeconfig.api.annotation.ConfigListProperty;
 import org.jeconfig.api.annotation.ConfigMapProperty;
 import org.jeconfig.api.annotation.ConfigSetProperty;
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.client.proxy.IConfigObjectFactory;
-import org.jeconfig.client.proxy.IConfigProxy;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.client.proxy.ConfigObjectFactory;
+import org.jeconfig.client.proxy.ConfigProxy;
 import org.jeconfig.client.proxy.ProxyUpdater;
 import org.jeconfig.client.proxy.ProxyUtil;
 import org.jeconfig.common.reflection.PropertyAccessor;
 
 public class ComplexDTODeserializer extends AbstractDTODeserializer {
 	private final PropertyAccessor propertyAccessor = new PropertyAccessor();
-	private final IConfigObjectFactory proxyFactory;
+	private final ConfigObjectFactory proxyFactory;
 	private final SimpleDTODeserializer simpleDTODeserializer;
 	private final ArrayDTODeserializer arrayDTODeserializer;
 	private final ListDTODeserializer listDTODeserializer;
@@ -59,8 +59,8 @@ public class ComplexDTODeserializer extends AbstractDTODeserializer {
 	private final MapDTODeserializer mapDTODeserializer;
 
 	public ComplexDTODeserializer(
-		final IConfigObjectFactory proxyFactory,
-		final ISimpleTypeConverterRegistry converterRegistry,
+		final ConfigObjectFactory proxyFactory,
+		final SimpleTypeConverterRegistry converterRegistry,
 		final ProxyUpdater proxyUpdater) {
 		this.proxyFactory = proxyFactory;
 		simpleDTODeserializer = new SimpleDTODeserializer(converterRegistry);
@@ -76,9 +76,9 @@ public class ComplexDTODeserializer extends AbstractDTODeserializer {
 		final ComplexConfigDTO configDTO,
 		final Object config,
 		final List<ComplexConfigDTO> dtos,
-		final IScopePath scopePath) {
+		final ScopePath scopePath) {
 
-		final IConfigProxy<ComplexConfigDTO> proxy = (IConfigProxy<ComplexConfigDTO>) config;
+		final ConfigProxy<ComplexConfigDTO> proxy = (ConfigProxy<ComplexConfigDTO>) config;
 		proxy.setInitializingWhile(new Runnable() {
 			@Override
 			public void run() {
@@ -90,9 +90,9 @@ public class ComplexDTODeserializer extends AbstractDTODeserializer {
 	private void doProcessConfig(
 		final Class<?> configClass,
 		final ComplexConfigDTO configDTO,
-		final IConfigProxy<ComplexConfigDTO> config,
+		final ConfigProxy<ComplexConfigDTO> config,
 		final List<ComplexConfigDTO> dtos,
-		final IScopePath scopePath) {
+		final ScopePath scopePath) {
 
 		final List<ComplexConfigDTO> dtosToSet = removeNullObjects(dtos);
 		config.setConfigDTOs(dtosToSet);
@@ -128,7 +128,7 @@ public class ComplexDTODeserializer extends AbstractDTODeserializer {
 	public Object createComplexConfigObject(
 		final ComplexConfigDTO complexDTO,
 		final List<ComplexConfigDTO> dtos,
-		final IScopePath scopePath) {
+		final ScopePath scopePath) {
 		final String propertyType = complexDTO.getPropertyType();
 		if (propertyType != null) {
 			final Class<?> itemType = getTypeLoader().getPolymorphType(propertyType);
@@ -144,7 +144,7 @@ public class ComplexDTODeserializer extends AbstractDTODeserializer {
 		final ComplexConfigDTO configDTO,
 		final Object config,
 		final List<ComplexConfigDTO> dtos,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final String propName) {
 		final ComplexConfigDTO complexDTO = configDTO.getComplexProperty(propName);
 
@@ -181,7 +181,7 @@ public class ComplexDTODeserializer extends AbstractDTODeserializer {
 		return result;
 	}
 
-	private Set<String> calculateDeclaredProperties(final List<ComplexConfigDTO> configDTOs, final IScopePath scopePath) {
+	private Set<String> calculateDeclaredProperties(final List<ComplexConfigDTO> configDTOs, final ScopePath scopePath) {
 		final ComplexConfigDTO dto = (configDTOs != null && !configDTOs.isEmpty()) ? configDTOs.get(configDTOs.size() - 1) : null;
 		if (dto != null && dto.getDefiningScopePath().equals(scopePath)) {
 			return dto.getDeclaredProperties();

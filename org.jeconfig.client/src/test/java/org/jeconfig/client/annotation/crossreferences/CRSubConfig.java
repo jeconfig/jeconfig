@@ -27,7 +27,7 @@
 
 package org.jeconfig.client.annotation.crossreferences;
 
-import org.jeconfig.api.IConfigService;
+import org.jeconfig.api.ConfigService;
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.annotation.ConfigCrossReference;
 import org.jeconfig.api.annotation.ConfigIdProperty;
@@ -62,7 +62,7 @@ public class CRSubConfig {
 		this.id = id;
 	}
 
-	public static CRSubConfig create(final IConfigService cs, final String id) {
+	public static CRSubConfig create(final ConfigService cs, final String id) {
 		final CRSubConfig cfg = cs.createComplexObject(CRSubConfig.class);
 		cfg.setId(id);
 		return cfg;

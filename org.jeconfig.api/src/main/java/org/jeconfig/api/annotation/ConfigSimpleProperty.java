@@ -32,10 +32,10 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.jeconfig.api.annotation.merging.ISimpleValueMergingStrategy;
+import org.jeconfig.api.annotation.merging.SimpleValueMergingStrategy;
 import org.jeconfig.api.annotation.merging.MergingStrategies;
 import org.jeconfig.api.annotation.merging.StalenessSolutionStrategy;
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
 import org.jeconfig.api.conversion.NoCustomSimpleTypeConverter;
 
 /**
@@ -50,12 +50,12 @@ public @interface ConfigSimpleProperty {
 	 * If no custom converter is set, a converter is searched in the global converter registry of the
 	 * configuration setup service.
 	 */
-	Class<? extends ISimpleTypeConverter<?>> customConverter() default NoCustomSimpleTypeConverter.class;
+	Class<? extends SimpleTypeConverter<?>> customConverter() default NoCustomSimpleTypeConverter.class;
 
 	/**
 	 * The strategy which is used when values of the property must be merged.
 	 */
-	Class<? extends ISimpleValueMergingStrategy<?>> mergingStrategy() default MergingStrategies.ChildOverwrites.class;
+	Class<? extends SimpleValueMergingStrategy<?>> mergingStrategy() default MergingStrategies.ChildOverwrites.class;
 
 	/**
 	 * Specifies how stale properties should be handled.

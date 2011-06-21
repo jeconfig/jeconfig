@@ -27,22 +27,22 @@
 
 package org.jeconfig.client.testconfigs;
 
-import org.jeconfig.api.exception.IStalePropertiesMergingResult;
-import org.jeconfig.api.exception.IStalenessNotifier;
+import org.jeconfig.api.exception.StalePropertiesMergingResult;
+import org.jeconfig.api.exception.StalenessNotifier;
 
-public class DummyStalenessNotifier implements IStalenessNotifier {
-	private static IStalePropertiesMergingResult mergingResult;
+public class DummyStalenessNotifier implements StalenessNotifier {
+	private static StalePropertiesMergingResult mergingResult;
 
 	@Override
-	public void loadedStaleConfig(final IStalePropertiesMergingResult mergingResult) {
+	public void loadedStaleConfig(final StalePropertiesMergingResult mergingResult) {
 		setMergingResult(mergingResult);
 	}
 
-	public static void setMergingResult(final IStalePropertiesMergingResult mergingResult) {
+	public static void setMergingResult(final StalePropertiesMergingResult mergingResult) {
 		DummyStalenessNotifier.mergingResult = mergingResult;
 	}
 
-	public static IStalePropertiesMergingResult getMergingResult() {
+	public static StalePropertiesMergingResult getMergingResult() {
 		return mergingResult;
 	}
 }

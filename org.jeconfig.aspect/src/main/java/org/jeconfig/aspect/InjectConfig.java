@@ -33,7 +33,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 import org.jeconfig.api.exception.DefaultConfigExceptionHandler;
-import org.jeconfig.api.exception.IConfigExceptionHandler;
+import org.jeconfig.api.exception.ConfigExceptionHandler;
 
 /**
  * Marks a field to determine that the configuration injection aspect has to inject a configuration into it.<br>
@@ -61,7 +61,7 @@ public @interface InjectConfig {
 	 * by the provider is automatically added to the 'instance' scope. When {@link InjectConfig#instanceName()} is set, this
 	 * property is ignored.
 	 */
-	Class<? extends IInstanceNameProvider> instanceNameProvider() default NoInstanceNameProvider.class;
+	Class<? extends InstanceNameProvider> instanceNameProvider() default NoInstanceNameProvider.class;
 
 	/**
 	 * <b>use with caution!!! no transactions are supported.</b><br>
@@ -74,5 +74,5 @@ public @interface InjectConfig {
 	 * The exception handler which is notified if errors occur during load. It is also used by the
 	 * ConfigAutoSaveService if {@link #autoSave()} is set to <code>true</code>.
 	 */
-	Class<? extends IConfigExceptionHandler> exceptionHandler() default DefaultConfigExceptionHandler.class;
+	Class<? extends ConfigExceptionHandler> exceptionHandler() default DefaultConfigExceptionHandler.class;
 }

@@ -31,17 +31,17 @@ import java.beans.PropertyDescriptor;
 import java.lang.annotation.Annotation;
 
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
 import org.jeconfig.common.reflection.PropertyAccessor;
 
 public class SimpleDTODeserializer extends AbstractDTODeserializer {
 	private final PropertyAccessor propertyAccessor = new PropertyAccessor();
-	private final ISimpleTypeConverterRegistry simpleTypeConverterRegistry;
+	private final SimpleTypeConverterRegistry simpleTypeConverterRegistry;
 
-	public SimpleDTODeserializer(final ISimpleTypeConverterRegistry simpleTypeConverterRegistry) {
+	public SimpleDTODeserializer(final SimpleTypeConverterRegistry simpleTypeConverterRegistry) {
 		this.simpleTypeConverterRegistry = simpleTypeConverterRegistry;
 	}
 
@@ -52,7 +52,7 @@ public class SimpleDTODeserializer extends AbstractDTODeserializer {
 		final Annotation annotation,
 		final String propName) {
 		final ConfigSimpleProperty anno = (ConfigSimpleProperty) annotation;
-		final ISimpleTypeConverter<?> customConverter = createCustomConverter(anno.customConverter());
+		final SimpleTypeConverter<?> customConverter = createCustomConverter(anno.customConverter());
 		final ConfigSimpleValueDTO simpleValueProperty = configDTO.getSimpleValueProperty(propName);
 		Object value = null;
 		if (simpleValueProperty != null) {
@@ -65,7 +65,7 @@ public class SimpleDTODeserializer extends AbstractDTODeserializer {
 	public Object createSimpleValue(
 		final ConfigSimpleValueDTO configDTO,
 		final Class propertyType,
-		final ISimpleTypeConverter<?> customConverter) {
+		final SimpleTypeConverter<?> customConverter) {
 		if (configDTO.getValue() != null) {
 			if (customConverter != null) {
 				return customConverter.convertToObject(propertyType, configDTO.getValue());

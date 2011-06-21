@@ -28,7 +28,7 @@
 package org.jeconfig.aspect.test;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.server.persister.InMemoryPersister;
 
 public class InjectTestConfigPersister extends InMemoryPersister {
@@ -44,7 +44,7 @@ public class InjectTestConfigPersister extends InMemoryPersister {
 	}
 
 	@Override
-	public ComplexConfigDTO loadConfiguration(final IScopePath scopePath) {
+	public ComplexConfigDTO loadConfiguration(final ScopePath scopePath) {
 		if (shouldFailLoad) {
 			throw new RuntimeException("Expected exception"); //$NON-NLS-1$
 		}

@@ -29,12 +29,12 @@ package org.jeconfig.client.internal.conversion;
 
 import java.util.Date;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 
 public final class DefaultConverterFactory {
 
-	public void createConverters(final ISimpleTypeConverterRegistry converterRegistry) {
+	public void createConverters(final SimpleTypeConverterRegistry converterRegistry) {
 		converterRegistry.addConverter(Integer.class, new IntConverter());
 		converterRegistry.addConverter(int.class, new IntConverter());
 		converterRegistry.addConverter(Long.class, new LongConverter());
@@ -54,7 +54,7 @@ public final class DefaultConverterFactory {
 		converterRegistry.addConverter(Enum.class, new EnumConverter());
 	}
 
-	private static class IntConverter implements ISimpleTypeConverter<Integer> {
+	private static class IntConverter implements SimpleTypeConverter<Integer> {
 		@Override
 		public String convertToSerializedForm(final Integer object) {
 			return object.toString();
@@ -66,7 +66,7 @@ public final class DefaultConverterFactory {
 		}
 	}
 
-	private static class LongConverter implements ISimpleTypeConverter<Long> {
+	private static class LongConverter implements SimpleTypeConverter<Long> {
 		@Override
 		public String convertToSerializedForm(final Long object) {
 			return object.toString();
@@ -78,7 +78,7 @@ public final class DefaultConverterFactory {
 		}
 	}
 
-	private static class ShortConverter implements ISimpleTypeConverter<Short> {
+	private static class ShortConverter implements SimpleTypeConverter<Short> {
 		@Override
 		public String convertToSerializedForm(final Short object) {
 			return object.toString();
@@ -90,7 +90,7 @@ public final class DefaultConverterFactory {
 		}
 	}
 
-	private static class ByteConverter implements ISimpleTypeConverter<Byte> {
+	private static class ByteConverter implements SimpleTypeConverter<Byte> {
 		@Override
 		public String convertToSerializedForm(final Byte object) {
 			return object.toString();
@@ -102,7 +102,7 @@ public final class DefaultConverterFactory {
 		}
 	}
 
-	private static class FloatConverter implements ISimpleTypeConverter<Float> {
+	private static class FloatConverter implements SimpleTypeConverter<Float> {
 		@Override
 		public String convertToSerializedForm(final Float object) {
 			return object.toString();
@@ -114,7 +114,7 @@ public final class DefaultConverterFactory {
 		}
 	}
 
-	private static class DoubleConverter implements ISimpleTypeConverter<Double> {
+	private static class DoubleConverter implements SimpleTypeConverter<Double> {
 		@Override
 		public String convertToSerializedForm(final Double object) {
 			return object.toString();
@@ -126,7 +126,7 @@ public final class DefaultConverterFactory {
 		}
 	}
 
-	private static class BooleanConverter implements ISimpleTypeConverter<Boolean> {
+	private static class BooleanConverter implements SimpleTypeConverter<Boolean> {
 		@Override
 		public String convertToSerializedForm(final Boolean object) {
 			return object.toString();
@@ -138,7 +138,7 @@ public final class DefaultConverterFactory {
 		}
 	}
 
-	private static class StringConverter implements ISimpleTypeConverter<String> {
+	private static class StringConverter implements SimpleTypeConverter<String> {
 		@Override
 		public String convertToSerializedForm(final String object) {
 			return object;
@@ -151,7 +151,7 @@ public final class DefaultConverterFactory {
 	}
 
 	@SuppressWarnings({"rawtypes", "unchecked"})
-	private static class EnumConverter implements ISimpleTypeConverter<Enum> {
+	private static class EnumConverter implements SimpleTypeConverter<Enum> {
 		@Override
 		public Enum<?> convertToObject(final Class<Enum> simpleType, final String serializedForm) {
 			return Enum.valueOf((Class) simpleType, serializedForm);
@@ -163,7 +163,7 @@ public final class DefaultConverterFactory {
 		}
 	}
 
-	private static class DateConverter implements ISimpleTypeConverter<Date> {
+	private static class DateConverter implements SimpleTypeConverter<Date> {
 		@Override
 		public Date convertToObject(final Class<Date> simpleType, final String serializedForm) {
 			return new Date(Long.parseLong(serializedForm));

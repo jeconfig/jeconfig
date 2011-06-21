@@ -29,17 +29,17 @@ package org.jeconfig.server.persister;
 
 import java.util.Collection;
 
-import org.jeconfig.api.persister.IPersisterSelector;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.persister.PersisterSelector;
+import org.jeconfig.api.scope.ScopePath;
 
 /**
  * Default persister selector implementation.<br>
  * It can be used if only one configuration persister is registered at the persistence service.
  */
-public final class DefaultPersisterSelector implements IPersisterSelector {
+public final class DefaultPersisterSelector implements PersisterSelector {
 
 	@Override
-	public String getPersisterId(final IScopePath scope, final Collection<String> configPersisterIds) {
+	public String getPersisterId(final ScopePath scope, final Collection<String> configPersisterIds) {
 		if (configPersisterIds.size() == 0) {
 			throw new IllegalStateException(
 				"DefaultPersisterSelector needs exactly one configuration persister! got: " + configPersisterIds.size()); //$NON-NLS-1$

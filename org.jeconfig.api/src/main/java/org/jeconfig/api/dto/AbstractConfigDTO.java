@@ -27,15 +27,15 @@
 
 package org.jeconfig.api.dto;
 
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 
 /**
  * Abstract base class for all configuration DTOs.
  */
-public abstract class AbstractConfigDTO implements IConfigDTO {
+public abstract class AbstractConfigDTO implements ConfigDTO {
 	private static final long serialVersionUID = 1L;
 
-	private IScopePath definingScopePath;
+	private ScopePath definingScopePath;
 	private String propertyType;
 	private String propertyName;
 	private boolean polymorph;
@@ -44,7 +44,7 @@ public abstract class AbstractConfigDTO implements IConfigDTO {
 	private long version;
 
 	@Override
-	public void setDefiningScopePath(final IScopePath definingScopePath) {
+	public void setDefiningScopePath(final ScopePath definingScopePath) {
 		this.definingScopePath = definingScopePath;
 	}
 
@@ -109,7 +109,7 @@ public abstract class AbstractConfigDTO implements IConfigDTO {
 	}
 
 	@Override
-	public IScopePath getDefiningScopePath() {
+	public ScopePath getDefiningScopePath() {
 		return definingScopePath;
 	}
 

@@ -34,8 +34,8 @@ import junit.framework.Assert;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
-import org.jeconfig.api.persister.IConfigPersister;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.persister.ConfigPersister;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.client.AbstractConfigServiceTest;
 import org.junit.Test;
 
@@ -43,8 +43,8 @@ public class SimpleTypeConverterTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testOverwriteofDateTypeConverter() {
-		final IConfigPersister persister = getPersister();
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ConfigPersister persister = getPersister();
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				OverwriteDateTypeConverterTestConfiguration.class);
 		final OverwriteDateTypeConverterTestConfiguration config = getConfigService().load(
 				OverwriteDateTypeConverterTestConfiguration.class);
@@ -69,9 +69,9 @@ public class SimpleTypeConverterTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testConvertNewSimpleType() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				NewSimpleTypeTestConfiguration.class);
-		final IConfigPersister persister = getPersister();
+		final ConfigPersister persister = getPersister();
 		final NewSimpleTypeConverter converter = new NewSimpleTypeConverter();
 		getConfigSetupService().getSimpleTypeConverterRegistry().addConverter(NewSimpleType.class, converter);
 		final NewSimpleTypeTestConfiguration config = getConfigService().load(NewSimpleTypeTestConfiguration.class);

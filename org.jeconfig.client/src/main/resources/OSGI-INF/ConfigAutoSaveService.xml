@@ -2,7 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" deactivate="close" name="org.jeconfig.ConfigAutoSaveService">
    <implementation class="org.jeconfig.client.internal.autosave.ConfigAutoSaveServiceImpl"/>
    <service>
-      <provide interface="org.jeconfig.api.autosave.IConfigAutoSaveService"/>
+      <provide interface="org.jeconfig.api.autosave.ConfigAutoSaveService"/>
    </service>
-   <reference bind="bindConfigService" cardinality="1..1" interface="org.jeconfig.api.IConfigService" name="IConfigService" policy="dynamic" unbind="unbindConfigService"/>
+   <reference bind="bindConfigService" cardinality="1..1" interface="org.jeconfig.api.ConfigService" name="IConfigService" policy="dynamic" unbind="unbindConfigService"/>
 </scr:component>

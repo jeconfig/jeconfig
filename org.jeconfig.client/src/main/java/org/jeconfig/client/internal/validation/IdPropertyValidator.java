@@ -34,10 +34,10 @@ import java.util.Set;
 
 import org.jeconfig.api.annotation.ConfigIdProperty;
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 
 @SuppressWarnings("nls")
-public final class IdPropertyValidator implements IPropertyValidator<ConfigIdProperty> {
+public final class IdPropertyValidator implements PropertyValidator<ConfigIdProperty> {
 	@Override
 	public Set<Class<? extends Annotation>> getCompatibleAnnotations() {
 		return null;
@@ -49,8 +49,8 @@ public final class IdPropertyValidator implements IPropertyValidator<ConfigIdPro
 		final PropertyDescriptor propertyDescriptor,
 		final ConfigIdProperty annotation,
 		final Set<Annotation> otherAnnotations,
-		final ISimpleTypeConverterRegistry converterRegistry,
-		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
+		final SimpleTypeConverterRegistry converterRegistry,
+		final Map<Class<? extends Annotation>, PropertyValidator<Annotation>> validators,
 		final ComplexTypeValidator complexTypeValidator,
 		final Set<Class<?>> validatedComplexTypes) {
 

@@ -35,25 +35,25 @@ import java.util.Map.Entry;
 
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.annotation.ConfigMapProperty;
-import org.jeconfig.api.annotation.merging.ISimpleValueMergingStrategy;
+import org.jeconfig.api.annotation.merging.SimpleValueMergingStrategy;
 import org.jeconfig.api.annotation.merging.ItemExistenceStrategy;
 import org.jeconfig.api.annotation.merging.ItemMergingStrategy;
 import org.jeconfig.api.annotation.merging.PropertyMergingParameter;
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.conversion.NoCustomSimpleTypeConverter;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigMapDTO;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
-import org.jeconfig.api.dto.IConfigDTO;
+import org.jeconfig.api.dto.ConfigDTO;
 import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.common.reflection.ClassInstantiation;
 
 public final class MapPropertyMerger extends AbstractPropertyMerger {
 	private final ClassInstantiation classInstantiation = new ClassInstantiation();
-	private final ISimpleTypeConverterRegistry converterRegistry;
+	private final SimpleTypeConverterRegistry converterRegistry;
 
-	public MapPropertyMerger(final ISimpleTypeConverterRegistry converterRegistry) {
+	public MapPropertyMerger(final SimpleTypeConverterRegistry converterRegistry) {
 		this.converterRegistry = converterRegistry;
 	}
 
@@ -68,7 +68,7 @@ public final class MapPropertyMerger extends AbstractPropertyMerger {
 		final ComplexConfigDTO parentConfigDTO,
 		final ComplexConfigDTO childConfigDTO,
 		final PropertyDescriptor propertyDescriptor,
-		final Map<Class<? extends Annotation>, IPropertyMerger> mergers,
+		final Map<Class<? extends Annotation>, PropertyMerger> mergers,
 		final ComplexTypeMerger complexTypeMerger,
 		final StalePropertiesMergingResultImpl mergingResult) {
 
@@ -100,11 +100,11 @@ public final class MapPropertyMerger extends AbstractPropertyMerger {
 			}
 
 			if (resultMapDTO == null) {
-				final Map<String, IConfigDTO> parentMap = parentMapDTO.getMap();
-				final Map<String, IConfigDTO> childMap = childMapDTO.getMap();
-				Map<String, IConfigDTO> resultMap = null;
+				final Map<String, ConfigDTO> parentMap = parentMapDTO.getMap();
+				final Map<String, ConfigDTO> childMap = childMapDTO.getMap();
+				Map<String, ConfigDTO> resultMap = null;
 				if (parentMap != null || childMap != null) {
-					resultMap = new HashMap<String, IConfigDTO>();
+					resultMap = new HashMap<String, ConfigDTO>();
 					mergeAddedEntries(resultMap, parentMap, childMap, annotation.entryAddedStrategy());
 					mergeRemovedEntries(resultMap, parentMap, childMap, annotation.entryRemovedStrategy());
 					mergeExistingEntries(
@@ -130,13 +130,13 @@ public final class MapPropertyMerger extends AbstractPropertyMerger {
 	}
 
 	private void mergeAddedEntries(
-		final Map<String, IConfigDTO> resultMap,
-		final Map<String, IConfigDTO> parentMap,
-		final Map<String, IConfigDTO> childMap,
+		final Map<String, ConfigDTO> resultMap,
+		final Map<String, ConfigDTO> parentMap,
+		final Map<String, ConfigDTO> childMap,
 		final ItemExistenceStrategy itemExistanceStrategy) {
 
 		if (childMap != null) {
-			for (final Entry<String, IConfigDTO> entry : childMap.entrySet()) {
+			for (final Entry<String, ConfigDTO> entry : childMap.entrySet()) {
 				if (parentMap == null || !parentMap.containsKey(entry.getKey())) {
 					switch (itemExistanceStrategy) {
 						case ADD:
@@ -154,13 +154,13 @@ public final class MapPropertyMerger extends AbstractPropertyMerger {
 	}
 
 	private void mergeRemovedEntries(
-		final Map<String, IConfigDTO> resultMap,
-		final Map<String, IConfigDTO> parentMap,
-		final Map<String, IConfigDTO> childMap,
+		final Map<String, ConfigDTO> resultMap,
+		final Map<String, ConfigDTO> parentMap,
+		final Map<String, ConfigDTO> childMap,
 		final ItemExistenceStrategy itemExistanceStrategy) {
 
 		if (parentMap != null) {
-			for (final Entry<String, IConfigDTO> entry : parentMap.entrySet()) {
+			for (final Entry<String, ConfigDTO> entry : parentMap.entrySet()) {
 				if (childMap == null || !childMap.containsKey(entry.getKey())) {
 					switch (itemExistanceStrategy) {
 						case ADD:
@@ -178,10 +178,10 @@ public final class MapPropertyMerger extends AbstractPropertyMerger {
 	}
 
 	private void mergeExistingEntries(
-		final Map<String, IConfigDTO> resultMap,
-		final Map<String, IConfigDTO> parentMap,
-		final Map<String, IConfigDTO> childMap,
-		final Map<Class<? extends Annotation>, IPropertyMerger> mergers,
+		final Map<String, ConfigDTO> resultMap,
+		final Map<String, ConfigDTO> parentMap,
+		final Map<String, ConfigDTO> childMap,
+		final Map<Class<? extends Annotation>, PropertyMerger> mergers,
 		final ComplexTypeMerger complexTypeMerger,
 		final PropertyDescriptor propertyDescriptor,
 		final ComplexConfigDTO parentConfigDTO,
@@ -199,10 +199,10 @@ public final class MapPropertyMerger extends AbstractPropertyMerger {
 		}
 
 		if (parentMap != null && childMap != null) {
-			for (final Entry<String, IConfigDTO> entry : parentMap.entrySet()) {
+			for (final Entry<String, ConfigDTO> entry : parentMap.entrySet()) {
 				if (childMap.containsKey(entry.getKey())) {
-					final IConfigDTO parentValueDTO = entry.getValue();
-					final IConfigDTO childValueDTO = childMap.get(entry.getKey());
+					final ConfigDTO parentValueDTO = entry.getValue();
+					final ConfigDTO childValueDTO = childMap.get(entry.getKey());
 					switch (mergingStrategy) {
 						case USE_CHILD:
 							resultMap.put(entry.getKey(), createChildWithMissingProperties(parentValueDTO, childValueDTO));
@@ -237,10 +237,10 @@ public final class MapPropertyMerger extends AbstractPropertyMerger {
 	}
 
 	@SuppressWarnings({"unchecked", "rawtypes"})
-	private IConfigDTO mergeValue(
-		final IConfigDTO parentValueDTO,
-		final IConfigDTO childValueDTO,
-		final Map<Class<? extends Annotation>, IPropertyMerger> mergers,
+	private ConfigDTO mergeValue(
+		final ConfigDTO parentValueDTO,
+		final ConfigDTO childValueDTO,
+		final Map<Class<? extends Annotation>, PropertyMerger> mergers,
 		final ComplexTypeMerger complexTypeMerger,
 		final PropertyDescriptor propertyDescriptor,
 		final ComplexConfigDTO parentConfigDTO,
@@ -266,7 +266,7 @@ public final class MapPropertyMerger extends AbstractPropertyMerger {
 					mergers,
 					mergingResult);
 		} else {
-			final ISimpleValueMergingStrategy strategy = classInstantiation.newInstance(annotation.simpleValueMergingStrategy());
+			final SimpleValueMergingStrategy strategy = classInstantiation.newInstance(annotation.simpleValueMergingStrategy());
 			if (childValueDTO != null && !(childValueDTO instanceof ConfigSimpleValueDTO)) {
 				throw new IllegalArgumentException("Got non-simple value for simple map"); //$NON-NLS-1$
 			}
@@ -287,9 +287,9 @@ public final class MapPropertyMerger extends AbstractPropertyMerger {
 		}
 	}
 
-	private ISimpleTypeConverter<?> getConverter(
+	private SimpleTypeConverter<?> getConverter(
 		final Class<?> propertyType,
-		final Class<? extends ISimpleTypeConverter<?>> customConverterClass) {
+		final Class<? extends SimpleTypeConverter<?>> customConverterClass) {
 		final boolean customConverter = !NoCustomSimpleTypeConverter.class.equals(customConverterClass);
 		if (customConverter) {
 			return classInstantiation.newInstance(customConverterClass);

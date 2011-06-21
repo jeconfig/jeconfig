@@ -58,10 +58,10 @@ public class JdbcTemplate<T> {
 	 * Connection will be closed quietly after executing runnable.
 	 * 
 	 * @param runnable
-	 * @return T a ResultSet or a Collection of IScopePath
+	 * @return T a ResultSet or a Collection of ScopePath
 	 */
 	@SuppressWarnings("unchecked")
-	public T perform(final IDbCallable runnable) {
+	public T perform(final DbCallable runnable) {
 		Connection con = null;
 		T result = null;
 		try {

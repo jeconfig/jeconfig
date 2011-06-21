@@ -33,11 +33,11 @@ import java.lang.reflect.Array;
 
 import org.jeconfig.api.annotation.ConfigArrayProperty;
 import org.jeconfig.api.annotation.ConfigComplexType;
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigListDTO;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.common.reflection.PropertyAccessor;
 
@@ -56,12 +56,12 @@ public class ArrayDTODeserializer extends AbstractDTODeserializer {
 	public void handleArrayProperty(
 		final ComplexConfigDTO configDTO,
 		final Object config,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final PropertyDescriptor propDesc,
 		final Annotation annotation,
 		final String propName) {
 		final ConfigArrayProperty arrayAnno = (ConfigArrayProperty) annotation;
-		final ISimpleTypeConverter<?> customConverter = createCustomConverter(arrayAnno.customConverter());
+		final SimpleTypeConverter<?> customConverter = createCustomConverter(arrayAnno.customConverter());
 		final boolean polymorph = arrayAnno.polymorph();
 		final boolean complex = AnnotationUtil.getAnnotation(
 				propDesc.getPropertyType().getComponentType(),
@@ -77,8 +77,8 @@ public class ArrayDTODeserializer extends AbstractDTODeserializer {
 		final boolean polymorph,
 		final boolean complex,
 		final ConfigListDTO listDTO,
-		final IScopePath scopePath,
-		final ISimpleTypeConverter<?> customConverter) {
+		final ScopePath scopePath,
+		final SimpleTypeConverter<?> customConverter) {
 		Object arrayToSet = null;
 		if (listDTO.getItems() != null) {
 			final Class<?> arrayItemType = propDesc.getPropertyType().getComponentType();

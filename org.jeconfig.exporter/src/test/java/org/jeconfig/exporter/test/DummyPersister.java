@@ -32,13 +32,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.persister.IConfigPersister;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.persister.ConfigPersister;
+import org.jeconfig.api.scope.ScopePath;
 
-public class DummyPersister implements IConfigPersister {
+public class DummyPersister implements ConfigPersister {
 	public static final String ID = "TestPersister"; //$NON-NLS-1$
 
-	private final Map<IScopePath, ComplexConfigDTO> savedObjects = new HashMap<IScopePath, ComplexConfigDTO>();
+	private final Map<ScopePath, ComplexConfigDTO> savedObjects = new HashMap<ScopePath, ComplexConfigDTO>();
 
 	@Override
 	public String getId() {
@@ -46,7 +46,7 @@ public class DummyPersister implements IConfigPersister {
 	}
 
 	@Override
-	public ComplexConfigDTO loadConfiguration(final IScopePath scope) {
+	public ComplexConfigDTO loadConfiguration(final ScopePath scope) {
 		return savedObjects.get(scope);
 	}
 
@@ -60,12 +60,12 @@ public class DummyPersister implements IConfigPersister {
 		savedObjects.put(configDTO.getDefiningScopePath(), configDTO);
 	}
 
-	public Map<IScopePath, ComplexConfigDTO> getSavedObjects() {
+	public Map<ScopePath, ComplexConfigDTO> getSavedObjects() {
 		return savedObjects;
 	}
 
 	@Override
-	public void delete(final IScopePath scope, final boolean deleteChildren) {
+	public void delete(final ScopePath scope, final boolean deleteChildren) {
 
 	}
 
@@ -75,7 +75,7 @@ public class DummyPersister implements IConfigPersister {
 	}
 
 	@Override
-	public Collection<IScopePath> listScopes(final String scopeName, final Map<String, String> properties) {
+	public Collection<ScopePath> listScopes(final String scopeName, final Map<String, String> properties) {
 		throw new UnsupportedOperationException("not yet implemented"); //$NON-NLS-1$
 	}
 

@@ -32,7 +32,7 @@ package org.jeconfig.api.scope;
  * <br>
  * It can be used if different users need different instances of the configuration.
  */
-public final class UserScopeDescriptor implements IScopeDescriptor {
+public final class UserScopeDescriptor implements ScopeDescriptor {
 	public static final String NAME = "user"; //$NON-NLS-1$
 
 	/**

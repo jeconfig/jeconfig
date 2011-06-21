@@ -27,7 +27,7 @@
 
 package org.jeconfig.client.internal.mapping.deserialization;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
 import org.jeconfig.api.conversion.NoCustomSimpleTypeConverter;
 import org.jeconfig.common.reflection.ClassInstantiation;
 
@@ -35,7 +35,7 @@ public abstract class AbstractDTODeserializer {
 	private final ClassInstantiation classInstantiation = new ClassInstantiation();
 	private final PolymorphTypeLoader typeLoader = new PolymorphTypeLoader();
 
-	public ISimpleTypeConverter<?> createCustomConverter(final Class<? extends ISimpleTypeConverter<?>> customConverter) {
+	public SimpleTypeConverter<?> createCustomConverter(final Class<? extends SimpleTypeConverter<?>> customConverter) {
 		if (NoCustomSimpleTypeConverter.class.equals(customConverter)) {
 			return null;
 		}

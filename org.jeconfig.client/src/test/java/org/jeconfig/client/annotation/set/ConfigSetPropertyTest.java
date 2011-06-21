@@ -32,7 +32,7 @@ import java.util.Set;
 import junit.framework.Assert;
 
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.client.AbstractConfigServiceTest;
 import org.junit.Test;
 
@@ -82,7 +82,7 @@ public class ConfigSetPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testUseChildMergeWithSimpleTypes() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				SimpleTypeSetPropertyTestConfiguration.class);
 		final SimpleTypeSetPropertyTestConfiguration parentConfig = getConfigService().load(
 				SimpleTypeSetPropertyTestConfiguration.class,
@@ -106,7 +106,7 @@ public class ConfigSetPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeDefaultEntryAddedStrategyWithSimpleTypes() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
 				SetPropertyTestConfiguration.class);
 		final SetPropertyTestConfiguration parentConfig = getConfigService().load(
 				SetPropertyTestConfiguration.class,
@@ -127,7 +127,7 @@ public class ConfigSetPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeDefaultEntryRemovedStrategyWithSimpleTypes() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
 				SetPropertyTestConfiguration.class);
 		final SetPropertyTestConfiguration parentConfig = getConfigService().load(
 				SetPropertyTestConfiguration.class,

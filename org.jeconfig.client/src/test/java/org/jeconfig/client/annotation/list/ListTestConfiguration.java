@@ -37,7 +37,7 @@ import org.jeconfig.api.scope.GlobalScopeDescriptor;
 import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.jeconfig.client.testconfigs.BaseClass;
 import org.jeconfig.client.testconfigs.ComplexSubtype;
-import org.jeconfig.client.testconfigs.IMyInterface;
+import org.jeconfig.client.testconfigs.MyInterface;
 
 @ConfigClass(scopePath = {GlobalScopeDescriptor.NAME, UserScopeDescriptor.NAME})
 public class ListTestConfiguration {
@@ -50,7 +50,7 @@ public class ListTestConfiguration {
 
 	private List<BaseClass> subClass;
 
-	private List<IMyInterface> implClass;
+	private List<MyInterface> implClass;
 
 	@ConfigListProperty(itemType = Integer.class)
 	public List<Integer> getIntField() {
@@ -88,12 +88,12 @@ public class ListTestConfiguration {
 		this.subClass = subClass;
 	}
 
-	@ConfigListProperty(polymorph = true, itemType = IMyInterface.class)
-	public List<IMyInterface> getImplClass() {
+	@ConfigListProperty(polymorph = true, itemType = MyInterface.class)
+	public List<MyInterface> getImplClass() {
 		return implClass;
 	}
 
-	public void setImplClass(final List<IMyInterface> implClass) {
+	public void setImplClass(final List<MyInterface> implClass) {
 		this.implClass = implClass;
 	}
 

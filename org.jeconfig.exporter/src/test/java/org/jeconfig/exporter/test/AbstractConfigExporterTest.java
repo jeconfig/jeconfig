@@ -32,13 +32,13 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jeconfig.api.ConfigServiceAccessor;
-import org.jeconfig.api.IConfigService;
-import org.jeconfig.api.IConfigSetupService;
-import org.jeconfig.api.persister.IConfigPersistenceService;
+import org.jeconfig.api.ConfigService;
+import org.jeconfig.api.ConfigSetupService;
+import org.jeconfig.api.persister.ConfigPersistenceService;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePropertyProvider;
-import org.jeconfig.api.scope.IScopeRegistry;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePropertyProvider;
+import org.jeconfig.api.scope.ScopeRegistry;
 import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.jeconfig.client.internal.ConfigServiceImpl;
 import org.jeconfig.exporter.internal.ExportScopeDescriptor;
@@ -49,10 +49,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 public abstract class AbstractConfigExporterTest {
-	private static IConfigService configService;
-	private static IConfigPersistenceService configPersistenceService;
+	private static ConfigService configService;
+	private static ConfigPersistenceService configPersistenceService;
 	private static CountingDummyPersister persister;
-	private static IConfigSetupService configSetupService;
+	private static ConfigSetupService configSetupService;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -63,9 +63,9 @@ public abstract class AbstractConfigExporterTest {
 
 		configSetupService = configServiceImpl;
 
-		final IScopeRegistry scopeRegistry = configSetupService.getScopeRegistry();
+		final ScopeRegistry scopeRegistry = configSetupService.getScopeRegistry();
 		scopeRegistry.addScopeDescriptor(new ExportScopeDescriptor());
-		scopeRegistry.addScopePropertyProvider(new IScopePropertyProvider() {
+		scopeRegistry.addScopePropertyProvider(new ScopePropertyProvider() {
 			@Override
 			public String getScopeName() {
 				return UserScopeDescriptor.NAME;
@@ -105,15 +105,15 @@ public abstract class AbstractConfigExporterTest {
 		return new ConfigServiceAccessor(configService);
 	}
 
-	public static IConfigPersistenceService getConfigPersistenceService() {
+	public static ConfigPersistenceService getConfigPersistenceService() {
 		return configPersistenceService;
 	}
 
-	public IConfigPersistenceService getConfigSetupService() {
+	public ConfigPersistenceService getConfigSetupService() {
 		return configPersistenceService;
 	}
 
-	public <T> IScopePath getExportScope(final IScopePath scopePath, final Class<T> configClass) {
+	public <T> ScopePath getExportScope(final ScopePath scopePath, final Class<T> configClass) {
 		return new ExportScopePathGenerator().buildExportScopePath(scopePath, configClass);
 
 	}

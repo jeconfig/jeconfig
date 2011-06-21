@@ -27,15 +27,15 @@
 
 package org.jeconfig.api.annotation;
 
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 
 /**
- * This class is used at the @ConfigClass-annotation to indicate that no {@link IDefaultConfigFactory} is configured.
+ * This class is used at the @ConfigClass-annotation to indicate that no {@link DefaultConfigFactory} is configured.
  */
-public final class NoDefaultConfigFactory implements IDefaultConfigFactory<Object> {
+public final class NoDefaultConfigFactory implements DefaultConfigFactory<Object> {
 
 	@Override
-	public Object createDefaultConfig(final IScopePath scopePath) {
+	public Object createDefaultConfig(final ScopePath scopePath) {
 		return null;
 	}
 

@@ -38,10 +38,10 @@ public final class ConfigObjectCopyUtil {
 
 	public ConfigObjectCopyUtil() {}
 
-	public void copyConfigTree(final IConfigObjectFactory objectFactory, final Object original, final Object copy) {
+	public void copyConfigTree(final ConfigObjectFactory objectFactory, final Object original, final Object copy) {
 
-		if (copy instanceof IConfigProxy) {
-			final IConfigProxy<?> proxy = (IConfigProxy<?>) copy;
+		if (copy instanceof ConfigProxy) {
+			final ConfigProxy<?> proxy = (ConfigProxy<?>) copy;
 			proxy.setInitializingWhile(new Runnable() {
 				@Override
 				public void run() {
@@ -53,7 +53,7 @@ public final class ConfigObjectCopyUtil {
 		}
 	}
 
-	private void doCopyConfigTree(final IConfigObjectFactory objectFactory, final Object original, final Object copy) {
+	private void doCopyConfigTree(final ConfigObjectFactory objectFactory, final Object original, final Object copy) {
 		for (final PropertyDescriptor propertyDescriptor : propertyAccessor.getPropertyDescriptors(ProxyUtil.getConfigClass(original.getClass()))) {
 			final String propertyName = propertyDescriptor.getName();
 			if (propertyDescriptor.getReadMethod() != null) {

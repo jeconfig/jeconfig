@@ -27,34 +27,34 @@
 
 package org.jeconfig.client.internal.autorefresh;
 
-import org.jeconfig.api.autorefresh.IConfigRefreshNotifier;
-import org.jeconfig.api.exception.IConfigExceptionHandler;
-import org.jeconfig.client.proxy.IRootConfigProxy;
+import org.jeconfig.api.autorefresh.ConfigRefreshNotifier;
+import org.jeconfig.api.exception.ConfigExceptionHandler;
+import org.jeconfig.client.proxy.RootConfigProxy;
 
 public class ConfigRefreshJobContainer<T> {
 
-	private final IRootConfigProxy config;
-	private final IConfigExceptionHandler exceptionHandler;
-	private final IConfigRefreshNotifier<T> notifier;
+	private final RootConfigProxy config;
+	private final ConfigExceptionHandler exceptionHandler;
+	private final ConfigRefreshNotifier<T> notifier;
 
 	public ConfigRefreshJobContainer(
-		final IRootConfigProxy config,
-		final IConfigExceptionHandler exceptionHandler,
-		final IConfigRefreshNotifier<T> notifier) {
+		final RootConfigProxy config,
+		final ConfigExceptionHandler exceptionHandler,
+		final ConfigRefreshNotifier<T> notifier) {
 		this.config = config;
 		this.exceptionHandler = exceptionHandler;
 		this.notifier = notifier;
 	}
 
-	public IRootConfigProxy getConfig() {
+	public RootConfigProxy getConfig() {
 		return config;
 	}
 
-	public IConfigExceptionHandler getExceptionHandler() {
+	public ConfigExceptionHandler getExceptionHandler() {
 		return exceptionHandler;
 	}
 
-	public IConfigRefreshNotifier<T> getNotifier() {
+	public ConfigRefreshNotifier<T> getNotifier() {
 		return notifier;
 	}
 

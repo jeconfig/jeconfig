@@ -29,7 +29,7 @@ package org.jeconfig.client;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.exception.StaleConfigException;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.server.persister.InMemoryPersister;
 
 public class ConfigServiceAccessorTestPersister extends InMemoryPersister {
@@ -58,7 +58,7 @@ public class ConfigServiceAccessorTestPersister extends InMemoryPersister {
 	}
 
 	@Override
-	public ComplexConfigDTO loadConfiguration(final IScopePath scopePath) {
+	public ComplexConfigDTO loadConfiguration(final ScopePath scopePath) {
 		loadCount++;
 		if (shouldFailLoad || shouldFailLoadOnce) {
 			shouldFailLoadOnce = false;

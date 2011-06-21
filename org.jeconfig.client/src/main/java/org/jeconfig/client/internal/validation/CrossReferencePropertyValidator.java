@@ -35,12 +35,12 @@ import java.util.Set;
 
 import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.annotation.ConfigCrossReference;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.client.proxy.ProxyUtil;
 
 @SuppressWarnings("nls")
-public final class CrossReferencePropertyValidator implements IPropertyValidator<ConfigCrossReference> {
+public final class CrossReferencePropertyValidator implements PropertyValidator<ConfigCrossReference> {
 
 	@Override
 	public Set<Class<? extends Annotation>> getCompatibleAnnotations() {
@@ -53,8 +53,8 @@ public final class CrossReferencePropertyValidator implements IPropertyValidator
 		final PropertyDescriptor propertyDescriptor,
 		final ConfigCrossReference annotation,
 		final Set<Annotation> otherAnnotations,
-		final ISimpleTypeConverterRegistry converterRegistry,
-		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
+		final SimpleTypeConverterRegistry converterRegistry,
+		final Map<Class<? extends Annotation>, PropertyValidator<Annotation>> validators,
 		final ComplexTypeValidator complexTypeValidator,
 		final Set<Class<?>> validatedComplexTypes) {
 

@@ -34,12 +34,12 @@ import java.util.Set;
 
 import junit.framework.Assert;
 
-import org.jeconfig.api.IScopePathListener;
+import org.jeconfig.api.ScopePathListener;
 import org.jeconfig.api.exception.InvalidConfigException;
 import org.jeconfig.api.scope.DefaultScopeDescriptor;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.client.annotation.complex.ComplexPropertyTestConfiguration;
 import org.jeconfig.client.annotation.configclass.TestConfiguration;
 import org.jeconfig.client.annotation.configclass.TestConfigurationDefaultFactory;
@@ -59,17 +59,17 @@ import org.junit.Test;
 @SuppressWarnings("nls")
 public class ConfigServiceTest extends AbstractConfigServiceTest {
 
-	private static class TestScopePathListener implements IScopePathListener {
+	private static class TestScopePathListener implements ScopePathListener {
 		private int saveCount = 0;
 		private int refreshCount = 0;
 
 		@Override
-		public void configSaved(final IScopePath scopePath) {
+		public void configSaved(final ScopePath scopePath) {
 			saveCount++;
 		}
 
 		@Override
-		public void configRefreshed(final IScopePath scopePath) {
+		public void configRefreshed(final ScopePath scopePath) {
 			refreshCount++;
 		}
 	}
@@ -82,7 +82,7 @@ public class ConfigServiceTest extends AbstractConfigServiceTest {
 	@Test
 	public void testScopePathListenerRefresh() {
 		final TestConfiguration globalConfiguration = getConfigService().load(TestConfiguration.class);
-		final IScopePath scope = getConfigService().getScopePathBuilderFactory(TestConfiguration.class).annotatedPath().create();
+		final ScopePath scope = getConfigService().getScopePathBuilderFactory(TestConfiguration.class).annotatedPath().create();
 		final TestScopePathListener listener = new TestScopePathListener();
 		getConfigService().addScopePathListener(scope, listener);
 		getConfigService().refresh(globalConfiguration);
@@ -95,7 +95,7 @@ public class ConfigServiceTest extends AbstractConfigServiceTest {
 	@Test
 	public void testScopePathListenerSave() {
 		final TestConfiguration globalConfiguration = getConfigService().load(TestConfiguration.class);
-		final IScopePath scope = getConfigService().getScopePathBuilderFactory(TestConfiguration.class).annotatedPath().create();
+		final ScopePath scope = getConfigService().getScopePathBuilderFactory(TestConfiguration.class).annotatedPath().create();
 		final TestScopePathListener listener = new TestScopePathListener();
 		getConfigService().addScopePathListener(scope, listener);
 		globalConfiguration.setField1("asdf");
@@ -133,7 +133,7 @@ public class ConfigServiceTest extends AbstractConfigServiceTest {
 	public void testSaveToScopePathIntoNonSourceScope() {
 		final TestConfiguration globalConfiguration = getConfigService().load(TestConfiguration.class);
 
-		final IScopePath scope = getConfigService().getScopePathBuilderFactory(TestConfiguration.class).annotatedPathUntil(
+		final ScopePath scope = getConfigService().getScopePathBuilderFactory(TestConfiguration.class).annotatedPathUntil(
 				GlobalScopeDescriptor.NAME).create();
 		getConfigService().copyToScopePath(globalConfiguration, scope);
 		Assert.assertEquals(1, getCountingDummyPersister().getSaveCount());
@@ -141,7 +141,7 @@ public class ConfigServiceTest extends AbstractConfigServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testSaveToScopePathIntoSourceScope() {
-		final IScopePath scope = getConfigService().getScopePathBuilderFactory(TestConfiguration.class).annotatedPathUntil(
+		final ScopePath scope = getConfigService().getScopePathBuilderFactory(TestConfiguration.class).annotatedPathUntil(
 				GlobalScopeDescriptor.NAME).create();
 		final TestConfiguration globalConfiguration = getConfigService().load(TestConfiguration.class, scope);
 		getConfigService().copyToScopePath(globalConfiguration, scope);
@@ -421,9 +421,9 @@ public class ConfigServiceTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testDeletionWithoutChildDeletion() {
-		final IScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
-		final IScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
-		final IScopePath globalPath = builderFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
+		final ScopePath globalPath = builderFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
 
 		final TestConfiguration codeDefaultConfig = new TestConfigurationDefaultFactory().createDefaultConfig(defaultPath);
 
@@ -455,9 +455,9 @@ public class ConfigServiceTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testDeletionWithChildDeletion() {
-		final IScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
-		final IScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
-		final IScopePath globalPath = builderFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
+		final ScopePath globalPath = builderFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
 
 		final TestConfiguration codeDefaultConfig = new TestConfigurationDefaultFactory().createDefaultConfig(defaultPath);
 

@@ -29,8 +29,8 @@ package org.jeconfig.client.migration;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.exception.StaleConfigException;
-import org.jeconfig.api.persister.IConfigPersister;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.persister.ConfigPersister;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.client.AbstractConfigServiceTest;
 import org.junit.Assert;
 import org.junit.Test;
@@ -38,7 +38,7 @@ import org.junit.Test;
 public class ClassVersionTransformationChainTest extends AbstractConfigServiceTest {
 	@Test
 	public void testTransformToNewVersionWithOneConverter() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				ClassVersionTransformationChainTestConfiguration.class);
 
 		final ClassVersionTransformationChainTestConfiguration config = getConfigService().load(
@@ -46,7 +46,7 @@ public class ClassVersionTransformationChainTest extends AbstractConfigServiceTe
 		config.setId(2);
 		getConfigService().save(config);
 
-		final IConfigPersister persister = getPersister();
+		final ConfigPersister persister = getPersister();
 		final ComplexConfigDTO configDTO = persister.loadConfiguration(factory.annotatedPath().create());
 		configDTO.setClassVersion(1);
 
@@ -60,7 +60,7 @@ public class ClassVersionTransformationChainTest extends AbstractConfigServiceTe
 
 	@Test(expected = StaleConfigException.class)
 	public void testNoTransformerForNewVersion() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				ClassVersionTChainNoConverterForNewVersionTestConfiguration.class);
 
 		final ClassVersionTChainNoConverterForNewVersionTestConfiguration config = getConfigService().load(
@@ -68,7 +68,7 @@ public class ClassVersionTransformationChainTest extends AbstractConfigServiceTe
 		config.setId(2);
 		getConfigService().save(config);
 
-		final IConfigPersister persister = getPersister();
+		final ConfigPersister persister = getPersister();
 		final ComplexConfigDTO configDTO = persister.loadConfiguration(factory.annotatedPath().create());
 		configDTO.setClassVersion(1);
 
@@ -80,7 +80,7 @@ public class ClassVersionTransformationChainTest extends AbstractConfigServiceTe
 
 	@Test
 	public void testTransformToNewVersionWithMultipleConverters() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				ClassVersionTChainMultipleConverterForNewVersionTestConfiguration.class);
 
 		final ClassVersionTChainMultipleConverterForNewVersionTestConfiguration config = getConfigService().load(
@@ -89,7 +89,7 @@ public class ClassVersionTransformationChainTest extends AbstractConfigServiceTe
 		config.setName("asdf"); //$NON-NLS-1$
 		getConfigService().save(config);
 
-		final IConfigPersister persister = getPersister();
+		final ConfigPersister persister = getPersister();
 		final ComplexConfigDTO configDTO = persister.loadConfiguration(factory.annotatedPath().create());
 		configDTO.setClassVersion(1);
 

@@ -32,7 +32,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.jeconfig.api.exception.IStalenessNotifier;
+import org.jeconfig.api.exception.StalenessNotifier;
 import org.jeconfig.api.exception.NoStalenessNotifier;
 
 /**
@@ -69,10 +69,10 @@ public @interface ConfigClass {
 	/**
 	 * A factory which provides the 'codeDefault' configuration of this configuration class.
 	 */
-	Class<? extends IDefaultConfigFactory<?>> defaultConfigFactory() default NoDefaultConfigFactory.class;
+	Class<? extends DefaultConfigFactory<?>> defaultConfigFactory() default NoDefaultConfigFactory.class;
 
 	/**
 	 * A staleness notifier which is informed when an instance of the class has been loaded and one or more properties were stale.
 	 */
-	Class<? extends IStalenessNotifier> stalenessNotfier() default NoStalenessNotifier.class;
+	Class<? extends StalenessNotifier> stalenessNotfier() default NoStalenessNotifier.class;
 }

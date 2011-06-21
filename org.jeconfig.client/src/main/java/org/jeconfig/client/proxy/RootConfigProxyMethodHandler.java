@@ -31,20 +31,20 @@ import java.lang.reflect.Method;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 
-public final class RootConfigProxyMethodHandler extends ConfigProxyMethodHandler implements IRootConfigProxy {
+public final class RootConfigProxyMethodHandler extends ConfigProxyMethodHandler implements RootConfigProxy {
 	private boolean dirty;
 	private boolean isNew = false;
-	private final Set<IConfigDirtyStateListener> listeners;
+	private final Set<ConfigDirtyStateListener> listeners;
 	private Object self;
-	private final IScopePath scopePath;
+	private final ScopePath scopePath;
 
-	public RootConfigProxyMethodHandler(final Class<?> configClass, final IScopePath scopePath, final ProxyUpdater proxyUpdater) {
+	public RootConfigProxyMethodHandler(final Class<?> configClass, final ScopePath scopePath, final ProxyUpdater proxyUpdater) {
 		super(configClass, proxyUpdater);
 		this.scopePath = scopePath;
 		this.dirty = false;
-		listeners = new HashSet<IConfigDirtyStateListener>();
+		listeners = new HashSet<ConfigDirtyStateListener>();
 	}
 
 	@Override
@@ -54,7 +54,7 @@ public final class RootConfigProxyMethodHandler extends ConfigProxyMethodHandler
 	}
 
 	@Override
-	public IScopePath getScopePath() {
+	public ScopePath getScopePath() {
 		return scopePath;
 	}
 
@@ -91,18 +91,18 @@ public final class RootConfigProxyMethodHandler extends ConfigProxyMethodHandler
 	}
 
 	private void fireDirtyChanged() {
-		for (final IConfigDirtyStateListener listener : listeners) {
-			listener.dirtyStateChanged((IRootConfigProxy) self);
+		for (final ConfigDirtyStateListener listener : listeners) {
+			listener.dirtyStateChanged((RootConfigProxy) self);
 		}
 	}
 
 	@Override
-	public void addDirtyStateListener(final IConfigDirtyStateListener listener) {
+	public void addDirtyStateListener(final ConfigDirtyStateListener listener) {
 		listeners.add(listener);
 	}
 
 	@Override
-	public void removeDirtyStateListener(final IConfigDirtyStateListener listener) {
+	public void removeDirtyStateListener(final ConfigDirtyStateListener listener) {
 		listeners.remove(listener);
 	}
 }

@@ -32,8 +32,8 @@ import java.util.Calendar;
 import junit.framework.Assert;
 
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.client.AbstractConfigServiceTest;
 import org.jeconfig.client.annotation.configclass.TestConfiguration;
 import org.junit.Test;
@@ -86,9 +86,9 @@ public class ConfigSimplePropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testUsingChildMergeInt() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
 				SimplePropertyTestConfiguration.class);
-		final IScopePath parentScopePath = scopeFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePath parentScopePath = scopeFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
 
 		final SimplePropertyTestConfiguration parentConfig = getConfigService().load(
 				SimplePropertyTestConfiguration.class,
@@ -106,9 +106,9 @@ public class ConfigSimplePropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testUsingChildMergeBigInt() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
 				SimplePropertyTestConfiguration.class);
-		final IScopePath parentScopePath = scopeFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePath parentScopePath = scopeFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
 
 		final SimplePropertyTestConfiguration parentConfig = getConfigService().load(
 				SimplePropertyTestConfiguration.class,
@@ -271,9 +271,9 @@ public class ConfigSimplePropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeUseParentIntField() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
 				SimplePropertyTestConfiguration.class);
-		final IScopePath parentScopePath = scopeFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePath parentScopePath = scopeFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
 
 		final SimplePropertyTestConfiguration parentConfig = getConfigService().load(
 				SimplePropertyTestConfiguration.class,
@@ -291,9 +291,9 @@ public class ConfigSimplePropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeUseMyMergingStrategyIntField() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
 				SimplePropertyTestConfiguration.class);
-		final IScopePath parentScopePath = scopeFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePath parentScopePath = scopeFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
 
 		final SimplePropertyTestConfiguration parentConfig = getConfigService().load(
 				SimplePropertyTestConfiguration.class,
@@ -311,9 +311,9 @@ public class ConfigSimplePropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeUseParentBigIntField() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
 				SimplePropertyTestConfiguration.class);
-		final IScopePath parentScopePath = scopeFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePath parentScopePath = scopeFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
 
 		final SimplePropertyTestConfiguration parentConfig = getConfigService().load(
 				SimplePropertyTestConfiguration.class,
@@ -335,9 +335,9 @@ public class ConfigSimplePropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeUseMyMergingStrategyBigIntField() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(
 				SimplePropertyTestConfiguration.class);
-		final IScopePath parentScopePath = scopeFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePath parentScopePath = scopeFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
 
 		final SimplePropertyTestConfiguration parentConfig = getConfigService().load(
 				SimplePropertyTestConfiguration.class,

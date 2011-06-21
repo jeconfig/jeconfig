@@ -31,37 +31,37 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-import org.jeconfig.api.scope.IScope;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.Scope;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.api.util.Assert;
 
-public final class ScopePathImpl implements IScopePath {
+public final class ScopePathImpl implements ScopePath {
 	private static final long serialVersionUID = 1L;
 
-	private final List<IScope> scopes;
+	private final List<Scope> scopes;
 
-	public ScopePathImpl(final List<IScope> scopes) {
+	public ScopePathImpl(final List<Scope> scopes) {
 		Assert.paramNotEmpty(scopes, "scopes"); //$NON-NLS-1$
-		this.scopes = new ArrayList<IScope>(scopes);
+		this.scopes = new ArrayList<Scope>(scopes);
 	}
 
 	@Override
-	public List<IScope> getScopes() {
+	public List<Scope> getScopes() {
 		return Collections.unmodifiableList(scopes);
 	}
 
 	@Override
-	public IScope getRootScope() {
+	public Scope getRootScope() {
 		return scopes.get(0);
 	}
 
 	@Override
-	public IScope getLastScope() {
+	public Scope getLastScope() {
 		return scopes.get(scopes.size() - 1);
 	}
 
 	@Override
-	public IScopePath getParentPath() {
+	public ScopePath getParentPath() {
 		if (scopes.size() > 1) {
 			return new ScopePathImpl(scopes.subList(0, scopes.size() - 1));
 		}
@@ -70,8 +70,8 @@ public final class ScopePathImpl implements IScopePath {
 	}
 
 	@Override
-	public IScope findScopeByName(final String name) {
-		for (final IScope scope : scopes) {
+	public Scope findScopeByName(final String name) {
+		for (final Scope scope : scopes) {
 			if (scope.getName().equals(name)) {
 				return scope;
 			}
@@ -80,17 +80,17 @@ public final class ScopePathImpl implements IScopePath {
 	}
 
 	@Override
-	public boolean startsPathWith(final IScopePath other) {
-		final List<IScope> otherScopeList = other.getScopes();
-		final List<IScope> scopeList = getScopes();
+	public boolean startsPathWith(final ScopePath other) {
+		final List<Scope> otherScopeList = other.getScopes();
+		final List<Scope> scopeList = getScopes();
 
 		if (scopeList.size() < otherScopeList.size()) {
 			return false;
 		}
 
 		for (int i = 0; i < otherScopeList.size(); i++) {
-			final IScope scope = scopeList.get(i);
-			final IScope otherScope = otherScopeList.get(i);
+			final Scope scope = scopeList.get(i);
+			final Scope otherScope = otherScopeList.get(i);
 
 			if (!scope.equals(otherScope)) {
 				return false;
@@ -134,7 +134,7 @@ public final class ScopePathImpl implements IScopePath {
 		final StringBuilder sb = new StringBuilder();
 
 		for (int i = 0; i < scopes.size(); i++) {
-			final IScope scope = scopes.get(i);
+			final Scope scope = scopes.get(i);
 			sb.append(scope);
 			if (i < scopes.size() - 1) {
 				sb.append("/"); //$NON-NLS-1$

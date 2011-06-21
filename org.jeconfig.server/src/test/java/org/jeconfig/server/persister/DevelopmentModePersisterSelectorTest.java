@@ -31,9 +31,9 @@ import java.util.Collections;
 
 import junit.framework.Assert;
 
-import org.jeconfig.api.persister.IPersisterSelector;
-import org.jeconfig.api.scope.IScope;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.persister.PersisterSelector;
+import org.jeconfig.api.scope.Scope;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.jeconfig.common.scope.ScopeImpl;
 import org.jeconfig.common.scope.ScopePathImpl;
@@ -43,7 +43,7 @@ public class DevelopmentModePersisterSelectorTest {
 
 	@Test
 	public void testReturnSinglePersister() {
-		final IPersisterSelector selector = new DevelopmentModePersisterSelector(new DefaultPersisterSelector(), false);
+		final PersisterSelector selector = new DevelopmentModePersisterSelector(new DefaultPersisterSelector(), false);
 		final String persisterId = selector.getPersisterId(null, Arrays.asList("test")); //$NON-NLS-1$
 
 		Assert.assertEquals("test", persisterId); //$NON-NLS-1$
@@ -51,13 +51,13 @@ public class DevelopmentModePersisterSelectorTest {
 
 	@Test(expected = IllegalStateException.class)
 	public void testExceptionIfNoPersister() {
-		final IPersisterSelector selector = new DevelopmentModePersisterSelector(new DefaultPersisterSelector(), false);
+		final PersisterSelector selector = new DevelopmentModePersisterSelector(new DefaultPersisterSelector(), false);
 		selector.getPersisterId(null, Collections.<String> emptyList());
 	}
 
 	@Test(expected = IllegalStateException.class)
 	public void testExceptionIfTwoPersister() {
-		final IPersisterSelector selector = new DevelopmentModePersisterSelector(new DefaultPersisterSelector(), false);
+		final PersisterSelector selector = new DevelopmentModePersisterSelector(new DefaultPersisterSelector(), false);
 		selector.getPersisterId(null, Arrays.asList("test", "test2")); //$NON-NLS-1$//$NON-NLS-2$
 	}
 
@@ -72,8 +72,8 @@ public class DevelopmentModePersisterSelectorTest {
 
 	@Test
 	public void testReturnInMemoryPersisterForDevMode() {
-		final IScope userScope = new ScopeImpl(UserScopeDescriptor.NAME, Collections.<String, String> emptyMap());
-		final IScopePath scopePath = new ScopePathImpl(Arrays.asList(userScope));
+		final Scope userScope = new ScopeImpl(UserScopeDescriptor.NAME, Collections.<String, String> emptyMap());
+		final ScopePath scopePath = new ScopePathImpl(Arrays.asList(userScope));
 
 		final DevelopmentModePersisterSelector selector = new DevelopmentModePersisterSelector(
 			new DefaultPersisterSelector(),

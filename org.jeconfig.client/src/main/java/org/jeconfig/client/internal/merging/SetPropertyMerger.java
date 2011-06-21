@@ -41,7 +41,7 @@ import org.jeconfig.api.annotation.merging.ItemMergingStrategy;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigSetDTO;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
-import org.jeconfig.api.dto.IConfigDTO;
+import org.jeconfig.api.dto.ConfigDTO;
 import org.jeconfig.client.internal.AnnotationUtil;
 
 public final class SetPropertyMerger extends AbstractPropertyMerger {
@@ -57,7 +57,7 @@ public final class SetPropertyMerger extends AbstractPropertyMerger {
 		final ComplexConfigDTO parentDTO,
 		final ComplexConfigDTO childDTO,
 		final PropertyDescriptor propertyDescriptor,
-		final Map<Class<? extends Annotation>, IPropertyMerger> mergers,
+		final Map<Class<? extends Annotation>, PropertyMerger> mergers,
 		final ComplexTypeMerger complexTypeMerger,
 		final StalePropertiesMergingResultImpl mergingResult) {
 
@@ -89,11 +89,11 @@ public final class SetPropertyMerger extends AbstractPropertyMerger {
 			}
 
 			if (resultSetDTO == null) {
-				Set<IConfigDTO> resultSet = null;
+				Set<ConfigDTO> resultSet = null;
 				if (parentSetDTO.getItems() != null || childSetDTO.getItems() != null) {
-					resultSet = new HashSet<IConfigDTO>();
-					final Map<ElementContainer, IConfigDTO> parentContainerMap = createContainerMap(parentSetDTO.getItems());
-					final Map<ElementContainer, IConfigDTO> childContainerMap = createContainerMap(childSetDTO.getItems());
+					resultSet = new HashSet<ConfigDTO>();
+					final Map<ElementContainer, ConfigDTO> parentContainerMap = createContainerMap(parentSetDTO.getItems());
+					final Map<ElementContainer, ConfigDTO> childContainerMap = createContainerMap(childSetDTO.getItems());
 
 					mergeAddedSimpleElements(resultSet, parentContainerMap, childContainerMap, annotation.itemAddedStrategy());
 					mergeRemovedSimpleElements(resultSet, parentContainerMap, childContainerMap, annotation.itemRemovedStrategy());
@@ -119,11 +119,11 @@ public final class SetPropertyMerger extends AbstractPropertyMerger {
 		}
 	}
 
-	private Map<ElementContainer, IConfigDTO> createContainerMap(final Set<IConfigDTO> set) {
+	private Map<ElementContainer, ConfigDTO> createContainerMap(final Set<ConfigDTO> set) {
 		if (set != null) {
-			final Map<ElementContainer, IConfigDTO> result = new HashMap<ElementContainer, IConfigDTO>();
+			final Map<ElementContainer, ConfigDTO> result = new HashMap<ElementContainer, ConfigDTO>();
 
-			for (final IConfigDTO element : set) {
+			for (final ConfigDTO element : set) {
 				result.put(new ElementContainer(element), element);
 			}
 
@@ -133,10 +133,10 @@ public final class SetPropertyMerger extends AbstractPropertyMerger {
 	}
 
 	private void mergeExistingEntries(
-		final Set<IConfigDTO> resultSet,
-		final Map<ElementContainer, IConfigDTO> parentMap,
-		final Map<ElementContainer, IConfigDTO> childMap,
-		final Map<Class<? extends Annotation>, IPropertyMerger> mergers,
+		final Set<ConfigDTO> resultSet,
+		final Map<ElementContainer, ConfigDTO> parentMap,
+		final Map<ElementContainer, ConfigDTO> childMap,
+		final Map<Class<? extends Annotation>, PropertyMerger> mergers,
 		final ComplexTypeMerger complexTypeMerger,
 		final PropertyDescriptor propertyDescriptor,
 		final ComplexConfigDTO parentConfigDTO,
@@ -158,8 +158,8 @@ public final class SetPropertyMerger extends AbstractPropertyMerger {
 		if (parentMap != null && childMap != null) {
 			for (final ElementContainer elementContainer : parentMap.keySet()) {
 				if (childMap.containsKey(elementContainer)) {
-					final IConfigDTO parentItemDTO = elementContainer.getElement();
-					final IConfigDTO childItemDTO = childMap.get(elementContainer);
+					final ConfigDTO parentItemDTO = elementContainer.getElement();
+					final ConfigDTO childItemDTO = childMap.get(elementContainer);
 
 					switch (mergingStrategy) {
 						case USE_CHILD:
@@ -193,10 +193,10 @@ public final class SetPropertyMerger extends AbstractPropertyMerger {
 	}
 
 	@SuppressWarnings("unchecked")
-	private IConfigDTO mergeItem(
-		final IConfigDTO parentItemDTO,
-		final IConfigDTO childItemDTO,
-		final Map<Class<? extends Annotation>, IPropertyMerger> mergers,
+	private ConfigDTO mergeItem(
+		final ConfigDTO parentItemDTO,
+		final ConfigDTO childItemDTO,
+		final Map<Class<? extends Annotation>, PropertyMerger> mergers,
 		final ComplexTypeMerger complexTypeMerger,
 		final PropertyDescriptor propertyDescriptor,
 		final ComplexConfigDTO parentConfigDTO,
@@ -226,9 +226,9 @@ public final class SetPropertyMerger extends AbstractPropertyMerger {
 	}
 
 	private void mergeAddedSimpleElements(
-		final Set<IConfigDTO> resultSet,
-		final Map<ElementContainer, IConfigDTO> parentMap,
-		final Map<ElementContainer, IConfigDTO> childMap,
+		final Set<ConfigDTO> resultSet,
+		final Map<ElementContainer, ConfigDTO> parentMap,
+		final Map<ElementContainer, ConfigDTO> childMap,
 		final ItemExistenceStrategy itemExistanceStrategy) {
 
 		if (childMap != null) {
@@ -250,9 +250,9 @@ public final class SetPropertyMerger extends AbstractPropertyMerger {
 	}
 
 	private void mergeRemovedSimpleElements(
-		final Set<IConfigDTO> resultSet,
-		final Map<ElementContainer, IConfigDTO> parentMap,
-		final Map<ElementContainer, IConfigDTO> childMap,
+		final Set<ConfigDTO> resultSet,
+		final Map<ElementContainer, ConfigDTO> parentMap,
+		final Map<ElementContainer, ConfigDTO> childMap,
 		final ItemExistenceStrategy itemExistanceStrategy) {
 
 		if (parentMap != null) {
@@ -274,10 +274,10 @@ public final class SetPropertyMerger extends AbstractPropertyMerger {
 	}
 
 	private static class ElementContainer {
-		private final IConfigDTO element;
+		private final ConfigDTO element;
 		private Object key;
 
-		public ElementContainer(final IConfigDTO element) {
+		public ElementContainer(final ConfigDTO element) {
 			this.element = element;
 
 			if (element instanceof ConfigSimpleValueDTO) {
@@ -299,7 +299,7 @@ public final class SetPropertyMerger extends AbstractPropertyMerger {
 			}
 		}
 
-		public IConfigDTO getElement() {
+		public ConfigDTO getElement() {
 			return element;
 		}
 

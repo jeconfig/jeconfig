@@ -48,7 +48,7 @@ public final class ConfigMapDecorator<K, V> extends AbstractConfigProxy<ConfigMa
 		Assert.paramNotNull(target, "target"); //$NON-NLS-1$
 		Assert.paramNotNull(proxyUpdater, "proxyUpdater"); //$NON-NLS-1$
 
-		if (target instanceof IConfigProxy) {
+		if (target instanceof ConfigProxy) {
 			throw new IllegalArgumentException("Attempt to decorate a map twice!"); //$NON-NLS-1$
 		}
 
@@ -165,8 +165,8 @@ public final class ConfigMapDecorator<K, V> extends AbstractConfigProxy<ConfigMa
 			return true;
 		} else {
 			for (final V theV : target.values()) {
-				if (theV instanceof IConfigProxy) {
-					final IConfigProxy<?> proxyV = (IConfigProxy<?>) theV;
+				if (theV instanceof ConfigProxy) {
+					final ConfigProxy<?> proxyV = (ConfigProxy<?>) theV;
 					if (proxyV.hasDiff()) {
 						return true;
 					}

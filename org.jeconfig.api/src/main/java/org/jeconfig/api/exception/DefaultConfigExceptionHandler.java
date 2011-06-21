@@ -27,20 +27,20 @@
 
 package org.jeconfig.api.exception;
 
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 /**
- * Default implementation of the {@link IConfigExceptionHandler} interface.<br>
+ * Default implementation of the {@link ConfigExceptionHandler} interface.<br>
  * Logs all exceptions and uses default failure solution strategies.
  */
-public class DefaultConfigExceptionHandler implements IConfigExceptionHandler {
+public class DefaultConfigExceptionHandler implements ConfigExceptionHandler {
 	private static final Logger LOG = LoggerFactory.getLogger(DefaultConfigExceptionHandler.class);
 
 	@Override
 	public LoadFailureSolutionStrategy loadFailed(
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final Class<?> configClass,
 		final Exception e,
 		final int retryCount) {
@@ -52,7 +52,7 @@ public class DefaultConfigExceptionHandler implements IConfigExceptionHandler {
 
 	@Override
 	public RefreshFailureSolutionStrategy refreshFailed(
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final Object config,
 		final Exception e,
 		final int retryCount) {
@@ -67,7 +67,7 @@ public class DefaultConfigExceptionHandler implements IConfigExceptionHandler {
 
 	@Override
 	public SaveFailureSolutionStrategy saveFailed(
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final Object config,
 		final Exception e,
 		final int retryCount) {

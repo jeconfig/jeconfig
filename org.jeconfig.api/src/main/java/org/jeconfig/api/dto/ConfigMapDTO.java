@@ -31,23 +31,23 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 
 /**
  * Holds all information about a map configuration object.
  */
 public final class ConfigMapDTO extends AbstractConfigDTO {
 	private static final long serialVersionUID = 1L;
-	private Map<String, IConfigDTO> map;
+	private Map<String, ConfigDTO> map;
 
 	/**
 	 * Returns the map which holds simple or coplex DTOs representing the original map of the configuration object.
 	 * 
 	 * @return the map; may be <code>null</code>
 	 */
-	public Map<String, IConfigDTO> getMap() {
+	public Map<String, ConfigDTO> getMap() {
 		if (map != null) {
-			return new HashMap<String, IConfigDTO>(map);
+			return new HashMap<String, ConfigDTO>(map);
 		}
 		return null;
 	}
@@ -57,7 +57,7 @@ public final class ConfigMapDTO extends AbstractConfigDTO {
 	 * 
 	 * @param map
 	 */
-	public void setMap(final Map<String, IConfigDTO> map) {
+	public void setMap(final Map<String, ConfigDTO> map) {
 		this.map = map;
 	}
 
@@ -75,7 +75,7 @@ public final class ConfigMapDTO extends AbstractConfigDTO {
 		config.setVersion(getVersion());
 		config.setParentVersion(getParentVersion());
 		config.setParentScopeName(getParentScopeName());
-		config.setMap(map == null ? null : new HashMap<String, IConfigDTO>());
+		config.setMap(map == null ? null : new HashMap<String, ConfigDTO>());
 		return config;
 	}
 
@@ -85,7 +85,7 @@ public final class ConfigMapDTO extends AbstractConfigDTO {
 	 * @param map
 	 * @return a new flat copy
 	 */
-	public ConfigMapDTO flatCopy(final Map<String, IConfigDTO> map) {
+	public ConfigMapDTO flatCopy(final Map<String, ConfigDTO> map) {
 		final ConfigMapDTO config = new ConfigMapDTO();
 		config.setPropertyType(getPropertyType());
 		config.setPropertyName(getPropertyName());
@@ -115,7 +115,7 @@ public final class ConfigMapDTO extends AbstractConfigDTO {
 		config.setVersion(version);
 		config.setParentVersion(parentVersion);
 		config.setParentScopeName(parentScopeName);
-		config.setMap(map == null ? null : new HashMap<String, IConfigDTO>());
+		config.setMap(map == null ? null : new HashMap<String, ConfigDTO>());
 		return config;
 	}
 
@@ -125,12 +125,12 @@ public final class ConfigMapDTO extends AbstractConfigDTO {
 	}
 
 	@Override
-	public ConfigMapDTO deepCopyToScopePath(final IScopePath scopePath) {
+	public ConfigMapDTO deepCopyToScopePath(final ScopePath scopePath) {
 		final ConfigMapDTO result = flatCopy();
 		result.setDefiningScopePath(scopePath);
 
 		if (map != null) {
-			for (final Entry<String, IConfigDTO> entry : map.entrySet()) {
+			for (final Entry<String, ConfigDTO> entry : map.entrySet()) {
 				result.map.put(entry.getKey(), entry.getValue().deepCopyToScopePath(scopePath));
 			}
 		}
@@ -144,17 +144,17 @@ public final class ConfigMapDTO extends AbstractConfigDTO {
 	 * @param key
 	 * @param value
 	 */
-	public void addEntry(final String key, final IConfigDTO value) {
+	public void addEntry(final String key, final ConfigDTO value) {
 		if (map == null) {
-			map = new HashMap<String, IConfigDTO>();
+			map = new HashMap<String, ConfigDTO>();
 		}
 		map.put(key, value);
 	}
 
 	@Override
-	public void visit(final IConfigDtoVisitor visitor) {
+	public void visit(final ConfigDtoVisitor visitor) {
 		visitor.visitMapDto(this);
-		for (final IConfigDTO valueDto : map.values()) {
+		for (final ConfigDTO valueDto : map.values()) {
 			valueDto.visit(visitor);
 		}
 	}

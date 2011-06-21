@@ -29,8 +29,8 @@ package org.jeconfig.client.annotation.complex;
 
 import org.jeconfig.api.scope.DefaultScopeDescriptor;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.client.AbstractConfigServiceTest;
 import org.jeconfig.client.testconfigs.ComplexSubtype;
 import org.jeconfig.client.testconfigs.DummyStalenessNotifier;
@@ -47,10 +47,10 @@ public class ComplexPropertyStalenessTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testUseParentOnStalenessBecauseOfDeletion() {
-		final IScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
 				ComplexPropertyStalenessTestConfiguration.class);
-		final IScopePath globalPath = builderFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
-		final IScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
+		final ScopePath globalPath = builderFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
 
 		final ComplexPropertyStalenessTestConfiguration globalConfig = getConfigService().load(
 				ComplexPropertyStalenessTestConfiguration.class,
@@ -79,10 +79,10 @@ public class ComplexPropertyStalenessTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeAndUseChildOnStalenessBecauseOfDeletion() {
-		final IScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
 				ComplexPropertyStalenessTestConfiguration.class);
-		final IScopePath globalPath = builderFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
-		final IScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
+		final ScopePath globalPath = builderFactory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
 
 		final ComplexPropertyStalenessTestConfiguration globalConfig = getConfigService().load(
 				ComplexPropertyStalenessTestConfiguration.class,
@@ -111,9 +111,9 @@ public class ComplexPropertyStalenessTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testUseParentOnStalenessBecauseOfParentUpdate() {
-		final IScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
 				ComplexPropertyStalenessTestConfiguration.class);
-		final IScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
+		final ScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
 
 		final ComplexPropertyStalenessTestConfiguration defaultConfig = getConfigService().load(
 				ComplexPropertyStalenessTestConfiguration.class,
@@ -137,9 +137,9 @@ public class ComplexPropertyStalenessTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeAndUseChildOnStalenessBecauseOfParentUpdate() {
-		final IScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory builderFactory = getConfigService().getScopePathBuilderFactory(
 				ComplexPropertyStalenessTestConfiguration.class);
-		final IScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
+		final ScopePath defaultPath = builderFactory.annotatedPathUntil(DefaultScopeDescriptor.NAME).create();
 
 		final ComplexPropertyStalenessTestConfiguration defaultConfig = getConfigService().load(
 				ComplexPropertyStalenessTestConfiguration.class,

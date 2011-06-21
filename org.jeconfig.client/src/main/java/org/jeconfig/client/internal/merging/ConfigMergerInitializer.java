@@ -31,23 +31,23 @@ import java.lang.annotation.Annotation;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 
 public final class ConfigMergerInitializer {
-	private final Map<Class<? extends Annotation>, IPropertyMerger> mergers;
-	private final ISimpleTypeConverterRegistry converterRegistry;
+	private final Map<Class<? extends Annotation>, PropertyMerger> mergers;
+	private final SimpleTypeConverterRegistry converterRegistry;
 
-	public ConfigMergerInitializer(final ISimpleTypeConverterRegistry converterRegistry) {
+	public ConfigMergerInitializer(final SimpleTypeConverterRegistry converterRegistry) {
 		this.converterRegistry = converterRegistry;
-		mergers = new HashMap<Class<? extends Annotation>, IPropertyMerger>();
+		mergers = new HashMap<Class<? extends Annotation>, PropertyMerger>();
 		createMergers();
 	}
 
-	public Map<Class<? extends Annotation>, IPropertyMerger> getFieldMergers() {
+	public Map<Class<? extends Annotation>, PropertyMerger> getFieldMergers() {
 		return mergers;
 	}
 
-	private void addMerger(final IPropertyMerger merger) {
+	private void addMerger(final PropertyMerger merger) {
 		mergers.put(merger.getAnnotationClass(), merger);
 	}
 

@@ -32,12 +32,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jeconfig.api.ConfigServiceAccessor;
-import org.jeconfig.api.IConfigService;
-import org.jeconfig.api.IConfigSetupService;
-import org.jeconfig.api.persister.IConfigPersistenceService;
-import org.jeconfig.api.persister.IConfigPersister;
+import org.jeconfig.api.ConfigService;
+import org.jeconfig.api.ConfigSetupService;
+import org.jeconfig.api.persister.ConfigPersistenceService;
+import org.jeconfig.api.persister.ConfigPersister;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
-import org.jeconfig.api.scope.IScopePropertyProvider;
+import org.jeconfig.api.scope.ScopePropertyProvider;
 import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.jeconfig.aspect.creation.Activator;
 import org.jeconfig.client.internal.ConfigServiceImpl;
@@ -48,10 +48,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 public abstract class AbstractConfigCreationTest {
-	private static IConfigService configService;
-	private static IConfigPersistenceService configPersistenceService;
-	private static IConfigSetupService configSetupService;
-	private static IConfigPersister persister;
+	private static ConfigService configService;
+	private static ConfigPersistenceService configPersistenceService;
+	private static ConfigSetupService configSetupService;
+	private static ConfigPersister persister;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -62,7 +62,7 @@ public abstract class AbstractConfigCreationTest {
 		configService = new ConfigServiceAccessor(configServiceImpl);
 		configPersistenceService = new ConfigPersistenceServiceImpl();
 
-		configSetupService.getScopeRegistry().addScopePropertyProvider(new IScopePropertyProvider() {
+		configSetupService.getScopeRegistry().addScopePropertyProvider(new ScopePropertyProvider() {
 			@Override
 			public String getScopeName() {
 				return UserScopeDescriptor.NAME;
@@ -99,11 +99,11 @@ public abstract class AbstractConfigCreationTest {
 		return new ConfigServiceAccessor(configService);
 	}
 
-	public IConfigPersistenceService getConfigSetupService() {
+	public ConfigPersistenceService getConfigSetupService() {
 		return configPersistenceService;
 	}
 
-	public static IConfigPersister getPersister() {
+	public static ConfigPersister getPersister() {
 		return persister;
 	}
 }

@@ -32,12 +32,12 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.jeconfig.api.annotation.merging.ISimpleValueMergingStrategy;
+import org.jeconfig.api.annotation.merging.SimpleValueMergingStrategy;
 import org.jeconfig.api.annotation.merging.ItemExistenceStrategy;
 import org.jeconfig.api.annotation.merging.ItemMergingStrategy;
 import org.jeconfig.api.annotation.merging.MergingStrategies;
 import org.jeconfig.api.annotation.merging.StalenessSolutionStrategy;
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
 import org.jeconfig.api.conversion.NoCustomSimpleTypeConverter;
 
 /**
@@ -85,7 +85,7 @@ public @interface ConfigMapProperty {
 	 * 
 	 * <b> Only supported for Simple Map value types!!!</b>
 	 */
-	Class<? extends ISimpleValueMergingStrategy<?>> simpleValueMergingStrategy() default MergingStrategies.ChildOverwrites.class;
+	Class<? extends SimpleValueMergingStrategy<?>> simpleValueMergingStrategy() default MergingStrategies.ChildOverwrites.class;
 
 	/**
 	 * Specifies the behavior when an entry does not exist in the child.
@@ -109,7 +109,7 @@ public @interface ConfigMapProperty {
 	 * If no custom converter is set, a converter is searched in the global converter registry of the
 	 * configuration setup service. <br>
 	 */
-	Class<? extends ISimpleTypeConverter<?>> customKeyConverter() default NoCustomSimpleTypeConverter.class;
+	Class<? extends SimpleTypeConverter<?>> customKeyConverter() default NoCustomSimpleTypeConverter.class;
 
 	/**
 	 * The converter which is used to convert simple types of this property into their serialized form.<br>
@@ -118,5 +118,5 @@ public @interface ConfigMapProperty {
 	 * 
 	 * <b> Only supported for Simple Map value types!!!</b>
 	 */
-	Class<? extends ISimpleTypeConverter<?>> customValueConverter() default NoCustomSimpleTypeConverter.class;
+	Class<? extends SimpleTypeConverter<?>> customValueConverter() default NoCustomSimpleTypeConverter.class;
 }

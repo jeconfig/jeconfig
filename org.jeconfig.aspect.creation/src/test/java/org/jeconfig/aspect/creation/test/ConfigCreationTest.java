@@ -27,7 +27,7 @@
 
 package org.jeconfig.aspect.creation.test;
 
-import org.jeconfig.client.proxy.IConfigProxy;
+import org.jeconfig.client.proxy.ConfigProxy;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -38,27 +38,27 @@ public class ConfigCreationTest extends AbstractConfigCreationTest {
 	public void testSimpleComplexTypeCreation() {
 		final CreationTestConfiguration config = new CreationTestConfiguration();
 		Assert.assertNull(config.getField());
-		Assert.assertTrue(IConfigProxy.class.isAssignableFrom(config.getClass()));
+		Assert.assertTrue(ConfigProxy.class.isAssignableFrom(config.getClass()));
 	}
 
 	@Test
 	public void testSimpleComplexTypeCreationWithArg() {
 		final CreationTestConfiguration config = new CreationTestConfiguration("adsf");
 		Assert.assertEquals("adsf", config.getField());
-		Assert.assertTrue(IConfigProxy.class.isAssignableFrom(config.getClass()));
+		Assert.assertTrue(ConfigProxy.class.isAssignableFrom(config.getClass()));
 	}
 
 	@Test
 	public void testNonConfigComplexTypeCreation() {
 		final CreationTextNoConfiguration object = new CreationTextNoConfiguration();
 		Assert.assertNotNull(object);
-		Assert.assertFalse(IConfigProxy.class.isAssignableFrom(object.getClass()));
+		Assert.assertFalse(ConfigProxy.class.isAssignableFrom(object.getClass()));
 	}
 
 	@Test
 	public void testCreationOfComplexRootConfig() {
 		final TestConfig config = new TestConfig();
 		Assert.assertNotNull(config);
-		Assert.assertTrue(config instanceof IConfigProxy);
+		Assert.assertTrue(config instanceof ConfigProxy);
 	}
 }

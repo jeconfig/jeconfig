@@ -34,7 +34,7 @@ package org.jeconfig.api.scope;
  * one per panel, per table, ...<br>
  * Some configuration annotations have special support for this scope, see @InjectConfig and @ConfigCrossReference.
  */
-public final class InstanceScopeDescriptor implements IScopeDescriptor {
+public final class InstanceScopeDescriptor implements ScopeDescriptor {
 	public static final String NAME = "instance"; //$NON-NLS-1$
 
 	/**

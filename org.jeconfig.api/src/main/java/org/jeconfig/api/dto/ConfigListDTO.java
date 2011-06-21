@@ -30,23 +30,23 @@ package org.jeconfig.api.dto;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 
 /**
  * Holds all information about a list configuration object.
  */
 public final class ConfigListDTO extends AbstractConfigDTO {
 	private static final long serialVersionUID = 1L;
-	private List<IConfigDTO> items;
+	private List<ConfigDTO> items;
 
 	/**
 	 * Returns all items of the list. May be simple or complex DTOs or <code>null</code>.
 	 * 
 	 * @return all items of the list; may be <code>null</code>
 	 */
-	public List<IConfigDTO> getItems() {
+	public List<ConfigDTO> getItems() {
 		if (items != null) {
-			return new ArrayList<IConfigDTO>(items);
+			return new ArrayList<ConfigDTO>(items);
 		}
 		return null;
 	}
@@ -56,7 +56,7 @@ public final class ConfigListDTO extends AbstractConfigDTO {
 	 * 
 	 * @param items
 	 */
-	public void setItems(final List<IConfigDTO> items) {
+	public void setItems(final List<ConfigDTO> items) {
 		this.items = items;
 	}
 
@@ -74,7 +74,7 @@ public final class ConfigListDTO extends AbstractConfigDTO {
 		config.setVersion(getVersion());
 		config.setParentVersion(getParentVersion());
 		config.setParentScopeName(getParentScopeName());
-		config.setItems(items == null ? null : new ArrayList<IConfigDTO>());
+		config.setItems(items == null ? null : new ArrayList<ConfigDTO>());
 		return config;
 	}
 
@@ -84,7 +84,7 @@ public final class ConfigListDTO extends AbstractConfigDTO {
 	 * @param items
 	 * @return a new flat copy
 	 */
-	public ConfigListDTO flatCopy(final List<IConfigDTO> items) {
+	public ConfigListDTO flatCopy(final List<ConfigDTO> items) {
 		final ConfigListDTO config = new ConfigListDTO();
 		config.setPropertyType(getPropertyType());
 		config.setPropertyName(getPropertyName());
@@ -114,7 +114,7 @@ public final class ConfigListDTO extends AbstractConfigDTO {
 		config.setVersion(version);
 		config.setParentVersion(parentVersion);
 		config.setParentScopeName(parentScopeName);
-		config.setItems(items == null ? null : new ArrayList<IConfigDTO>());
+		config.setItems(items == null ? null : new ArrayList<ConfigDTO>());
 		return config;
 	}
 
@@ -124,12 +124,12 @@ public final class ConfigListDTO extends AbstractConfigDTO {
 	}
 
 	@Override
-	public ConfigListDTO deepCopyToScopePath(final IScopePath scopePath) {
+	public ConfigListDTO deepCopyToScopePath(final ScopePath scopePath) {
 		final ConfigListDTO result = flatCopy();
 		result.setDefiningScopePath(scopePath);
 
 		if (items != null) {
-			for (final IConfigDTO item : items) {
+			for (final ConfigDTO item : items) {
 				result.items.add(item.deepCopyToScopePath(scopePath));
 			}
 		}
@@ -142,17 +142,17 @@ public final class ConfigListDTO extends AbstractConfigDTO {
 	 * 
 	 * @param item
 	 */
-	public void addItem(final IConfigDTO item) {
+	public void addItem(final ConfigDTO item) {
 		if (items == null) {
-			items = new ArrayList<IConfigDTO>();
+			items = new ArrayList<ConfigDTO>();
 		}
 		items.add(item);
 	}
 
 	@Override
-	public void visit(final IConfigDtoVisitor visitor) {
+	public void visit(final ConfigDtoVisitor visitor) {
 		visitor.visitListDto(this);
-		for (final IConfigDTO itemDto : items) {
+		for (final ConfigDTO itemDto : items) {
 			itemDto.visit(visitor);
 		}
 	}

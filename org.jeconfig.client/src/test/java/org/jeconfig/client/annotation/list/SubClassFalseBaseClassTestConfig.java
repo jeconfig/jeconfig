@@ -27,7 +27,7 @@
 
 package org.jeconfig.client.annotation.list;
 
-import org.jeconfig.api.IConfigService;
+import org.jeconfig.api.ConfigService;
 import org.jeconfig.api.annotation.ConfigComplexType;
 import org.jeconfig.api.annotation.ConfigSimpleProperty;
 
@@ -44,7 +44,7 @@ public class SubClassFalseBaseClassTestConfig extends BaseClassFalseBaseClassTes
 		this.i = i;
 	}
 
-	public static SubClassFalseBaseClassTestConfig create(final IConfigService cs, final int i) {
+	public static SubClassFalseBaseClassTestConfig create(final ConfigService cs, final int i) {
 		final SubClassFalseBaseClassTestConfig sub = cs.createComplexObject(SubClassFalseBaseClassTestConfig.class);
 		sub.setI(i);
 		return sub;

@@ -36,10 +36,10 @@ import java.util.concurrent.atomic.AtomicReference;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.exception.StaleConfigException;
-import org.jeconfig.api.persister.IConfigPersistenceService;
-import org.jeconfig.api.persister.IConfigPersister;
-import org.jeconfig.api.persister.IPersisterSelector;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.persister.ConfigPersistenceService;
+import org.jeconfig.api.persister.ConfigPersister;
+import org.jeconfig.api.persister.PersisterSelector;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.api.util.Assert;
 import org.jeconfig.common.datastructure.CacheEntry;
 import org.jeconfig.common.datastructure.LRUCache;
@@ -52,66 +52,66 @@ import org.slf4j.LoggerFactory;
  * 
  * Persister which delegates to a persister which is chosen by a persister selector.
  */
-public final class ConfigPersistenceServiceImpl implements IConfigPersistenceService {
+public final class ConfigPersistenceServiceImpl implements ConfigPersistenceService {
 	private static final Logger LOG = LoggerFactory.getLogger(ConfigPersistenceServiceImpl.class);
 	private static final int CACHE_SIZE = 400;
 
-	private final Map<String, IConfigPersister> configPersisters;
-	private final AtomicReference<IPersisterSelector> persisterSelector;
-	private final Map<IScopePath, CacheEntry<ComplexConfigDTO>> configCache;
+	private final Map<String, ConfigPersister> configPersisters;
+	private final AtomicReference<PersisterSelector> persisterSelector;
+	private final Map<ScopePath, CacheEntry<ComplexConfigDTO>> configCache;
 	private final AtomicReference<Boolean> cacheEnabled = new AtomicReference<Boolean>(Boolean.TRUE);
 
 	public ConfigPersistenceServiceImpl() {
-		configPersisters = new ConcurrentHashMap<String, IConfigPersister>();
-		persisterSelector = new AtomicReference<IPersisterSelector>();
+		configPersisters = new ConcurrentHashMap<String, ConfigPersister>();
+		persisterSelector = new AtomicReference<PersisterSelector>();
 		persisterSelector.set(new DefaultPersisterSelector());
-		configCache = Collections.synchronizedMap(new LRUCache<IScopePath, CacheEntry<ComplexConfigDTO>>(CACHE_SIZE));
+		configCache = Collections.synchronizedMap(new LRUCache<ScopePath, CacheEntry<ComplexConfigDTO>>(CACHE_SIZE));
 	}
 
 	@Override
-	public void setPersisterSelector(final IPersisterSelector persisterSelector) {
+	public void setPersisterSelector(final PersisterSelector persisterSelector) {
 		this.persisterSelector.set(persisterSelector);
 	}
 
-	public void unsetPersisterSelector(final IPersisterSelector persisterSelector) {
+	public void unsetPersisterSelector(final PersisterSelector persisterSelector) {
 		this.persisterSelector.compareAndSet(persisterSelector, new DefaultPersisterSelector());
 	}
 
-	public void setConfigPersister(final IConfigPersister configPersister) {
+	public void setConfigPersister(final ConfigPersister configPersister) {
 		Assert.paramNotNull(configPersister, "configPersister"); //$NON-NLS-1$
-		setConfigPersisters(new IConfigPersister[] {configPersister});
+		setConfigPersisters(new ConfigPersister[] {configPersister});
 	}
 
-	public void setConfigPersisters(final IConfigPersister[] configPersisters) {
+	public void setConfigPersisters(final ConfigPersister[] configPersisters) {
 		Assert.paramNotNull(configPersisters, "configPersisters"); //$NON-NLS-1$
 		this.configPersisters.clear();
-		for (final IConfigPersister configPersister : configPersisters) {
+		for (final ConfigPersister configPersister : configPersisters) {
 			addConfigPersister(configPersister);
 		}
 	}
 
 	@Override
-	public void addConfigPersister(final IConfigPersister configPersister) {
+	public void addConfigPersister(final ConfigPersister configPersister) {
 		Assert.paramNotNull(configPersister, "configPersister"); //$NON-NLS-1$
 		configPersisters.put(configPersister.getId(), configPersister);
 		LOG.info("added config persister: " + configPersister.getId()); //$NON-NLS-1$
 	}
 
 	@Override
-	public void removeConfigPersister(final IConfigPersister configPersister) {
+	public void removeConfigPersister(final ConfigPersister configPersister) {
 		if (configPersister != null) {
 			configPersisters.remove(configPersister.getId());
 			LOG.info("removed config persister: " + configPersister.getId()); //$NON-NLS-1$
 		}
 	}
 
-	private IConfigPersister getPersisterForScopePath(final IScopePath scopePath) {
+	private ConfigPersister getPersisterForScopePath(final ScopePath scopePath) {
 		final String persisterId = persisterSelector.get().getPersisterId(scopePath, configPersisters.keySet());
 		if (persisterId == null) {
 			throw new IllegalStateException(
 				"Didn't find configuration persister id for scope: " + scopePath + "\nPlease check provided persister selector!"); //$NON-NLS-1$ //$NON-NLS-2$
 		}
-		final IConfigPersister persister = configPersisters.get(persisterId);
+		final ConfigPersister persister = configPersisters.get(persisterId);
 		if (persister == null) {
 			throw new IllegalStateException("Didn't find configuration persister with id '" + persisterId + "'!"); //$NON-NLS-1$//$NON-NLS-2$
 		}
@@ -119,13 +119,13 @@ public final class ConfigPersistenceServiceImpl implements IConfigPersistenceSer
 	}
 
 	@Override
-	public void delete(final IScopePath scopePath, final boolean deleteChildren) {
+	public void delete(final ScopePath scopePath, final boolean deleteChildren) {
 		// clear the cache to remove the configurations which will be deleted
 		// this could be improved by removing only necessary entries
 		configCache.clear();
 
 		if (deleteChildren) {
-			for (final IConfigPersister persister : configPersisters.values()) {
+			for (final ConfigPersister persister : configPersisters.values()) {
 				persister.delete(scopePath, deleteChildren);
 			}
 		} else {
@@ -139,7 +139,7 @@ public final class ConfigPersistenceServiceImpl implements IConfigPersistenceSer
 		// this could be improved by removing only necessary entries
 		configCache.clear();
 
-		for (final IConfigPersister persister : configPersisters.values()) {
+		for (final ConfigPersister persister : configPersisters.values()) {
 			persister.deleteAllOccurences(scopeName, properties);
 		}
 	}
@@ -151,17 +151,17 @@ public final class ConfigPersistenceServiceImpl implements IConfigPersistenceSer
 	}
 
 	@Override
-	public Collection<IScopePath> listScopes(final String scopeName, final Map<String, String> properties) {
+	public Collection<ScopePath> listScopes(final String scopeName, final Map<String, String> properties) {
 		Assert.paramNotEmpty(scopeName, "scopeName"); //$NON-NLS-1$
-		final Collection<IScopePath> scopesList = new LinkedList<IScopePath>();
-		for (final IConfigPersister persister : configPersisters.values()) {
+		final Collection<ScopePath> scopesList = new LinkedList<ScopePath>();
+		for (final ConfigPersister persister : configPersisters.values()) {
 			scopesList.addAll(persister.listScopes(scopeName, properties));
 		}
 		return scopesList;
 	}
 
 	@Override
-	public ComplexConfigDTO loadConfiguration(final IScopePath scopePath) {
+	public ComplexConfigDTO loadConfiguration(final ScopePath scopePath) {
 		if (Boolean.TRUE.equals(cacheEnabled.get())) {
 			CacheEntry<ComplexConfigDTO> result = configCache.get(scopePath);
 			if (result == null) {
@@ -196,14 +196,14 @@ public final class ConfigPersistenceServiceImpl implements IConfigPersistenceSer
 		}
 	}
 
-	private void putIntoCache(final ComplexConfigDTO config, final IScopePath scopePath) {
+	private void putIntoCache(final ComplexConfigDTO config, final ScopePath scopePath) {
 		if (Boolean.TRUE.equals(cacheEnabled.get())) {
 			final CacheEntry<ComplexConfigDTO> cacheEntry = new CacheEntry<ComplexConfigDTO>(config);
 			configCache.put(scopePath, cacheEntry);
 		}
 	}
 
-	private void removeFromCache(final IScopePath scopePath) {
+	private void removeFromCache(final ScopePath scopePath) {
 		configCache.remove(scopePath);
 	}
 

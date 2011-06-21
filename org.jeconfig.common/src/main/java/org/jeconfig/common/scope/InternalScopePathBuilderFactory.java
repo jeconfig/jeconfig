@@ -27,10 +27,10 @@
 
 package org.jeconfig.common.scope;
 
-import org.jeconfig.api.scope.IScopePathBuilder;
+import org.jeconfig.api.scope.ScopePathBuilder;
 
 public final class InternalScopePathBuilderFactory {
-	public IScopePathBuilder createBuilder() {
+	public ScopePathBuilder createBuilder() {
 		return new ScopePathBuilderImpl();
 	}
 }

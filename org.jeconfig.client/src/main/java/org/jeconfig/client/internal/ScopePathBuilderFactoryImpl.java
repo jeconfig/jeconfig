@@ -30,19 +30,19 @@ package org.jeconfig.client.internal;
 import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilder;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
-import org.jeconfig.api.scope.IScopeRegistry;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilder;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopeRegistry;
 import org.jeconfig.api.util.Assert;
 import org.jeconfig.client.proxy.ProxyUtil;
 import org.jeconfig.common.scope.ScopePathBuilderImpl;
 
-public final class ScopePathBuilderFactoryImpl implements IScopePathBuilderFactory {
-	private final IScopeRegistry scopeRegistry;
+public final class ScopePathBuilderFactoryImpl implements ScopePathBuilderFactory {
+	private final ScopeRegistry scopeRegistry;
 	private final Class<?> configClass;
 
-	public ScopePathBuilderFactoryImpl(final IScopeRegistry scopeRegistry, final Class<?> configClass) {
+	public ScopePathBuilderFactoryImpl(final ScopeRegistry scopeRegistry, final Class<?> configClass) {
 		Assert.paramNotNull(scopeRegistry, "scopeRegistry"); //$NON-NLS-1$
 		Assert.paramNotNull(configClass, "configClass"); //$NON-NLS-1$
 
@@ -51,18 +51,18 @@ public final class ScopePathBuilderFactoryImpl implements IScopePathBuilderFacto
 	}
 
 	@Override
-	public IScopePathBuilder stub() {
+	public ScopePathBuilder stub() {
 		return annotatedPathUntil(CodeDefaultScopeDescriptor.NAME);
 	}
 
 	@Override
-	public IScopePathBuilder annotatedPath() {
+	public ScopePathBuilder annotatedPath() {
 		return annotatedPathUntil(null);
 	}
 
 	@Override
-	public IScopePathBuilder annotatedPathUntil(final String lastScope) {
-		final IScopePathBuilder builder = new ScopePathBuilderImpl(scopeRegistry, configClass);
+	public ScopePathBuilder annotatedPathUntil(final String lastScope) {
+		final ScopePathBuilder builder = new ScopePathBuilderImpl(scopeRegistry, configClass);
 
 		final ConfigClass configClassAnnotation = AnnotationUtil.getAnnotation(configClass, ConfigClass.class);
 		if (configClassAnnotation == null) {
@@ -84,7 +84,7 @@ public final class ScopePathBuilderFactoryImpl implements IScopePathBuilderFacto
 			}
 		}
 
-		final IScopePath scopePath = builder.create();
+		final ScopePath scopePath = builder.create();
 		if (lastScope != null && !scopePath.getLastScope().getName().equals(lastScope)) {
 			throw new IllegalArgumentException("The scope '" //$NON-NLS-1$
 				+ lastScope

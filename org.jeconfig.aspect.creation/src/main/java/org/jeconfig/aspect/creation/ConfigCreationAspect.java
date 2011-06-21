@@ -32,8 +32,8 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.aspectj.lang.reflect.ConstructorSignature;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
-import org.jeconfig.client.IInternalConfigService;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
+import org.jeconfig.client.InternalConfigService;
 
 /**
  * Aspect which hooks into constructor invocations of configuration classes (all classes annotated with @ConfigComplexType)
@@ -61,8 +61,8 @@ public class ConfigCreationAspect {
 			if (args != null && args.length > 0) {
 				throw new IllegalArgumentException("Config Class must be instantiated by its default constructor: " + sig); //$NON-NLS-1$
 			}
-			final IInternalConfigService configService = Activator.getInstance().getConfigService();
-			final IScopePathBuilderFactory scopePathBuilderFactory = configService.getScopePathBuilderFactory(clazz);
+			final InternalConfigService configService = Activator.getInstance().getConfigService();
+			final ScopePathBuilderFactory scopePathBuilderFactory = configService.getScopePathBuilderFactory(clazz);
 			return configService.load(clazz, scopePathBuilderFactory.annotatedPath().create());
 		} else {
 			throw new IllegalArgumentException("this should never happen..."); //$NON-NLS-1$
@@ -79,7 +79,7 @@ public class ConfigCreationAspect {
 			final Class<?> clazz = sig.getDeclaringType();
 			final Object[] args = pjp.getArgs();
 			final Class<?>[] types = sig.getParameterTypes();
-			final IInternalConfigService configService = Activator.getInstance().getConfigService();
+			final InternalConfigService configService = Activator.getInstance().getConfigService();
 			return configService.createComplexObject(clazz, types, args);
 		} else {
 			throw new IllegalArgumentException("this should never happen..."); //$NON-NLS-1$

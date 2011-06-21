@@ -32,7 +32,7 @@ package org.jeconfig.api.scope;
  * <br>
  * This scope can be used if several named components exist which need their own configuration instances.
  */
-public final class ComponentScopeDescriptor implements IScopeDescriptor {
+public final class ComponentScopeDescriptor implements ScopeDescriptor {
 	public static final String NAME = "component"; //$NON-NLS-1$
 
 	/**

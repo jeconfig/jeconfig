@@ -34,8 +34,8 @@ import java.util.Map;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.exporter.ConfigExporter;
 import org.jeconfig.exporter.test.configs.ComplexType;
 import org.jeconfig.exporter.test.configs.ComplexTypeTestConfiguration;
@@ -48,17 +48,17 @@ public class ConfigExporterTest extends AbstractConfigExporterTest {
 	@Test
 	public void testImportNonExistingConfig() {
 		final ConfigExporter exporter = new ConfigExporter(getConfigPersistenceService());
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
 		exporter.importConfig(TestConfiguration.class, factory.annotatedPath().create());
-		final IScopePath exportScope = getExportScope(factory.annotatedPath().create(), TestConfiguration.class);
+		final ScopePath exportScope = getExportScope(factory.annotatedPath().create(), TestConfiguration.class);
 		final ComplexConfigDTO resultDTO = getConfigPersistenceService().loadConfiguration(exportScope);
 		Assert.assertNull(resultDTO);
 	}
 
 	@Test
 	public void testExportConfig() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
-		final IScopePath scope = factory.annotatedPath().create();
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePath scope = factory.annotatedPath().create();
 		final TestConfiguration config = getConfigService().load(TestConfiguration.class, scope);
 		final ConfigExporter exporter = new ConfigExporter(getConfigPersistenceService());
 		final Map<String, Double> map = config.getMap();
@@ -69,7 +69,7 @@ public class ConfigExporterTest extends AbstractConfigExporterTest {
 
 		exporter.exportConfig(config.getClass(), scope);
 
-		final IScopePath exportScope = getExportScope(scope, TestConfiguration.class);
+		final ScopePath exportScope = getExportScope(scope, TestConfiguration.class);
 		final TestConfiguration result = getConfigService().load(TestConfiguration.class, exportScope);
 		Assert.assertEquals(config.getS(), result.getS());
 		Assert.assertEquals(config.getMap(), result.getMap());
@@ -81,27 +81,27 @@ public class ConfigExporterTest extends AbstractConfigExporterTest {
 	@Test
 	public void testExportNonExistingConfig() {
 		final ConfigExporter exporter = new ConfigExporter(getConfigPersistenceService());
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
-		final IScopePath scope = factory.annotatedPath().create();
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePath scope = factory.annotatedPath().create();
 
 		getConfigService().delete(scope, true);
 		exporter.exportConfig(TestConfiguration.class, scope);
 
-		final IScopePath exportScope = getExportScope(scope, TestConfiguration.class);
+		final ScopePath exportScope = getExportScope(scope, TestConfiguration.class);
 		final ComplexConfigDTO resultDTO = getConfigPersistenceService().loadConfiguration(exportScope);
 		Assert.assertNull(resultDTO);
 	}
 
 	@Test
 	public void testImportConfig() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
-		final IScopePath scope = factory.annotatedPath().create();
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(TestConfiguration.class);
+		final ScopePath scope = factory.annotatedPath().create();
 		final TestConfiguration config = getConfigService().load(TestConfiguration.class, scope);
 		final ConfigExporter exporter = new ConfigExporter(getConfigPersistenceService());
 		getConfigService().save(config);
 		exporter.exportConfig(TestConfiguration.class, scope);
 		exporter.importConfig(TestConfiguration.class, scope);
-		final IScopePath exportScope = getExportScope(scope, TestConfiguration.class);
+		final ScopePath exportScope = getExportScope(scope, TestConfiguration.class);
 		final TestConfiguration result = getConfigService().load(TestConfiguration.class, exportScope);
 		Assert.assertEquals(config.getS(), result.getS());
 		Assert.assertEquals(config.getMap(), result.getMap());
@@ -109,7 +109,7 @@ public class ConfigExporterTest extends AbstractConfigExporterTest {
 
 	@Test
 	public void testExportComplexTypeConfig() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(ComplexTypeTestConfiguration.class);
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(ComplexTypeTestConfiguration.class);
 		final ComplexTypeTestConfiguration config = getConfigService().load(
 				ComplexTypeTestConfiguration.class,
 				factory.annotatedPath().create());
@@ -117,7 +117,7 @@ public class ConfigExporterTest extends AbstractConfigExporterTest {
 		config.setComplexType(ComplexType.create(getConfigService(), 0, "asd")); //$NON-NLS-1$
 		final ConfigExporter exporter = new ConfigExporter(getConfigPersistenceService());
 		getConfigService().save(config);
-		final IScopePath exportScopePath = getExportScope(factory.annotatedPath().create(), ComplexTypeTestConfiguration.class);
+		final ScopePath exportScopePath = getExportScope(factory.annotatedPath().create(), ComplexTypeTestConfiguration.class);
 		exporter.exportConfig(ComplexTypeTestConfiguration.class, factory.annotatedPath().create());
 
 		final ComplexTypeTestConfiguration result = getConfigService().load(ComplexTypeTestConfiguration.class, exportScopePath);
@@ -128,7 +128,7 @@ public class ConfigExporterTest extends AbstractConfigExporterTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testExportWithExportScope() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(ComplexTypeTestConfiguration.class);
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(ComplexTypeTestConfiguration.class);
 		final ComplexTypeTestConfiguration config = getConfigService().load(
 				ComplexTypeTestConfiguration.class,
 				factory.annotatedPath().create());
@@ -136,15 +136,15 @@ public class ConfigExporterTest extends AbstractConfigExporterTest {
 		config.setComplexType(ComplexType.create(getConfigService(), 1, "1")); //$NON-NLS-1$
 		final ConfigExporter exporter = new ConfigExporter(getConfigPersistenceService());
 		getConfigService().save(config);
-		final IScopePath exportScopePath = getExportScope(factory.annotatedPath().create(), ComplexTypeTestConfiguration.class);
+		final ScopePath exportScopePath = getExportScope(factory.annotatedPath().create(), ComplexTypeTestConfiguration.class);
 		exporter.exportConfig(ComplexTypeTestConfiguration.class, exportScopePath);
 	}
 
 	@Test
 	public void testExportCollection() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(ComplexTypeTestConfiguration.class);
-		final IScopePath userScopePath = factory.annotatedPath().create();
-		final IScopePath globalScopePath = factory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(ComplexTypeTestConfiguration.class);
+		final ScopePath userScopePath = factory.annotatedPath().create();
+		final ScopePath globalScopePath = factory.annotatedPathUntil(GlobalScopeDescriptor.NAME).create();
 
 		final ComplexTypeTestConfiguration config2 = getConfigService().load(ComplexTypeTestConfiguration.class, globalScopePath);
 		config2.setName("vscv"); //$NON-NLS-1$
@@ -158,13 +158,13 @@ public class ConfigExporterTest extends AbstractConfigExporterTest {
 
 		final ConfigExporter exporter = new ConfigExporter(getConfigPersistenceService());
 
-		final Collection<IScopePath> scopeList = new LinkedList<IScopePath>();
+		final Collection<ScopePath> scopeList = new LinkedList<ScopePath>();
 		scopeList.add(userScopePath);
 		scopeList.add(globalScopePath);
 
 		exporter.exportConfig(scopeList);
-		final IScopePath exportScopeUserPath = getExportScope(userScopePath, ComplexTypeTestConfiguration.class);
-		final IScopePath exportScopeGlobalPath = getExportScope(globalScopePath, ComplexTypeTestConfiguration.class);
+		final ScopePath exportScopeUserPath = getExportScope(userScopePath, ComplexTypeTestConfiguration.class);
+		final ScopePath exportScopeGlobalPath = getExportScope(globalScopePath, ComplexTypeTestConfiguration.class);
 
 		final ComplexTypeTestConfiguration resultUser = getConfigService().load(
 				ComplexTypeTestConfiguration.class,

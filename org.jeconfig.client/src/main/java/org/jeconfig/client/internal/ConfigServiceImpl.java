@@ -37,22 +37,22 @@ import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicReference;
 
-import org.jeconfig.api.IConfigSetupService;
-import org.jeconfig.api.IConfigUnsetter;
-import org.jeconfig.api.IScopePathListener;
+import org.jeconfig.api.ConfigSetupService;
+import org.jeconfig.api.ConfigUnsetter;
+import org.jeconfig.api.ScopePathListener;
 import org.jeconfig.api.annotation.ConfigClass;
-import org.jeconfig.api.annotation.IDefaultConfigFactory;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.annotation.DefaultConfigFactory;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.exception.IStalenessNotifier;
+import org.jeconfig.api.exception.StalenessNotifier;
 import org.jeconfig.api.exception.StaleConfigException;
-import org.jeconfig.api.persister.IConfigPersister;
+import org.jeconfig.api.persister.ConfigPersister;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopeRegistry;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopeRegistry;
 import org.jeconfig.api.util.Assert;
-import org.jeconfig.client.IInternalConfigService;
+import org.jeconfig.client.InternalConfigService;
 import org.jeconfig.client.internal.beanvalidation.BeanValidator;
 import org.jeconfig.client.internal.conversion.SimpleTypeConverterRegistryImpl;
 import org.jeconfig.client.internal.crossreferences.CrossReferencesResolver;
@@ -65,8 +65,8 @@ import org.jeconfig.client.proxy.ConfigMapDecorator;
 import org.jeconfig.client.proxy.ConfigObjectCopyUtil;
 import org.jeconfig.client.proxy.ConfigProxyFactory;
 import org.jeconfig.client.proxy.ConfigSetDecorator;
-import org.jeconfig.client.proxy.IConfigObjectFactory;
-import org.jeconfig.client.proxy.IRootConfigProxy;
+import org.jeconfig.client.proxy.ConfigObjectFactory;
+import org.jeconfig.client.proxy.RootConfigProxy;
 import org.jeconfig.client.proxy.ProxyUpdater;
 import org.jeconfig.client.proxy.ProxyUtil;
 import org.jeconfig.common.datastructure.CacheEntry;
@@ -75,44 +75,44 @@ import org.jeconfig.common.reflection.ClassInstantiation;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class ConfigServiceImpl implements IConfigSetupService, IInternalConfigService {
+public final class ConfigServiceImpl implements ConfigSetupService, InternalConfigService {
 	private static final Logger LOG = LoggerFactory.getLogger(ConfigServiceImpl.class);
 	private static final int CACHE_SIZE = 200;
 
-	private final IScopeRegistry scopeRegistry = new ScopeRegistryImpl();
-	private final ISimpleTypeConverterRegistry simpleTypeConverterRegistry = new SimpleTypeConverterRegistryImpl();
-	private final AtomicReference<IConfigPersister> configPersistenceServiceReference = new AtomicReference<IConfigPersister>();
+	private final ScopeRegistry scopeRegistry = new ScopeRegistryImpl();
+	private final SimpleTypeConverterRegistry simpleTypeConverterRegistry = new SimpleTypeConverterRegistryImpl();
+	private final AtomicReference<ConfigPersister> configPersistenceServiceReference = new AtomicReference<ConfigPersister>();
 	private final ClassInstantiation classInstantiation = new ClassInstantiation();
 	private final ConfigObjectCopyUtil copyUtil = new ConfigObjectCopyUtil();
 	private final BeanValidator beanValidator = new BeanValidator();
-	private final IConfigObjectFactory proxyFactory;
+	private final ConfigObjectFactory proxyFactory;
 	private final ConfigDTOMapper dtoMapper;
 	private final ConfigMerger configMerger;
-	private final Map<IScopePath, CacheEntry<ComplexConfigDTO>> serializedConfigCache;
+	private final Map<ScopePath, CacheEntry<ComplexConfigDTO>> serializedConfigCache;
 	private final ConfigValidator configValidator;
 	private final CrossReferencesResolver crossReferencesResolver;
 	private final ProxyUpdater proxyUpdater;
 	private final AtomicReference<Boolean> clientCacheEnabled = new AtomicReference<Boolean>(Boolean.TRUE);
-	private final AtomicReference<IStalenessNotifier> globalStalenessNotifier;
-	private final Map<IScopePath, Set<IScopePathListener>> scopePathListeners;
+	private final AtomicReference<StalenessNotifier> globalStalenessNotifier;
+	private final Map<ScopePath, Set<ScopePathListener>> scopePathListeners;
 
 	public ConfigServiceImpl() {
 		configMerger = new ConfigMerger(simpleTypeConverterRegistry);
 		proxyFactory = new ConfigProxyFactory(simpleTypeConverterRegistry);
 		proxyUpdater = new ProxyUpdater(proxyFactory, simpleTypeConverterRegistry);
-		serializedConfigCache = Collections.synchronizedMap(new LRUCache<IScopePath, CacheEntry<ComplexConfigDTO>>(CACHE_SIZE));
+		serializedConfigCache = Collections.synchronizedMap(new LRUCache<ScopePath, CacheEntry<ComplexConfigDTO>>(CACHE_SIZE));
 		configValidator = new ConfigValidator(this, this);
 		crossReferencesResolver = new CrossReferencesResolver(this);
 		dtoMapper = new ConfigDTOMapper(simpleTypeConverterRegistry, proxyFactory, proxyUpdater);
-		globalStalenessNotifier = new AtomicReference<IStalenessNotifier>(new NoOpStalenessNotifier());
-		scopePathListeners = Collections.synchronizedMap(new HashMap<IScopePath, Set<IScopePathListener>>());
+		globalStalenessNotifier = new AtomicReference<StalenessNotifier>(new NoOpStalenessNotifier());
+		scopePathListeners = Collections.synchronizedMap(new HashMap<ScopePath, Set<ScopePathListener>>());
 	}
 
-	public void bindConfigPersister(final IConfigPersister persistenceService) {
+	public void bindConfigPersister(final ConfigPersister persistenceService) {
 		configPersistenceServiceReference.set(persistenceService);
 	}
 
-	public void unbindConfigPersister(final IConfigPersister persistenceService) {
+	public void unbindConfigPersister(final ConfigPersister persistenceService) {
 		configPersistenceServiceReference.compareAndSet(persistenceService, null);
 	}
 
@@ -157,7 +157,7 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 	}
 
 	@Override
-	public <T> T load(final Class<T> configClass, final IScopePath scopePath) {
+	public <T> T load(final Class<T> configClass, final ScopePath scopePath) {
 		Assert.paramNotNull(configClass, "configClass"); //$NON-NLS-1$
 		Assert.paramNotNull(scopePath, "scope"); //$NON-NLS-1$
 
@@ -178,7 +178,7 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 		final T config = dtoMapper.deserializeRootConfig(configClass, configDTO, scopePath, configs);
 		crossReferencesResolver.resolveCrossReferences(config);
 
-		final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		final RootConfigProxy proxy = (RootConfigProxy) config;
 		proxy.resetDirty();
 		proxy.setNew(isNewConfig(proxy));
 
@@ -187,7 +187,7 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 		return config;
 	}
 
-	private boolean isNewConfig(final IRootConfigProxy rootProxy) {
+	private boolean isNewConfig(final RootConfigProxy rootProxy) {
 		final ComplexConfigDTO lastConfigDTO = rootProxy.getConfigDTOs().get(rootProxy.getConfigDTOs().size() - 1);
 		return !lastConfigDTO.getDefiningScopePath().equals(rootProxy.getScopePath());
 	}
@@ -197,7 +197,7 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 	public <T> void refresh(final T config) {
 		Assert.paramNotNull(config, "config"); //$NON-NLS-1$
 
-		final IRootConfigProxy rootConfigProxy = getRootConfigProxy(config);
+		final RootConfigProxy rootConfigProxy = getRootConfigProxy(config);
 		final Class<T> realClass = (Class<T>) ProxyUtil.getConfigClass(config.getClass());
 
 		removeScopePathFromCache(rootConfigProxy.getScopePath());
@@ -214,8 +214,8 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 		fireScopePathRefreshed(rootConfigProxy.getScopePath());
 	}
 
-	private void removeScopePathFromCache(final IScopePath scopePath) {
-		IScopePath currentPath = scopePath;
+	private void removeScopePathFromCache(final ScopePath scopePath) {
+		ScopePath currentPath = scopePath;
 		while (!CodeDefaultScopeDescriptor.NAME.equals(currentPath.getLastScope().getName())) {
 			removeFromCache(currentPath);
 			currentPath = currentPath.getParentPath();
@@ -224,7 +224,7 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 
 	private <T> void loadConfigsOfScopePath(
 		final Class<T> configClass,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final List<ComplexConfigDTO> configs) {
 		if (scopePath != null) {
 			if (ClassScopeDescriptor.NAME.equals(scopePath.getLastScope().getName())) {
@@ -245,7 +245,7 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 		}
 	}
 
-	private ComplexConfigDTO getSerializedConfig(final IScopePath scopePath, final Class<?> configClass) {
+	private ComplexConfigDTO getSerializedConfig(final ScopePath scopePath, final Class<?> configClass) {
 		if (Boolean.TRUE.equals(clientCacheEnabled.get())) {
 			CacheEntry<ComplexConfigDTO> result = serializedConfigCache.get(scopePath);
 			if (result == null) {
@@ -261,7 +261,7 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 	}
 
 	private ComplexConfigDTO migrateConfigIfNeeded(
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final Class<?> configClass,
 		final ComplexConfigDTO loadedConfiguration) {
 		ComplexConfigDTO serialiedObjectToUse = loadedConfiguration;
@@ -287,7 +287,7 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 	}
 
 	@SuppressWarnings("unchecked")
-	private <T> T getDefaultConfig(final Class<T> configClass, final IScopePath scopePath) {
+	private <T> T getDefaultConfig(final Class<T> configClass, final ScopePath scopePath) {
 		final ConfigClass annotation = AnnotationUtil.getAnnotation(configClass, ConfigClass.class);
 		if (annotation == null) {
 			throw new IllegalArgumentException(
@@ -295,7 +295,7 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 		}
 
 		if (annotation.defaultConfigFactory() != null) {
-			final IDefaultConfigFactory<T> configFactory = (IDefaultConfigFactory<T>) classInstantiation.newInstance(annotation.defaultConfigFactory());
+			final DefaultConfigFactory<T> configFactory = (DefaultConfigFactory<T>) classInstantiation.newInstance(annotation.defaultConfigFactory());
 			return configFactory.createDefaultConfig(scopePath);
 		}
 
@@ -307,8 +307,8 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 		Assert.paramNotNull(config, "config"); //$NON-NLS-1$
 		final Class<?> realClass = ProxyUtil.getConfigClass(config.getClass());
 
-		final IRootConfigProxy rootConfigProxy = getRootConfigProxy(config);
-		final IScopePath scopePath = rootConfigProxy.getScopePath();
+		final RootConfigProxy rootConfigProxy = getRootConfigProxy(config);
+		final ScopePath scopePath = rootConfigProxy.getScopePath();
 
 		configValidator.validate(config, rootConfigProxy.getScopePath());
 		beanValidator.validate(config);
@@ -347,27 +347,27 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 		}
 	}
 
-	private <T> IRootConfigProxy getRootConfigProxy(final T config) {
-		if (!IRootConfigProxy.class.isAssignableFrom(config.getClass())) {
+	private <T> RootConfigProxy getRootConfigProxy(final T config) {
+		if (!RootConfigProxy.class.isAssignableFrom(config.getClass())) {
 			throw new IllegalArgumentException(
 				"Config Objects must be obtained by the ConfigService#load methods. did not happen for: " //$NON-NLS-1$
 					+ ProxyUtil.getConfigClass(config.getClass()));
 		}
-		return (IRootConfigProxy) config;
+		return (RootConfigProxy) config;
 	}
 
 	@Override
-	public <T> void copyToScopePath(final T config, final IScopePath destinationScopePath) {
+	public <T> void copyToScopePath(final T config, final ScopePath destinationScopePath) {
 		Assert.paramNotNull(config, "config"); //$NON-NLS-1$
 		Assert.paramNotNull(destinationScopePath, "destinationScopePath"); //$NON-NLS-1$
 
-		final IRootConfigProxy rootConfigProxy = getRootConfigProxy(config);
-		final IScopePath sourceScopePath = rootConfigProxy.getScopePath();
+		final RootConfigProxy rootConfigProxy = getRootConfigProxy(config);
+		final ScopePath sourceScopePath = rootConfigProxy.getScopePath();
 
 		if (sourceScopePath.equals(destinationScopePath)) {
 			throw new IllegalArgumentException("The source and the destination scope of the configuration '" //$NON-NLS-1$
 				+ ProxyUtil.getConfigClass(config.getClass())
-				+ "' are equal. Use IConfigService.save() to save it!"); //$NON-NLS-1$
+				+ "' are equal. Use ConfigService.save() to save it!"); //$NON-NLS-1$
 		}
 
 		configValidator.validate(config, destinationScopePath);
@@ -381,19 +381,19 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 		fireScopePathSaved(destinationScopePath);
 	}
 
-	private void putIntoCache(final ComplexConfigDTO serializedConfig, final IScopePath scopePath) {
+	private void putIntoCache(final ComplexConfigDTO serializedConfig, final ScopePath scopePath) {
 		if (Boolean.TRUE.equals(clientCacheEnabled.get())) {
 			final CacheEntry<ComplexConfigDTO> cacheEntry = new CacheEntry<ComplexConfigDTO>(serializedConfig);
 			serializedConfigCache.put(scopePath, cacheEntry);
 		}
 	}
 
-	private void removeFromCache(final IScopePath scopePath) {
+	private void removeFromCache(final ScopePath scopePath) {
 		serializedConfigCache.remove(scopePath);
 	}
 
 	@Override
-	public void delete(final IScopePath scopePath, final boolean deleteChildren) {
+	public void delete(final ScopePath scopePath, final boolean deleteChildren) {
 		// clear the cache to remove the configurations which will be deleted
 		// this could be improved by removing only necessary entries
 		serializedConfigCache.clear();
@@ -411,29 +411,29 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 	}
 
 	@Override
-	public ISimpleTypeConverterRegistry getSimpleTypeConverterRegistry() {
+	public SimpleTypeConverterRegistry getSimpleTypeConverterRegistry() {
 		return simpleTypeConverterRegistry;
 	}
 
 	@Override
-	public IScopeRegistry getScopeRegistry() {
+	public ScopeRegistry getScopeRegistry() {
 		return scopeRegistry;
 	}
 
 	@Override
-	public Collection<IScopePath> listScopes(final String scopeName, final Map<String, String> properties) {
+	public Collection<ScopePath> listScopes(final String scopeName, final Map<String, String> properties) {
 		return configPersistenceServiceReference.get().listScopes(scopeName, properties);
 	}
 
 	@Override
-	public IConfigUnsetter getConfigUnsetter() {
+	public ConfigUnsetter getConfigUnsetter() {
 		return new ConfigUnsetterImpl(configMerger, dtoMapper);
 	}
 
 	@Override
-	public IScopePath getScopePath(final Object config) {
-		if (config instanceof IRootConfigProxy) {
-			return ((IRootConfigProxy) config).getScopePath();
+	public ScopePath getScopePath(final Object config) {
+		if (config instanceof RootConfigProxy) {
+			return ((RootConfigProxy) config).getScopePath();
 		}
 		return null;
 	}
@@ -448,43 +448,43 @@ public final class ConfigServiceImpl implements IConfigSetupService, IInternalCo
 	}
 
 	@Override
-	public void setGlobalStalenessNotifier(final IStalenessNotifier stalenessNotifier) {
+	public void setGlobalStalenessNotifier(final StalenessNotifier stalenessNotifier) {
 		Assert.paramNotNull(stalenessNotifier, "stalenessNotifier"); //$NON-NLS-1$
 
 		globalStalenessNotifier.set(stalenessNotifier);
 	}
 
 	@Override
-	public void addScopePathListener(final IScopePath forScopePath, final IScopePathListener listener) {
-		Set<IScopePathListener> listeners = scopePathListeners.get(forScopePath);
+	public void addScopePathListener(final ScopePath forScopePath, final ScopePathListener listener) {
+		Set<ScopePathListener> listeners = scopePathListeners.get(forScopePath);
 		if (listeners == null) {
-			listeners = new HashSet<IScopePathListener>();
+			listeners = new HashSet<ScopePathListener>();
 		}
 		listeners.add(listener);
 		scopePathListeners.put(forScopePath, listeners);
 	}
 
 	@Override
-	public void removeScopePathListener(final IScopePath forScopePath, final IScopePathListener listener) {
-		final Set<IScopePathListener> listeners = scopePathListeners.get(forScopePath);
+	public void removeScopePathListener(final ScopePath forScopePath, final ScopePathListener listener) {
+		final Set<ScopePathListener> listeners = scopePathListeners.get(forScopePath);
 		if (listeners != null) {
 			listeners.remove(listener);
 		}
 	}
 
-	private void fireScopePathSaved(final IScopePath scopePath) {
-		final Set<IScopePathListener> listeners = scopePathListeners.get(scopePath);
+	private void fireScopePathSaved(final ScopePath scopePath) {
+		final Set<ScopePathListener> listeners = scopePathListeners.get(scopePath);
 		if (listeners != null) {
-			for (final IScopePathListener listener : listeners) {
+			for (final ScopePathListener listener : listeners) {
 				listener.configSaved(scopePath);
 			}
 		}
 	}
 
-	private void fireScopePathRefreshed(final IScopePath scopePath) {
-		final Set<IScopePathListener> listeners = scopePathListeners.get(scopePath);
+	private void fireScopePathRefreshed(final ScopePath scopePath) {
+		final Set<ScopePathListener> listeners = scopePathListeners.get(scopePath);
 		if (listeners != null) {
-			for (final IScopePathListener listener : listeners) {
+			for (final ScopePathListener listener : listeners) {
 				listener.configRefreshed(scopePath);
 			}
 		}

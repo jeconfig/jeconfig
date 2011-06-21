@@ -28,7 +28,7 @@
 package org.jeconfig.exporter.test;
 
 import org.jeconfig.api.dto.ComplexConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 
 public class CountingDummyPersister extends DummyPersister {
 	private int loadCount = 0;
@@ -36,7 +36,7 @@ public class CountingDummyPersister extends DummyPersister {
 	private int updateCount = 0;
 
 	@Override
-	public ComplexConfigDTO loadConfiguration(final IScopePath scope) {
+	public ComplexConfigDTO loadConfiguration(final ScopePath scope) {
 		loadCount++;
 		return super.loadConfiguration(scope);
 	}

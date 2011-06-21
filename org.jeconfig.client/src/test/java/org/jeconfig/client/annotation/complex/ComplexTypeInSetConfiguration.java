@@ -34,23 +34,23 @@ import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.annotation.ConfigSetProperty;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
 import org.jeconfig.api.scope.UserScopeDescriptor;
-import org.jeconfig.client.testconfigs.IMyInterface;
+import org.jeconfig.client.testconfigs.MyInterface;
 
 @ConfigClass(scopePath = {GlobalScopeDescriptor.NAME, UserScopeDescriptor.NAME})
 public class ComplexTypeInSetConfiguration {
 
-	private Set<IMyInterface> set;
+	private Set<MyInterface> set;
 
 	public ComplexTypeInSetConfiguration() {
-		set = new HashSet<IMyInterface>();
+		set = new HashSet<MyInterface>();
 	}
 
-	@ConfigSetProperty(polymorph = true, itemType = IMyInterface.class)
-	public Set<IMyInterface> getSet() {
+	@ConfigSetProperty(polymorph = true, itemType = MyInterface.class)
+	public Set<MyInterface> getSet() {
 		return set;
 	}
 
-	public void setSet(final Set<IMyInterface> set) {
+	public void setSet(final Set<MyInterface> set) {
 		this.set = set;
 	}
 

@@ -34,23 +34,23 @@ import org.jeconfig.api.scope.ClassScopeDescriptor;
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
 import org.jeconfig.api.scope.DefaultScopeDescriptor;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopeDescriptor;
-import org.jeconfig.api.scope.IScopePropertyProvider;
-import org.jeconfig.api.scope.IScopeRegistry;
+import org.jeconfig.api.scope.ScopeDescriptor;
+import org.jeconfig.api.scope.ScopePropertyProvider;
+import org.jeconfig.api.scope.ScopeRegistry;
 import org.jeconfig.api.scope.InstanceScopeDescriptor;
 import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.jeconfig.api.util.Assert;
 import org.jeconfig.common.scope.ScopeValidator;
 
-public final class ScopeRegistryImpl implements IScopeRegistry {
-	private final ConcurrentHashMap<String, IScopeDescriptor> scopes;
-	private final ConcurrentHashMap<String, IScopePropertyProvider> propertyProviders;
+public final class ScopeRegistryImpl implements ScopeRegistry {
+	private final ConcurrentHashMap<String, ScopeDescriptor> scopes;
+	private final ConcurrentHashMap<String, ScopePropertyProvider> propertyProviders;
 
 	private final ScopeValidator scopeValidator;
 
 	public ScopeRegistryImpl() {
-		scopes = new ConcurrentHashMap<String, IScopeDescriptor>();
-		propertyProviders = new ConcurrentHashMap<String, IScopePropertyProvider>();
+		scopes = new ConcurrentHashMap<String, ScopeDescriptor>();
+		propertyProviders = new ConcurrentHashMap<String, ScopePropertyProvider>();
 		scopeValidator = new ScopeValidator();
 		registerDefaultScopes();
 		registerDefaultPropertyProviders();
@@ -71,37 +71,37 @@ public final class ScopeRegistryImpl implements IScopeRegistry {
 	}
 
 	@Override
-	public IScopeDescriptor getScopeDescriptor(final String scopeName) {
+	public ScopeDescriptor getScopeDescriptor(final String scopeName) {
 		return scopes.get(scopeName);
 	}
 
 	@Override
-	public void addScopeDescriptor(final IScopeDescriptor scopeDescriptor) {
+	public void addScopeDescriptor(final ScopeDescriptor scopeDescriptor) {
 		Assert.paramNotNull(scopeDescriptor, "scopeDescriptor"); //$NON-NLS-1$
 
 		scopeValidator.validateScopeDescriptor(scopeDescriptor);
 
-		final IScopeDescriptor currentlySetDescriptor = scopes.putIfAbsent(scopeDescriptor.getScopeName(), scopeDescriptor);
+		final ScopeDescriptor currentlySetDescriptor = scopes.putIfAbsent(scopeDescriptor.getScopeName(), scopeDescriptor);
 		if (currentlySetDescriptor != null) {
 			throw new IllegalArgumentException("Attempt to add a scope descriptor with a name which is already in use!"); //$NON-NLS-1$
 		}
 	}
 
 	@Override
-	public void removeScopeDescriptor(final IScopeDescriptor scopeDescriptor) {
+	public void removeScopeDescriptor(final ScopeDescriptor scopeDescriptor) {
 		Assert.paramNotNull(scopeDescriptor, "scopeDescriptor"); //$NON-NLS-1$
 		scopes.remove(scopeDescriptor.getScopeName());
 	}
 
 	@Override
-	public IScopePropertyProvider getScopePropertyProvider(final String scopeName) {
+	public ScopePropertyProvider getScopePropertyProvider(final String scopeName) {
 		return propertyProviders.get(scopeName);
 	}
 
 	@Override
-	public void addScopePropertyProvider(final IScopePropertyProvider provider) {
+	public void addScopePropertyProvider(final ScopePropertyProvider provider) {
 		Assert.paramNotNull(provider, "provider"); //$NON-NLS-1$
-		final IScopePropertyProvider currentlySetProvider = propertyProviders.putIfAbsent(provider.getScopeName(), provider);
+		final ScopePropertyProvider currentlySetProvider = propertyProviders.putIfAbsent(provider.getScopeName(), provider);
 		if (currentlySetProvider != null) {
 			throw new IllegalArgumentException(
 				"Attempt to add a property provider for a scope which has already a property provider registered!"); //$NON-NLS-1$
@@ -109,7 +109,7 @@ public final class ScopeRegistryImpl implements IScopeRegistry {
 	}
 
 	@Override
-	public void removeScopePropertyProvider(final IScopePropertyProvider provider) {
+	public void removeScopePropertyProvider(final ScopePropertyProvider provider) {
 		Assert.paramNotNull(provider, "provider"); //$NON-NLS-1$
 		propertyProviders.remove(provider.getScopeName());
 	}

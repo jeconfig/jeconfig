@@ -126,7 +126,7 @@ public class ConfigProxyMethodHandler extends AbstractConfigProxy<ComplexConfigD
 			final ModifyingMethodInfo methodInfo = modifyingMethods.get(thisMethod);
 			shouldAttachNewValue = shouldAttachNewValue(args[0], methodInfo);
 			if (shouldAttachNewValue) {
-				attachNewValueIfProxy(args[0], (IConfigProxy) self, methodInfo);
+				attachNewValueIfProxy(args[0], (ConfigProxy) self, methodInfo);
 			}
 			if (!isInitializing()) {
 				propertiesWithDiff.add(methodInfo.getPropertyName());
@@ -170,9 +170,9 @@ public class ConfigProxyMethodHandler extends AbstractConfigProxy<ComplexConfigD
 	}
 
 	@SuppressWarnings("rawtypes")
-	protected void attachNewValueIfProxy(final Object newValue, final IConfigProxy<?> self, final ModifyingMethodInfo methodInfo) {
-		if (newValue instanceof IConfigProxy) {
-			final IConfigProxy proxy = (IConfigProxy) newValue;
+	protected void attachNewValueIfProxy(final Object newValue, final ConfigProxy<?> self, final ModifyingMethodInfo methodInfo) {
+		if (newValue instanceof ConfigProxy) {
+			final ConfigProxy proxy = (ConfigProxy) newValue;
 			proxy.setConfigAnnotation(methodInfo.getConfigPropertyAnnotation());
 			super.attachNewValueIfProxy(
 					newValue,
@@ -180,7 +180,7 @@ public class ConfigProxyMethodHandler extends AbstractConfigProxy<ComplexConfigD
 					ConfigAnnotations.isCollectionAnnotation(methodInfo.getConfigPropertyAnnotation()));
 		} else if (!isInitializing()) {
 			throw new IllegalArgumentException(
-				"illegal argument use IConfigService.create* methods to create Config (sub)Objects for: " + newValue.getClass()); //$NON-NLS-1$
+				"illegal argument use ConfigService.create* methods to create Config (sub)Objects for: " + newValue.getClass()); //$NON-NLS-1$
 		}
 	}
 
@@ -192,8 +192,8 @@ public class ConfigProxyMethodHandler extends AbstractConfigProxy<ComplexConfigD
 			for (final ModifyingMethodInfo methodInfo : modifyingMethods.values()) {
 				try {
 					final Object property = methodInfo.getPropertyDescriptor().getReadMethod().invoke(self, new Object[] {});
-					if (property != null && property instanceof IConfigProxy) {
-						final IConfigProxy<?> proxy = (IConfigProxy<?>) property;
+					if (property != null && property instanceof ConfigProxy) {
+						final ConfigProxy<?> proxy = (ConfigProxy<?>) property;
 						if (proxy.hasDiff()) {
 							return true;
 						}

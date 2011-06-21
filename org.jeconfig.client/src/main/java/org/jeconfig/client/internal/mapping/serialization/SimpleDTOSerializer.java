@@ -29,15 +29,15 @@ package org.jeconfig.client.internal.mapping.serialization;
 
 import java.util.List;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 
 public class SimpleDTOSerializer extends AbstractDTOSerializer {
-	private final ISimpleTypeConverterRegistry simpleTypeConverterRegistry;
+	private final SimpleTypeConverterRegistry simpleTypeConverterRegistry;
 
-	public SimpleDTOSerializer(final ISimpleTypeConverterRegistry simpleTypeConverterRegistry) {
+	public SimpleDTOSerializer(final SimpleTypeConverterRegistry simpleTypeConverterRegistry) {
 		this.simpleTypeConverterRegistry = simpleTypeConverterRegistry;
 	}
 
@@ -46,8 +46,8 @@ public class SimpleDTOSerializer extends AbstractDTOSerializer {
 		final List<ConfigSimpleValueDTO> originalDTOs,
 		final Class<?> propertyType,
 		final String propertyName,
-		final IScopePath scopePath,
-		final ISimpleTypeConverter<Object> customConverter) {
+		final ScopePath scopePath,
+		final SimpleTypeConverter<Object> customConverter) {
 
 		String stringValue = null;
 		if (customConverter != null) {

@@ -32,7 +32,7 @@ package org.jeconfig.api.scope;
  * <br>
  * This scope should be used if modifiable defaults are desired for a configuration.
  */
-public final class DefaultScopeDescriptor implements IScopeDescriptor {
+public final class DefaultScopeDescriptor implements ScopeDescriptor {
 	public static final String NAME = "default"; //$NON-NLS-1$
 
 	@Override

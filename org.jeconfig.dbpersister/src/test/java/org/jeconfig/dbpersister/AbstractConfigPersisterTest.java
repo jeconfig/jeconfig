@@ -30,10 +30,10 @@ package org.jeconfig.dbpersister;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.jeconfig.api.IConfigService;
-import org.jeconfig.api.IConfigSetupService;
-import org.jeconfig.api.persister.IConfigPersistenceService;
-import org.jeconfig.api.scope.IScopePropertyProvider;
+import org.jeconfig.api.ConfigService;
+import org.jeconfig.api.ConfigSetupService;
+import org.jeconfig.api.persister.ConfigPersistenceService;
+import org.jeconfig.api.scope.ScopePropertyProvider;
 import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.jeconfig.client.internal.ConfigServiceImpl;
 import org.jeconfig.server.ConfigPersistenceServiceImpl;
@@ -41,10 +41,10 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 public abstract class AbstractConfigPersisterTest {
-	private static IConfigService configService;
-	private static IConfigPersistenceService configPersistenceService;
-	private static IScopePropertyProvider provider;
-	private static IConfigSetupService configSetupService;
+	private static ConfigService configService;
+	private static ConfigPersistenceService configPersistenceService;
+	private static ScopePropertyProvider provider;
+	private static ConfigSetupService configSetupService;
 
 	@BeforeClass
 	public static void setUpClass() {
@@ -55,7 +55,7 @@ public abstract class AbstractConfigPersisterTest {
 
 		configSetupService = configServiceImpl;
 
-		provider = new IScopePropertyProvider() {
+		provider = new ScopePropertyProvider() {
 			@Override
 			public String getScopeName() {
 				return UserScopeDescriptor.NAME;
@@ -84,11 +84,11 @@ public abstract class AbstractConfigPersisterTest {
 		}
 	}
 
-	public IConfigService getConfigService() {
+	public ConfigService getConfigService() {
 		return configService;
 	}
 
-	public IConfigPersistenceService getConfigSetupService() {
+	public ConfigPersistenceService getConfigSetupService() {
 		return configPersistenceService;
 	}
 

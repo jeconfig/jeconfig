@@ -35,42 +35,42 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 
 import org.jeconfig.api.ConfigServiceAccessor;
-import org.jeconfig.api.IConfigService;
-import org.jeconfig.api.autosave.IConfigAutoSaveService;
-import org.jeconfig.api.exception.IConfigExceptionHandler;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.ConfigService;
+import org.jeconfig.api.autosave.ConfigAutoSaveService;
+import org.jeconfig.api.exception.ConfigExceptionHandler;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.api.util.Assert;
-import org.jeconfig.client.proxy.IConfigDirtyStateListener;
-import org.jeconfig.client.proxy.IRootConfigProxy;
+import org.jeconfig.client.proxy.ConfigDirtyStateListener;
+import org.jeconfig.client.proxy.RootConfigProxy;
 import org.jeconfig.client.proxy.ProxyUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public final class ConfigAutoSaveServiceImpl implements IConfigAutoSaveService {
+public final class ConfigAutoSaveServiceImpl implements ConfigAutoSaveService {
 	private static final Logger LOG = LoggerFactory.getLogger(ConfigAutoSaveServiceImpl.class);
 	private static final long DEFAULT_AUTOSAVE_TIME = 5 * 60 * 1000;
 
-	private final ConcurrentHashMap<IScopePath, IRootConfigProxy> dirtyConfigs;
-	private final ConcurrentHashMap<IScopePath, IConfigExceptionHandler> exceptionHandlers;
-	private final AtomicReference<IConfigService> configServiceReference;
+	private final ConcurrentHashMap<ScopePath, RootConfigProxy> dirtyConfigs;
+	private final ConcurrentHashMap<ScopePath, ConfigExceptionHandler> exceptionHandlers;
+	private final AtomicReference<ConfigService> configServiceReference;
 	private volatile long autoSaveTime = DEFAULT_AUTOSAVE_TIME;
 	private final DirtyStateListener listener = new DirtyStateListener();
 	private Timer timer;
 	private final AtomicReference<Boolean> closed;
 
 	public ConfigAutoSaveServiceImpl() {
-		dirtyConfigs = new ConcurrentHashMap<IScopePath, IRootConfigProxy>();
-		exceptionHandlers = new ConcurrentHashMap<IScopePath, IConfigExceptionHandler>();
-		configServiceReference = new AtomicReference<IConfigService>();
+		dirtyConfigs = new ConcurrentHashMap<ScopePath, RootConfigProxy>();
+		exceptionHandlers = new ConcurrentHashMap<ScopePath, ConfigExceptionHandler>();
+		configServiceReference = new AtomicReference<ConfigService>();
 		closed = new AtomicReference<Boolean>(Boolean.valueOf(false));
 	}
 
-	public void bindConfigService(final IConfigService configService) {
+	public void bindConfigService(final ConfigService configService) {
 		this.configServiceReference.set(configService);
 		startTimer();
 	}
 
-	public void unbindConfigService(final IConfigService configService) {
+	public void unbindConfigService(final ConfigService configService) {
 		this.configServiceReference.compareAndSet(configService, null);
 		if (this.configServiceReference.get() == null) {
 			stopTimer();
@@ -90,16 +90,16 @@ public final class ConfigAutoSaveServiceImpl implements IConfigAutoSaveService {
 	}
 
 	private void doFlush() {
-		final IConfigService configService = configServiceReference.get();
+		final ConfigService configService = configServiceReference.get();
 		if (configService != null) {
-			final Iterator<Entry<IScopePath, IRootConfigProxy>> entryIterator = dirtyConfigs.entrySet().iterator();
+			final Iterator<Entry<ScopePath, RootConfigProxy>> entryIterator = dirtyConfigs.entrySet().iterator();
 			while (entryIterator.hasNext()) {
-				final Entry<IScopePath, IRootConfigProxy> entry = entryIterator.next();
-				final IRootConfigProxy config = entry.getValue();
+				final Entry<ScopePath, RootConfigProxy> entry = entryIterator.next();
+				final RootConfigProxy config = entry.getValue();
 				final Class<?> configClass = ProxyUtil.getConfigClass(config.getClass());
 				try {
-					final IConfigExceptionHandler exceptionHandler = exceptionHandlers.get(config.getScopePath());
-					final IConfigService configServiceAccessor = new ConfigServiceAccessor(configService, exceptionHandler);
+					final ConfigExceptionHandler exceptionHandler = exceptionHandlers.get(config.getScopePath());
+					final ConfigService configServiceAccessor = new ConfigServiceAccessor(configService, exceptionHandler);
 					configServiceAccessor.save(config);
 				} catch (final Exception e) {
 					logSaveFailed(config.getScopePath(), configClass, config, e);
@@ -110,7 +110,7 @@ public final class ConfigAutoSaveServiceImpl implements IConfigAutoSaveService {
 		}
 	}
 
-	private void logSaveFailed(final IScopePath scopePath, final Class<?> configClass, final Object config, final Exception e) {
+	private void logSaveFailed(final ScopePath scopePath, final Class<?> configClass, final Object config, final Exception e) {
 		LOG.error("Error while doing an auto-save for config-class: '" //$NON-NLS-1$
 			+ configClass.getName()
 			+ "' at scope path" //$NON-NLS-1$
@@ -155,12 +155,12 @@ public final class ConfigAutoSaveServiceImpl implements IConfigAutoSaveService {
 	}
 
 	@Override
-	public synchronized <T> void manageConfig(final T config, final IConfigExceptionHandler exceptionHandler) {
+	public synchronized <T> void manageConfig(final T config, final ConfigExceptionHandler exceptionHandler) {
 		Assert.paramNotNull(exceptionHandler, "exceptionHandler"); //$NON-NLS-1$
 		ensureNotClosed();
 
-		if (config instanceof IRootConfigProxy) {
-			final IRootConfigProxy proxy = (IRootConfigProxy) config;
+		if (config instanceof RootConfigProxy) {
+			final RootConfigProxy proxy = (RootConfigProxy) config;
 			if (proxy.isDirty()) {
 				dirtyConfigs.put(proxy.getScopePath(), proxy);
 			}
@@ -179,7 +179,7 @@ public final class ConfigAutoSaveServiceImpl implements IConfigAutoSaveService {
 	}
 
 	@Override
-	public boolean hasDirtyConfig(final IScopePath scopePath) {
+	public boolean hasDirtyConfig(final ScopePath scopePath) {
 		ensureNotClosed();
 
 		return dirtyConfigs.containsKey(scopePath);
@@ -193,9 +193,9 @@ public final class ConfigAutoSaveServiceImpl implements IConfigAutoSaveService {
 		}
 	}
 
-	private class DirtyStateListener implements IConfigDirtyStateListener {
+	private class DirtyStateListener implements ConfigDirtyStateListener {
 		@Override
-		public void dirtyStateChanged(final IRootConfigProxy configProxy) {
+		public void dirtyStateChanged(final RootConfigProxy configProxy) {
 			if (configProxy.isDirty()) {
 				if (Boolean.TRUE.equals(closed.get())) {
 					LOG.warn("A managed configuration became dirty.\nBut can't save the configuration because this service is closed!"); //$NON-NLS-1$

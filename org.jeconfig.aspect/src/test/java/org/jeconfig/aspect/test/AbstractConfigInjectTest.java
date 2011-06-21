@@ -32,11 +32,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.jeconfig.api.ConfigServiceAccessor;
-import org.jeconfig.api.IConfigService;
-import org.jeconfig.api.IConfigSetupService;
-import org.jeconfig.api.persister.IConfigPersistenceService;
+import org.jeconfig.api.ConfigService;
+import org.jeconfig.api.ConfigSetupService;
+import org.jeconfig.api.persister.ConfigPersistenceService;
 import org.jeconfig.api.scope.ClassScopeDescriptor;
-import org.jeconfig.api.scope.IScopePropertyProvider;
+import org.jeconfig.api.scope.ScopePropertyProvider;
 import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.jeconfig.aspect.internal.Activator;
 import org.jeconfig.client.internal.ConfigServiceImpl;
@@ -47,9 +47,9 @@ import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 public abstract class AbstractConfigInjectTest {
-	private static IConfigService configService;
-	private static IConfigPersistenceService configPersistenceService;
-	private static IConfigSetupService configSetupService;
+	private static ConfigService configService;
+	private static ConfigPersistenceService configPersistenceService;
+	private static ConfigSetupService configSetupService;
 	private static InjectTestConfigPersister persister;
 
 	@BeforeClass
@@ -65,7 +65,7 @@ public abstract class AbstractConfigInjectTest {
 		configService = new ConfigServiceAccessor(configServiceImpl);
 		configPersistenceService = new ConfigPersistenceServiceImpl();
 
-		configSetupService.getScopeRegistry().addScopePropertyProvider(new IScopePropertyProvider() {
+		configSetupService.getScopeRegistry().addScopePropertyProvider(new ScopePropertyProvider() {
 			@Override
 			public String getScopeName() {
 				return UserScopeDescriptor.NAME;
@@ -107,7 +107,7 @@ public abstract class AbstractConfigInjectTest {
 		return new ConfigServiceAccessor(configService);
 	}
 
-	public IConfigPersistenceService getConfigSetupService() {
+	public ConfigPersistenceService getConfigSetupService() {
 		return configPersistenceService;
 	}
 

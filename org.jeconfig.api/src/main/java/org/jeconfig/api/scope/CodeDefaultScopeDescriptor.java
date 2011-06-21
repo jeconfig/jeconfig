@@ -34,7 +34,7 @@ package org.jeconfig.api.scope;
  * The 'code default' instances of the configurations are never persisted in the repositories. They
  * are created by IDefaultConfigFactories.
  */
-public final class CodeDefaultScopeDescriptor implements IScopeDescriptor {
+public final class CodeDefaultScopeDescriptor implements ScopeDescriptor {
 	public static final String NAME = "codeDefault"; //$NON-NLS-1$
 
 	@Override

@@ -32,7 +32,7 @@ import java.util.Map;
 import java.util.Set;
 
 import org.jeconfig.api.annotation.ConfigComplexType;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.client.internal.AnnotationUtil;
 import org.jeconfig.client.proxy.ProxyUtil;
 
@@ -44,8 +44,8 @@ public final class CollectionElementValidator {
 		final Class<?> annotatedItemType,
 		final boolean polymorph,
 		final String collectionName,
-		final ISimpleTypeConverterRegistry converterRegistry,
-		final Map<Class<? extends Annotation>, IPropertyValidator<Annotation>> validators,
+		final SimpleTypeConverterRegistry converterRegistry,
+		final Map<Class<? extends Annotation>, PropertyValidator<Annotation>> validators,
 		final ComplexTypeValidator complexTypeValidator,
 		final Set<Class<?>> validatedComplexTypes) {
 		if (object != null) {

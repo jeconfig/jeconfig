@@ -2,7 +2,7 @@
 <scr:component xmlns:scr="http://www.osgi.org/xmlns/scr/v1.1.0" name="org.jeconfig.server.ConfigPersistenceService">
    <implementation class="org.jeconfig.server.ConfigPersistenceServiceImpl"/>
    <service>
-      <provide interface="org.jeconfig.api.persister.IConfigPersistenceService"/>
-      <provide interface="org.jeconfig.api.persister.IConfigPersister"/>
+      <provide interface="org.jeconfig.api.persister.ConfigPersistenceService"/>
+      <provide interface="org.jeconfig.api.persister.ConfigPersister"/>
    </service>
 </scr:component>

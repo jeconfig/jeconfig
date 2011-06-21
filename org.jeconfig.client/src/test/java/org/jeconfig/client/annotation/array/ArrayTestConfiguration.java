@@ -36,7 +36,7 @@ import org.jeconfig.api.scope.GlobalScopeDescriptor;
 import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.jeconfig.client.testconfigs.BaseClass;
 import org.jeconfig.client.testconfigs.ComplexSubtype;
-import org.jeconfig.client.testconfigs.IMyInterface;
+import org.jeconfig.client.testconfigs.MyInterface;
 
 @ConfigClass(scopePath = {GlobalScopeDescriptor.NAME, UserScopeDescriptor.NAME})
 public class ArrayTestConfiguration {
@@ -51,7 +51,7 @@ public class ArrayTestConfiguration {
 
 	private BaseClass[] subClass;
 
-	private IMyInterface[] implClass;
+	private MyInterface[] implClass;
 
 	@ConfigArrayProperty
 	public int[] getIntField() {
@@ -99,11 +99,11 @@ public class ArrayTestConfiguration {
 	}
 
 	@ConfigArrayProperty(polymorph = true)
-	public IMyInterface[] getImplClass() {
+	public MyInterface[] getImplClass() {
 		return implClass;
 	}
 
-	public void setImplClass(final IMyInterface[] implClass) {
+	public void setImplClass(final MyInterface[] implClass) {
 		this.implClass = implClass;
 	}
 

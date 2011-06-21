@@ -32,13 +32,13 @@ import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.aspectj.lang.annotation.Pointcut;
 import org.jeconfig.api.ConfigServiceAccessor;
-import org.jeconfig.api.IConfigService;
+import org.jeconfig.api.ConfigService;
 import org.jeconfig.api.annotation.ConfigClass;
-import org.jeconfig.api.autosave.IConfigAutoSaveService;
-import org.jeconfig.api.exception.IConfigExceptionHandler;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilder;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.autosave.ConfigAutoSaveService;
+import org.jeconfig.api.exception.ConfigExceptionHandler;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilder;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.api.scope.InstanceScopeDescriptor;
 import org.jeconfig.aspect.internal.Activator;
 import org.jeconfig.common.reflection.ClassInstantiation;
@@ -66,16 +66,16 @@ public final class ConfigInjectAspect {
 
 		Object result = pjp.proceed();
 		if (result == null) {
-			final IConfigExceptionHandler exceptionHandler = classInstantiation.newInstance(injectConfig.exceptionHandler());
-			final IConfigService configService = new ConfigServiceAccessor(
+			final ConfigExceptionHandler exceptionHandler = classInstantiation.newInstance(injectConfig.exceptionHandler());
+			final ConfigService configService = new ConfigServiceAccessor(
 				Activator.getInstance().getConfigService(),
 				exceptionHandler);
-			final IConfigAutoSaveService configAutoSaveService = Activator.getInstance().getConfigAutoSaveService();
+			final ConfigAutoSaveService configAutoSaveService = Activator.getInstance().getConfigAutoSaveService();
 
 			final String fieldName = pjp.getSignature().getName();
 			final Class<?> configClass = fieldAccessor.getFieldType(configUser.getClass(), fieldName);
 
-			final IScopePath scopePath = buildScopePath(configService, configUser, configClass, injectConfig);
+			final ScopePath scopePath = buildScopePath(configService, configUser, configClass, injectConfig);
 			if (configAutoSaveService.hasDirtyConfig(scopePath)) {
 				configAutoSaveService.flush();
 			}
@@ -89,14 +89,14 @@ public final class ConfigInjectAspect {
 		return result;
 	}
 
-	private IScopePath buildScopePath(
-		final IConfigService configService,
+	private ScopePath buildScopePath(
+		final ConfigService configService,
 		final Object configUser,
 		final Class<?> configClass,
 		final InjectConfig injectConfigAnnotation) {
 
-		final IScopePathBuilderFactory scopePathFactory = configService.getScopePathBuilderFactory(configClass);
-		final IScopePathBuilder scopePathBuilder;
+		final ScopePathBuilderFactory scopePathFactory = configService.getScopePathBuilderFactory(configClass);
+		final ScopePathBuilder scopePathBuilder;
 		String[] scopeNames;
 		if (injectConfigAnnotation.scopePath().length > 0) {
 			scopeNames = injectConfigAnnotation.scopePath();
@@ -110,7 +110,7 @@ public final class ConfigInjectAspect {
 					InstanceScopeDescriptor.PROP_INSTANCE_NAME,
 					injectConfigAnnotation.instanceName());
 		} else {
-			final IInstanceNameProvider instanceNameProvider = classInstantiation.newInstance(injectConfigAnnotation.instanceNameProvider());
+			final InstanceNameProvider instanceNameProvider = classInstantiation.newInstance(injectConfigAnnotation.instanceNameProvider());
 			final String instanceName = instanceNameProvider.getInstanceName(configUser);
 			if (instanceName != null) {
 				scopePathBuilder.addPropertyToScope(

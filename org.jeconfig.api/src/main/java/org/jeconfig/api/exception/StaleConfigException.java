@@ -27,7 +27,7 @@
 
 package org.jeconfig.api.exception;
 
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 
 /**
  * Indicates that a configuration could not be loaded or saved because it is stale.<br>
@@ -45,14 +45,14 @@ import org.jeconfig.api.scope.IScopePath;
  */
 public final class StaleConfigException extends RuntimeException {
 	private static final long serialVersionUID = 1L;
-	private final IScopePath scopePath;
+	private final ScopePath scopePath;
 
-	public StaleConfigException(final IScopePath scope, final String message, final Throwable cause) {
+	public StaleConfigException(final ScopePath scope, final String message, final Throwable cause) {
 		super(message, cause);
 		this.scopePath = scope;
 	}
 
-	public StaleConfigException(final IScopePath scope, final String message) {
+	public StaleConfigException(final ScopePath scope, final String message) {
 		super(message);
 		this.scopePath = scope;
 	}
@@ -60,7 +60,7 @@ public final class StaleConfigException extends RuntimeException {
 	/**
 	 * @return the scope path of the configuration which is stale
 	 */
-	public IScopePath getScopePath() {
+	public ScopePath getScopePath() {
 		return scopePath;
 	}
 

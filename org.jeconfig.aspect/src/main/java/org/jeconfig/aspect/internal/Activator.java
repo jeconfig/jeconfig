@@ -27,8 +27,8 @@
 
 package org.jeconfig.aspect.internal;
 
-import org.jeconfig.api.IConfigService;
-import org.jeconfig.api.autosave.IConfigAutoSaveService;
+import org.jeconfig.api.ConfigService;
+import org.jeconfig.api.autosave.ConfigAutoSaveService;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
@@ -39,33 +39,33 @@ public class Activator implements BundleActivator {
 	private BundleContext bundleContext;
 	private ServiceTracker configServiceTracker = null;
 	private ServiceTracker configAutoSaveServiceTracker = null;
-	private IConfigService configService = null;
-	private IConfigAutoSaveService configAutoSaveService = null;
+	private ConfigService configService = null;
+	private ConfigAutoSaveService configAutoSaveService = null;
 
-	public void setConfigService(final IConfigService configService) {
+	public void setConfigService(final ConfigService configService) {
 		this.configService = configService;
 	}
 
-	public void setConfigAutoSaveService(final IConfigAutoSaveService configAutoSaveService) {
+	public void setConfigAutoSaveService(final ConfigAutoSaveService configAutoSaveService) {
 		this.configAutoSaveService = configAutoSaveService;
 	}
 
 	@Override
 	public void start(final BundleContext context) throws Exception {
 		bundleContext = context;
-		configServiceTracker = new ServiceTracker(bundleContext, IConfigService.class.getName(), null);
+		configServiceTracker = new ServiceTracker(bundleContext, ConfigService.class.getName(), null);
 		configServiceTracker.open();
 
-		configAutoSaveServiceTracker = new ServiceTracker(bundleContext, IConfigAutoSaveService.class.getName(), null);
+		configAutoSaveServiceTracker = new ServiceTracker(bundleContext, ConfigAutoSaveService.class.getName(), null);
 		configAutoSaveServiceTracker.open();
 		instance = this;
 	}
 
-	public IConfigService getConfigService() {
+	public ConfigService getConfigService() {
 		if (configServiceTracker != null) {
-			final IConfigService cfgService = (IConfigService) configServiceTracker.getService();
+			final ConfigService cfgService = (ConfigService) configServiceTracker.getService();
 			if (cfgService == null) {
-				throw new RuntimeException("Didn't find " + IConfigService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
+				throw new RuntimeException("Didn't find " + ConfigService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
 			}
 			configService = cfgService;
 			return configService;
@@ -73,15 +73,15 @@ public class Activator implements BundleActivator {
 			if (configService != null) {
 				return configService;
 			}
-			throw new RuntimeException("Didn't find " + IConfigService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
+			throw new RuntimeException("Didn't find " + ConfigService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
 		}
 	}
 
-	public IConfigAutoSaveService getConfigAutoSaveService() {
+	public ConfigAutoSaveService getConfigAutoSaveService() {
 		if (configAutoSaveServiceTracker != null) {
-			final IConfigAutoSaveService cfgAutoSaveService = (IConfigAutoSaveService) configAutoSaveServiceTracker.getService();
+			final ConfigAutoSaveService cfgAutoSaveService = (ConfigAutoSaveService) configAutoSaveServiceTracker.getService();
 			if (cfgAutoSaveService == null) {
-				throw new RuntimeException("Didn't find " + IConfigAutoSaveService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
+				throw new RuntimeException("Didn't find " + ConfigAutoSaveService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
 			}
 			configAutoSaveService = cfgAutoSaveService;
 			return configAutoSaveService;
@@ -89,7 +89,7 @@ public class Activator implements BundleActivator {
 			if (configAutoSaveService != null) {
 				return configAutoSaveService;
 			} else {
-				throw new RuntimeException("Didn't find " + IConfigAutoSaveService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
+				throw new RuntimeException("Didn't find " + ConfigAutoSaveService.class.getSimpleName() + "!"); //$NON-NLS-1$//$NON-NLS-2$
 			}
 		}
 	}

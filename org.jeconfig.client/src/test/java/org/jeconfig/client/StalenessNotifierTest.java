@@ -30,7 +30,7 @@ package org.jeconfig.client;
 import junit.framework.Assert;
 
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.client.testconfigs.DummyStalenessNotifier;
 import org.jeconfig.client.testconfigs.StalenessNotifierTestConfig;
 import org.junit.Test;
@@ -54,7 +54,7 @@ public class StalenessNotifierTest extends AbstractConfigServiceTest {
 		final StalenessNotifierTestConfig childConfig = getConfigService().load(StalenessNotifierTestConfig.class);
 		childConfig.setNumber2(1);
 		getConfigService().save(childConfig);
-		final IScopePath scopePath = getConfigService().getScopePathBuilderFactory(StalenessNotifierTestConfig.class).annotatedPathUntil(
+		final ScopePath scopePath = getConfigService().getScopePathBuilderFactory(StalenessNotifierTestConfig.class).annotatedPathUntil(
 				GlobalScopeDescriptor.NAME).create();
 		final StalenessNotifierTestConfig parentConfig = getConfigService().load(StalenessNotifierTestConfig.class, scopePath);
 		parentConfig.setNumber2(2);
@@ -74,7 +74,7 @@ public class StalenessNotifierTest extends AbstractConfigServiceTest {
 		final StalenessNotifierTestConfig childConfig = getConfigService().load(StalenessNotifierTestConfig.class);
 		childConfig.setNumber1(1);
 		getConfigService().save(childConfig);
-		final IScopePath scopePath = getConfigService().getScopePathBuilderFactory(StalenessNotifierTestConfig.class).annotatedPathUntil(
+		final ScopePath scopePath = getConfigService().getScopePathBuilderFactory(StalenessNotifierTestConfig.class).annotatedPathUntil(
 				GlobalScopeDescriptor.NAME).create();
 		final StalenessNotifierTestConfig parentConfig = getConfigService().load(StalenessNotifierTestConfig.class, scopePath);
 		parentConfig.setNumber1(2);

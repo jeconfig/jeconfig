@@ -33,14 +33,14 @@ import java.util.List;
 import java.util.Set;
 
 import org.jeconfig.api.annotation.ConfigComplexType;
-import org.jeconfig.api.dto.IConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.dto.ConfigDTO;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.client.internal.AnnotationUtil;
 
-public abstract class AbstractConfigProxy<DTO_TYPE extends IConfigDTO> implements IConfigProxy<DTO_TYPE> {
+public abstract class AbstractConfigProxy<DTO_TYPE extends ConfigDTO> implements ConfigProxy<DTO_TYPE> {
 	protected static final String CROSSREFERENCES_ARE_READONLY = "Crossreferences are readonly"; //$NON-NLS-1$
 
-	private IConfigProxy<?> parent;
+	private ConfigProxy<?> parent;
 	private List<DTO_TYPE> configDTOs;
 	private boolean readOnly = false;
 	private boolean readOnlyCrossRefs = false;
@@ -49,7 +49,7 @@ public abstract class AbstractConfigProxy<DTO_TYPE extends IConfigDTO> implement
 	private Annotation configAnnotation;
 
 	@Override
-	public IScopePath getScopePath() {
+	public ScopePath getScopePath() {
 		if (parent != null) {
 			return parent.getScopePath();
 		}
@@ -57,12 +57,12 @@ public abstract class AbstractConfigProxy<DTO_TYPE extends IConfigDTO> implement
 	}
 
 	@Override
-	public IConfigProxy<?> getParentProxy() {
+	public ConfigProxy<?> getParentProxy() {
 		return parent;
 	}
 
 	@Override
-	public void setParentProxy(final IConfigProxy<?> parent) {
+	public void setParentProxy(final ConfigProxy<?> parent) {
 		this.parent = parent;
 	}
 
@@ -148,9 +148,9 @@ public abstract class AbstractConfigProxy<DTO_TYPE extends IConfigDTO> implement
 
 	@Override
 	public boolean isDetached() {
-		IConfigProxy<?> current = this;
+		ConfigProxy<?> current = this;
 		do {
-			if (current instanceof IRootConfigProxy) {
+			if (current instanceof RootConfigProxy) {
 				return false;
 			}
 			current = current.getParentProxy();
@@ -173,20 +173,20 @@ public abstract class AbstractConfigProxy<DTO_TYPE extends IConfigDTO> implement
 		return !isInitializing() && !isDetached();
 	}
 
-	protected void attachNewValueIfProxy(final Object newValue, final IConfigProxy<?> self) {
+	protected void attachNewValueIfProxy(final Object newValue, final ConfigProxy<?> self) {
 		attachNewValueIfProxy(newValue, self, false);
 	}
 
-	protected void attachNewValueIfProxy(final Object newValue, final IConfigProxy<?> self, final boolean newValueIsCollection) {
+	protected void attachNewValueIfProxy(final Object newValue, final ConfigProxy<?> self, final boolean newValueIsCollection) {
 		if (newValue != null) {
 			final ConfigComplexType complexTypeAnno = AnnotationUtil.getAnnotation(newValue.getClass(), ConfigComplexType.class);
 			if (complexTypeAnno != null || newValueIsCollection) {
-				if (!(newValue instanceof IConfigProxy)) {
+				if (!(newValue instanceof ConfigProxy)) {
 					throw new IllegalArgumentException(
 						"Got a configuration object which was not created by the configuration service!\n" + //$NON-NLS-1$
 							"Always use the create*()-Methods of the configuration service to create objects/collections!"); //$NON-NLS-1$
 				}
-				final IConfigProxy<?> proxy = (IConfigProxy<?>) newValue;
+				final ConfigProxy<?> proxy = (ConfigProxy<?>) newValue;
 				if (!isInitializing() && !proxy.isDetached()) {
 					throw new IllegalArgumentException("The configuration object is already set at a configuration." //$NON-NLS-1$
 						+ "A configuration object can't be used twice. Please create a new one!"); //$NON-NLS-1$

@@ -29,8 +29,8 @@ package org.jeconfig.client;
 
 import junit.framework.Assert;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.client.annotation.configclass.TestConfiguration;
 import org.jeconfig.client.internal.mapping.ConfigDTOMapper;
 import org.jeconfig.client.proxy.ConfigProxyFactory;
@@ -51,9 +51,9 @@ public class ConfigServiceCachingTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testCachingOnLoad() {
-		final IScopePath scope = getConfigService().getScopePathBuilderFactory(TestConfiguration.class).annotatedPath().create();
+		final ScopePath scope = getConfigService().getScopePathBuilderFactory(TestConfiguration.class).annotatedPath().create();
 		final ConfigProxyFactory proxyFactory = new ConfigProxyFactory(getConfigSetupService().getSimpleTypeConverterRegistry());
-		final ISimpleTypeConverterRegistry simpleTypeConverterRegistry = getConfigSetupService().getSimpleTypeConverterRegistry();
+		final SimpleTypeConverterRegistry simpleTypeConverterRegistry = getConfigSetupService().getSimpleTypeConverterRegistry();
 		final ProxyUpdater proxyUpdater = new ProxyUpdater(proxyFactory, simpleTypeConverterRegistry);
 		final ConfigDTOMapper mapper = new ConfigDTOMapper(simpleTypeConverterRegistry, proxyFactory, proxyUpdater);
 		getCountingDummyPersister().saveConfiguration(mapper.serialize(new TestConfiguration(), scope));

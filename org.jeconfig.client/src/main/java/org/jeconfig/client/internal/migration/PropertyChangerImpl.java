@@ -30,12 +30,12 @@ package org.jeconfig.client.internal.migration;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigDtoVisitorAdapter;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
-import org.jeconfig.api.dto.IConfigDTO;
-import org.jeconfig.api.migration.IPropertyChanger;
+import org.jeconfig.api.dto.ConfigDTO;
+import org.jeconfig.api.migration.PropertyChanger;
 
 import com.google.common.base.Objects;
 
-public class PropertyChangerImpl implements IPropertyChanger {
+public class PropertyChangerImpl implements PropertyChanger {
 
 	private final ComplexConfigDTO rootDto;
 
@@ -46,7 +46,7 @@ public class PropertyChangerImpl implements IPropertyChanger {
 	@Override
 	public void renameProperty(final ComplexConfigDTO parentDto, final String propertyName, final String newPropertyName) {
 		if (parentDto != null) {
-			final IConfigDTO property = parentDto.getProperty(propertyName);
+			final ConfigDTO property = parentDto.getProperty(propertyName);
 			if (property != null) {
 				parentDto.removeProperty(propertyName);
 				property.setPropertyName(newPropertyName);

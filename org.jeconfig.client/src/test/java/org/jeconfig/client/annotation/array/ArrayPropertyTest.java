@@ -32,14 +32,14 @@ import java.util.Arrays;
 import junit.framework.Assert;
 
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.client.AbstractConfigServiceTest;
 import org.jeconfig.client.annotation.list.BaseClassFalseBaseClassTestConfig;
 import org.jeconfig.client.annotation.list.SubClassFalseBaseClassTestConfig;
 import org.jeconfig.client.testconfigs.BaseClass;
 import org.jeconfig.client.testconfigs.ComplexSubtype;
-import org.jeconfig.client.testconfigs.IMyInferfaceForNonPolymorphTest;
-import org.jeconfig.client.testconfigs.IMyInterface;
+import org.jeconfig.client.testconfigs.MyInferfaceForNonPolymorphTest;
+import org.jeconfig.client.testconfigs.MyInterface;
 import org.jeconfig.client.testconfigs.SubClass1;
 import org.jeconfig.client.testconfigs.SubClass2;
 import org.junit.Test;
@@ -86,7 +86,7 @@ public class ArrayPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeUseChildPrimitiveField() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(ArrayTestConfiguration.class);
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(ArrayTestConfiguration.class);
 
 		final ArrayTestConfiguration globalConfig = getConfigService().load(
 				ArrayTestConfiguration.class,
@@ -104,7 +104,7 @@ public class ArrayPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeUseParentSimpleField() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(ArrayTestConfiguration.class);
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(ArrayTestConfiguration.class);
 
 		final ArrayTestConfiguration globalConfig = getConfigService().load(
 				ArrayTestConfiguration.class,
@@ -122,7 +122,7 @@ public class ArrayPropertyTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testMergeUseChildComplexTypeField() {
-		final IScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(ArrayTestConfiguration.class);
+		final ScopePathBuilderFactory scopeFactory = getConfigService().getScopePathBuilderFactory(ArrayTestConfiguration.class);
 
 		final ArrayTestConfiguration globalConfig = getConfigService().load(
 				ArrayTestConfiguration.class,
@@ -173,7 +173,7 @@ public class ArrayPropertyTest extends AbstractConfigServiceTest {
 	@Test
 	public void testPolymorphTrueIMyInterfaceField() {
 		final ArrayTestConfiguration testConfig = getConfigService().load(ArrayTestConfiguration.class);
-		testConfig.setImplClass(new IMyInterface[] {
+		testConfig.setImplClass(new MyInterface[] {
 				SubClass1.create(getConfigService(), "data1", 0), SubClass2.create(getConfigService(), "data2", 0.0f)});
 		getConfigService().save(testConfig);
 		final ArrayTestConfiguration result = getConfigService().load(ArrayTestConfiguration.class);
@@ -183,7 +183,7 @@ public class ArrayPropertyTest extends AbstractConfigServiceTest {
 	@Test(expected = IllegalArgumentException.class)
 	public void testPolymorphFalseIMyInterfaceField() {
 		final ArrayTestConfigurationNonPolymorph testConfig = getConfigService().load(ArrayTestConfigurationNonPolymorph.class);
-		testConfig.setImplClass2(new IMyInferfaceForNonPolymorphTest[] {
+		testConfig.setImplClass2(new MyInferfaceForNonPolymorphTest[] {
 				SubClass1.create(getConfigService(), "data1", 0), SubClass2.create(getConfigService(), "data2", 0.0f)});
 		getConfigService().save(testConfig);
 	}

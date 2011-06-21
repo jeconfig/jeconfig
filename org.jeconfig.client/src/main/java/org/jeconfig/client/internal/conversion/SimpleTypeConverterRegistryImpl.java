@@ -30,15 +30,15 @@ package org.jeconfig.client.internal.conversion;
 import java.util.Map.Entry;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.util.Assert;
 
-public final class SimpleTypeConverterRegistryImpl implements ISimpleTypeConverterRegistry {
-	private final ConcurrentHashMap<Class<?>, ISimpleTypeConverter<?>> converters;
+public final class SimpleTypeConverterRegistryImpl implements SimpleTypeConverterRegistry {
+	private final ConcurrentHashMap<Class<?>, SimpleTypeConverter<?>> converters;
 
 	public SimpleTypeConverterRegistryImpl() {
-		converters = new ConcurrentHashMap<Class<?>, ISimpleTypeConverter<?>>();
+		converters = new ConcurrentHashMap<Class<?>, SimpleTypeConverter<?>>();
 		new DefaultConverterFactory().createConverters(this);
 	}
 
@@ -49,19 +49,19 @@ public final class SimpleTypeConverterRegistryImpl implements ISimpleTypeConvert
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public <T> ISimpleTypeConverter<T> getConverter(final Class<T> simpleType) {
+	public <T> SimpleTypeConverter<T> getConverter(final Class<T> simpleType) {
 		Assert.paramNotNull(simpleType, "simpleType"); //$NON-NLS-1$
 
-		for (final Entry<Class<?>, ISimpleTypeConverter<?>> entry : converters.entrySet()) {
+		for (final Entry<Class<?>, SimpleTypeConverter<?>> entry : converters.entrySet()) {
 			if (entry.getKey().isAssignableFrom(simpleType)) {
-				return (ISimpleTypeConverter<T>) entry.getValue();
+				return (SimpleTypeConverter<T>) entry.getValue();
 			}
 		}
 		return null;
 	}
 
 	@Override
-	public <T> void addConverter(final Class<T> simpleType, final ISimpleTypeConverter<T> converter) {
+	public <T> void addConverter(final Class<T> simpleType, final SimpleTypeConverter<T> converter) {
 		Assert.paramNotNull(simpleType, "simpleType"); //$NON-NLS-1$
 		Assert.paramNotNull(converter, "converter"); //$NON-NLS-1$
 
@@ -69,7 +69,7 @@ public final class SimpleTypeConverterRegistryImpl implements ISimpleTypeConvert
 	}
 
 	@Override
-	public <T> void removeConverter(final Class<T> simpleType, final ISimpleTypeConverter<T> converter) {
+	public <T> void removeConverter(final Class<T> simpleType, final SimpleTypeConverter<T> converter) {
 		Assert.paramNotNull(simpleType, "simpleType"); //$NON-NLS-1$
 		Assert.paramNotNull(converter, "converter"); //$NON-NLS-1$
 
@@ -83,7 +83,7 @@ public final class SimpleTypeConverterRegistryImpl implements ISimpleTypeConvert
 			return null;
 		}
 
-		final ISimpleTypeConverter<T> converter = getConverter((Class<T>) object.getClass());
+		final SimpleTypeConverter<T> converter = getConverter((Class<T>) object.getClass());
 		if (converter != null) {
 			return converter.convertToSerializedForm(object);
 		}
@@ -93,7 +93,7 @@ public final class SimpleTypeConverterRegistryImpl implements ISimpleTypeConvert
 
 	@Override
 	public <T> T convertToObject(final Class<T> objectClass, final String serializedForm) {
-		final ISimpleTypeConverter<T> converter = getConverter(objectClass);
+		final SimpleTypeConverter<T> converter = getConverter(objectClass);
 		if (converter != null) {
 			return converter.convertToObject(objectClass, serializedForm);
 		}

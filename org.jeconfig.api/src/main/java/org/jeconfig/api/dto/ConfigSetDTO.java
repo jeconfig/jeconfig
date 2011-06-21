@@ -30,7 +30,7 @@ package org.jeconfig.api.dto;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.scope.ScopePath;
 
 /**
  * Holds all information about a set configuration object.
@@ -38,7 +38,7 @@ import org.jeconfig.api.scope.IScopePath;
 public final class ConfigSetDTO extends AbstractConfigDTO {
 	private static final long serialVersionUID = 1L;
 
-	private Set<IConfigDTO> items = null;
+	private Set<ConfigDTO> items = null;
 
 	/**
 	 * Creates a new set DTO.
@@ -53,7 +53,7 @@ public final class ConfigSetDTO extends AbstractConfigDTO {
 	 * @param polymorph
 	 * @param scopePath
 	 */
-	public ConfigSetDTO(final String propType, final String propName, final boolean polymorph, final IScopePath scopePath) {
+	public ConfigSetDTO(final String propType, final String propName, final boolean polymorph, final ScopePath scopePath) {
 		setPropertyType(propType);
 		setPropertyName(propName);
 		setPolymorph(polymorph);
@@ -65,9 +65,9 @@ public final class ConfigSetDTO extends AbstractConfigDTO {
 	 * 
 	 * @return the items; may be <code>null</code>
 	 */
-	public Set<IConfigDTO> getItems() {
+	public Set<ConfigDTO> getItems() {
 		if (items != null) {
-			return new HashSet<IConfigDTO>(items);
+			return new HashSet<ConfigDTO>(items);
 		}
 		return null;
 	}
@@ -77,7 +77,7 @@ public final class ConfigSetDTO extends AbstractConfigDTO {
 	 * 
 	 * @param items
 	 */
-	public void setItems(final Set<IConfigDTO> items) {
+	public void setItems(final Set<ConfigDTO> items) {
 		this.items = items;
 	}
 
@@ -95,7 +95,7 @@ public final class ConfigSetDTO extends AbstractConfigDTO {
 		config.setVersion(getVersion());
 		config.setParentVersion(getParentVersion());
 		config.setParentScopeName(getParentScopeName());
-		config.setItems(items == null ? null : new HashSet<IConfigDTO>());
+		config.setItems(items == null ? null : new HashSet<ConfigDTO>());
 		return config;
 	}
 
@@ -105,7 +105,7 @@ public final class ConfigSetDTO extends AbstractConfigDTO {
 	 * @param items
 	 * @return a new flat copy
 	 */
-	public ConfigSetDTO flatCopy(final Set<IConfigDTO> items) {
+	public ConfigSetDTO flatCopy(final Set<ConfigDTO> items) {
 		final ConfigSetDTO config = new ConfigSetDTO();
 		config.setPropertyType(getPropertyType());
 		config.setPropertyName(getPropertyName());
@@ -135,7 +135,7 @@ public final class ConfigSetDTO extends AbstractConfigDTO {
 		config.setVersion(version);
 		config.setParentVersion(parentVersion);
 		config.setParentScopeName(parentScopeName);
-		config.setItems(items == null ? null : new HashSet<IConfigDTO>());
+		config.setItems(items == null ? null : new HashSet<ConfigDTO>());
 		return config;
 	}
 
@@ -145,12 +145,12 @@ public final class ConfigSetDTO extends AbstractConfigDTO {
 	}
 
 	@Override
-	public ConfigSetDTO deepCopyToScopePath(final IScopePath scopePath) {
+	public ConfigSetDTO deepCopyToScopePath(final ScopePath scopePath) {
 		final ConfigSetDTO result = flatCopy();
 		result.setDefiningScopePath(scopePath);
 
 		if (items != null) {
-			for (final IConfigDTO item : items) {
+			for (final ConfigDTO item : items) {
 				result.items.add(item.deepCopyToScopePath(scopePath));
 			}
 		}
@@ -163,17 +163,17 @@ public final class ConfigSetDTO extends AbstractConfigDTO {
 	 * 
 	 * @param item
 	 */
-	public void addItem(final IConfigDTO item) {
+	public void addItem(final ConfigDTO item) {
 		if (items == null) {
-			items = new HashSet<IConfigDTO>();
+			items = new HashSet<ConfigDTO>();
 		}
 		items.add(item);
 	}
 
 	@Override
-	public void visit(final IConfigDtoVisitor visitor) {
+	public void visit(final ConfigDtoVisitor visitor) {
 		visitor.visitSetDto(this);
-		for (final IConfigDTO item : items) {
+		for (final ConfigDTO item : items) {
 			item.visit(visitor);
 		}
 	}

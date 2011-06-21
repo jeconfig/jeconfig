@@ -34,20 +34,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigSetDTO;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
-import org.jeconfig.api.dto.IConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.dto.ConfigDTO;
+import org.jeconfig.api.scope.ScopePath;
 import org.jeconfig.client.internal.ConfigIdPropertyUtil;
 
 public class SetDTOSerializer extends AbstractDTOSerializer {
-	private final ISimpleTypeConverterRegistry simpleTypeConverterRegistry;
+	private final SimpleTypeConverterRegistry simpleTypeConverterRegistry;
 	private final ConfigIdPropertyUtil configIdPropertyUtil = new ConfigIdPropertyUtil();
 
-	public SetDTOSerializer(final ISimpleTypeConverterRegistry simpleTypeConverterRegistry) {
+	public SetDTOSerializer(final SimpleTypeConverterRegistry simpleTypeConverterRegistry) {
 		this.simpleTypeConverterRegistry = simpleTypeConverterRegistry;
 	}
 
@@ -58,17 +58,17 @@ public class SetDTOSerializer extends AbstractDTOSerializer {
 		final String propertyName,
 		final boolean complex,
 		final boolean polymorph,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final Class<?> itemType,
 		final boolean shouldCreateWholeSubtree,
 		final ComplexDTOSerializer complexDTOSerializer,
 		final SimpleDTOSerializer simpleDTOSerializer,
-		final ISimpleTypeConverter<Object> customConverter) {
+		final SimpleTypeConverter<Object> customConverter) {
 
 		final ConfigSetDTO result = new ConfigSetDTO(propertyType.getName(), propertyName, polymorph, scopePath);
 
 		if (set != null) {
-			final Set<IConfigDTO> items = new HashSet<IConfigDTO>();
+			final Set<ConfigDTO> items = new HashSet<ConfigDTO>();
 
 			if (complex && !polymorph) {
 				// merging is supported
@@ -127,7 +127,7 @@ public class SetDTOSerializer extends AbstractDTOSerializer {
 		for (final ConfigSetDTO setDTO : originalDTOs) {
 			if (setDTO.getItems() != null && !setDTO.getItems().isEmpty()) {
 				final Map<String, ComplexConfigDTO> dtoMap = new HashMap<String, ComplexConfigDTO>();
-				for (final IConfigDTO item : setDTO.getItems()) {
+				for (final ConfigDTO item : setDTO.getItems()) {
 					final ComplexConfigDTO complexItem = (ComplexConfigDTO) item;
 					final ConfigSimpleValueDTO idProperty = complexItem.getSimpleValueProperty(idPropertyName);
 					if (idProperty == null) {

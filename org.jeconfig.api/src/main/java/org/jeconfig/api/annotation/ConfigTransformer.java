@@ -32,7 +32,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
-import org.jeconfig.api.migration.IConfigTransformer;
+import org.jeconfig.api.migration.ConfigTransformerDelegate;
 
 /**
  * Defines a configuration transformer to be used by the configuration service to
@@ -57,5 +57,5 @@ public @interface ConfigTransformer {
 	/**
 	 * Defines the transformer class which may be instantiated by the configuration service if needed.
 	 */
-	Class<? extends IConfigTransformer> transformer();
+	Class<? extends ConfigTransformerDelegate> transformer();
 }

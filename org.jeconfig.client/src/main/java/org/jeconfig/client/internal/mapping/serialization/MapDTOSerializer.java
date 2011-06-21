@@ -33,17 +33,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
-import org.jeconfig.api.conversion.ISimpleTypeConverterRegistry;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverterRegistry;
 import org.jeconfig.api.dto.ComplexConfigDTO;
 import org.jeconfig.api.dto.ConfigMapDTO;
-import org.jeconfig.api.dto.IConfigDTO;
-import org.jeconfig.api.scope.IScopePath;
+import org.jeconfig.api.dto.ConfigDTO;
+import org.jeconfig.api.scope.ScopePath;
 
 public class MapDTOSerializer extends AbstractDTOSerializer {
-	private final ISimpleTypeConverterRegistry simpleTypeConverterRegistry;
+	private final SimpleTypeConverterRegistry simpleTypeConverterRegistry;
 
-	public MapDTOSerializer(final ISimpleTypeConverterRegistry simpleTypeConverterRegistry) {
+	public MapDTOSerializer(final SimpleTypeConverterRegistry simpleTypeConverterRegistry) {
 		this.simpleTypeConverterRegistry = simpleTypeConverterRegistry;
 	}
 
@@ -54,14 +54,14 @@ public class MapDTOSerializer extends AbstractDTOSerializer {
 		final String propertyName,
 		final boolean complex,
 		final boolean polymorph,
-		final IScopePath scopePath,
+		final ScopePath scopePath,
 		final Class<?> keyType,
 		final Class<?> valueType,
 		final boolean shouldCreateWholeSubtree,
 		final ComplexDTOSerializer complexDTOSerializer,
 		final SimpleDTOSerializer simpleDTOSerializer,
-		final ISimpleTypeConverter<Object> customValueConverter,
-		final ISimpleTypeConverter<Object> customKeyConverter) {
+		final SimpleTypeConverter<Object> customValueConverter,
+		final SimpleTypeConverter<Object> customKeyConverter) {
 
 		final ConfigMapDTO result = new ConfigMapDTO();
 		result.setPropertyType(propertyType.getName());
@@ -77,7 +77,7 @@ public class MapDTOSerializer extends AbstractDTOSerializer {
 		}
 
 		if (map != null) {
-			final Map<String, IConfigDTO> items = new HashMap<String, IConfigDTO>();
+			final Map<String, ConfigDTO> items = new HashMap<String, ConfigDTO>();
 
 			for (final Entry<?, ?> entry : map.entrySet()) {
 				String keyString = null;
@@ -87,7 +87,7 @@ public class MapDTOSerializer extends AbstractDTOSerializer {
 					keyString = simpleTypeConverterRegistry.convertToSerializedForm(entry.getKey());
 				}
 				final Object value = entry.getValue();
-				IConfigDTO valueDTO;
+				ConfigDTO valueDTO;
 				if (complex && !polymorph) {
 					// merging is supported
 					valueDTO = complexDTOSerializer.createConfigDTO(

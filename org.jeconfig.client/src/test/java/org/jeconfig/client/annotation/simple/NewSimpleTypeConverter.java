@@ -27,9 +27,9 @@
 
 package org.jeconfig.client.annotation.simple;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
 
-public class NewSimpleTypeConverter implements ISimpleTypeConverter<NewSimpleType> {
+public class NewSimpleTypeConverter implements SimpleTypeConverter<NewSimpleType> {
 
 	private boolean hasConvertedToSerializedForm = false;
 	private boolean hasConvertedToObject = false;

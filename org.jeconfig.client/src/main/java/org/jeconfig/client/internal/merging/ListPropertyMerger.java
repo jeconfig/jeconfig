@@ -49,7 +49,7 @@ public final class ListPropertyMerger extends AbstractPropertyMerger {
 		final ComplexConfigDTO parentDTO,
 		final ComplexConfigDTO childDTO,
 		final PropertyDescriptor propertyDescriptor,
-		final Map<Class<? extends Annotation>, IPropertyMerger> mergers,
+		final Map<Class<? extends Annotation>, PropertyMerger> mergers,
 		final ComplexTypeMerger complexTypeMerger,
 		final StalePropertiesMergingResultImpl mergingResult) {
 

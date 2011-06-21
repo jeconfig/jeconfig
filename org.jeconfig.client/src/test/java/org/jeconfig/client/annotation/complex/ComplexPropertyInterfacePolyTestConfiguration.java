@@ -31,18 +31,18 @@ import org.jeconfig.api.annotation.ConfigClass;
 import org.jeconfig.api.annotation.ConfigComplexProperty;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
 import org.jeconfig.api.scope.UserScopeDescriptor;
-import org.jeconfig.client.testconfigs.IMyInterface;
+import org.jeconfig.client.testconfigs.MyInterface;
 
 @ConfigClass(scopePath = {GlobalScopeDescriptor.NAME, UserScopeDescriptor.NAME})
 public class ComplexPropertyInterfacePolyTestConfiguration {
-	private IMyInterface myInterface;
+	private MyInterface myInterface;
 
 	@ConfigComplexProperty(polymorph = true)
-	public IMyInterface getMyInterface() {
+	public MyInterface getMyInterface() {
 		return myInterface;
 	}
 
-	public void setMyInterface(final IMyInterface myInterface) {
+	public void setMyInterface(final MyInterface myInterface) {
 		this.myInterface = myInterface;
 	}
 

@@ -27,9 +27,9 @@
 
 package org.jeconfig.client.annotation.simple;
 
-import org.jeconfig.api.conversion.ISimpleTypeConverter;
+import org.jeconfig.api.conversion.SimpleTypeConverter;
 
-public class TestConverter implements ISimpleTypeConverter<Object> {
+public class TestConverter implements SimpleTypeConverter<Object> {
 
 	@Override
 	public Object convertToObject(final Class<Object> simpleType, final String serializedForm) {

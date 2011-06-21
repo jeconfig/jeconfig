@@ -55,7 +55,7 @@ public final class MergingStrategies {
 	 * Possible use-case: a table column property 'visible' may be overwritten by the user except the administrator
 	 * decided to set it to <code>false</code>.
 	 */
-	public static class UserOverwritesWhenParentTrue implements ISimpleValueMergingStrategy<Boolean> {
+	public static class UserOverwritesWhenParentTrue implements SimpleValueMergingStrategy<Boolean> {
 		@Override
 		public ConfigSimpleValueDTO merge(final PropertyMergingParameter<Boolean> mergingParameter) {
 			if (UserScopeDescriptor.NAME.equals(mergingParameter.getChildValueDTO().getDefiningScopePath().getLastScope().getName())) {

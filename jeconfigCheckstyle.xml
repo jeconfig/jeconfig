@@ -61,7 +61,7 @@
       <property name="format" value="^[a-z][a-zA-Z0-9_]*$"/>
     </module>
     <module name="TypeName">
-      <property name="format" value="^I[A-Z][a-zA-Z0-9]*$"/>
+      <property name="format" value="^[A-Z][a-zA-Z0-9]*$"/>
       <property name="tokens" value="INTERFACE_DEF"/>
       <metadata name="com.atlassw.tools.eclipse.checkstyle.customMessage" value="Interfaces have to start with I"/>
     </module>

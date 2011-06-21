@@ -31,8 +31,8 @@ import junit.framework.Assert;
 
 import org.jeconfig.api.scope.CodeDefaultScopeDescriptor;
 import org.jeconfig.api.scope.GlobalScopeDescriptor;
-import org.jeconfig.api.scope.IScopePath;
-import org.jeconfig.api.scope.IScopePathBuilderFactory;
+import org.jeconfig.api.scope.ScopePath;
+import org.jeconfig.api.scope.ScopePathBuilderFactory;
 import org.jeconfig.api.scope.UserScopeDescriptor;
 import org.jeconfig.client.testconfigs.SimpleScopePathTestConfiguration;
 import org.jeconfig.client.testconfigs.UsedScopeNotInScopePathConfiguration;
@@ -42,7 +42,7 @@ public class ScopeFactoryTest extends AbstractConfigServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testUsedScopeNotInScopePath() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				UsedScopeNotInScopePathConfiguration.class);
 		getConfigService().load(
 				UsedScopeNotInScopePathConfiguration.class,
@@ -51,9 +51,9 @@ public class ScopeFactoryTest extends AbstractConfigServiceTest {
 
 	@Test
 	public void testAppendScope() {
-		final IScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
+		final ScopePathBuilderFactory factory = getConfigService().getScopePathBuilderFactory(
 				SimpleScopePathTestConfiguration.class);
-		final IScopePath scopePath = factory.annotatedPathUntil(CodeDefaultScopeDescriptor.NAME).append(
+		final ScopePath scopePath = factory.annotatedPathUntil(CodeDefaultScopeDescriptor.NAME).append(
 				GlobalScopeDescriptor.NAME).create();
 		Assert.assertTrue(scopePath.getLastScope().getName().equals(GlobalScopeDescriptor.NAME));
 	}

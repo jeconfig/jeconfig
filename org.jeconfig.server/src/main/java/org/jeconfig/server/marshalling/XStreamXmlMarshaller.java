@@ -38,7 +38,7 @@ import org.jeconfig.api.dto.ConfigSimpleValueDTO;
 
 import com.thoughtworks.xstream.XStream;
 
-public final class XStreamXmlMarshaller implements IConfigMarshaller {
+public final class XStreamXmlMarshaller implements ConfigMarshaller {
 	private final XStream xstream = new XStream();
 
 	@SuppressWarnings("nls")

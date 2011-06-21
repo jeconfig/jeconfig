@@ -27,9 +27,9 @@
 
 package org.jeconfig.exporter.internal;
 
-import org.jeconfig.api.scope.IScopeDescriptor;
+import org.jeconfig.api.scope.ScopeDescriptor;
 
-public final class ExportScopeDescriptor implements IScopeDescriptor {
+public final class ExportScopeDescriptor implements ScopeDescriptor {
 	public static final String NAME = "export"; //$NON-NLS-1$
 
 	@Override

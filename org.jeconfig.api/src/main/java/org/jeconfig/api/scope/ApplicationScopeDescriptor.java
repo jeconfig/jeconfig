@@ -33,7 +33,7 @@ package org.jeconfig.api.scope;
  * It can be used if several applications need different instances of the configuration.<br>
  * In most cases configurations of the framework should include this scope in their path.
  */
-public final class ApplicationScopeDescriptor implements IScopeDescriptor {
+public final class ApplicationScopeDescriptor implements ScopeDescriptor {
 	public static final String NAME = "application"; //$NON-NLS-1$
 
 	/**

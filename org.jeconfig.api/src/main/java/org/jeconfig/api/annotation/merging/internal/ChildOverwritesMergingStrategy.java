@@ -27,14 +27,14 @@
 
 package org.jeconfig.api.annotation.merging.internal;
 
-import org.jeconfig.api.annotation.merging.ISimpleValueMergingStrategy;
+import org.jeconfig.api.annotation.merging.SimpleValueMergingStrategy;
 import org.jeconfig.api.annotation.merging.PropertyMergingParameter;
 import org.jeconfig.api.dto.ConfigSimpleValueDTO;
 
 /**
  * @param <T>
  */
-public class ChildOverwritesMergingStrategy<T> implements ISimpleValueMergingStrategy<T> {
+public class ChildOverwritesMergingStrategy<T> implements SimpleValueMergingStrategy<T> {
 
 	@Override
 	public ConfigSimpleValueDTO merge(final PropertyMergingParameter<T> mergingParameter) {
