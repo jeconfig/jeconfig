@@ -52,4 +52,16 @@ public class CountingDummyPersister extends DummyPersister {
 		updateCount++;
 		super.updateConfiguration(configuration);
 	}
+
+	public int getLoadCount() {
+		return loadCount;
+	}
+
+	public int getSaveCount() {
+		return saveCount;
+	}
+
+	public int getUpdateCount() {
+		return updateCount;
+	}
 }

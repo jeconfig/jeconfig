@@ -124,9 +124,7 @@ public class ConfigClassTest extends AbstractConfigServiceTest {
 
 	@Test(expected = IllegalArgumentException.class)
 	public void testInlineConfigClass() {
-		final TestConfiguration config = getConfigService().load(new TestConfiguration() {
-			private static final long serialVersionUID = 1L;
-		}.getClass());
+		final TestConfiguration config = getConfigService().load(new TestConfiguration() {}.getClass());
 		getConfigService().save(config);
 	}
 
@@ -238,7 +236,6 @@ public class ConfigClassTest extends AbstractConfigServiceTest {
 
 	@ConfigClass(scopePath = GlobalScopeDescriptor.NAME)
 	public class InnerNonStaticPublicClass {
-		private static final long serialVersionUID = 1L;
 		private int i;
 
 		public InnerNonStaticPublicClass() {}
