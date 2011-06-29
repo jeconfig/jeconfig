@@ -45,11 +45,7 @@ import org.jeconfig.api.scope.UserScopeDescriptor;
 		@ConfigTransformer(sourceVersion = 4, destinationVersion = 6, transformer = MyConfigTransformerV4V6.class),
 		@ConfigTransformer(sourceVersion = 5, destinationVersion = 7, transformer = MyConfigTransformerV5V7.class)})
 public class ClassVersionTChainNoConverterForNewVersionTestConfiguration {
-
-	private static final long serialVersionUID = 1L;
-
 	private String name;
-
 	private int id;
 
 	public ClassVersionTChainNoConverterForNewVersionTestConfiguration() {
